@@ -1,0 +1,7 @@
+geometry_msgs/Pose[] input_poses
+float32 discretization
+float32 jump_threshold
+float32 success_threshold
+float32 max_path_length
+---
+bool success

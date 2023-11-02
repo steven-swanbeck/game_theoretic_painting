@@ -1,0 +1,18 @@
+controller_list:
+ - name: /spot_arm/arm_controller
+   action_ns: follow_joint_trajectory
+   type: FollowJointTrajectory
+   default: true
+   joints:
+    - arm0_shoulder_yaw
+    - arm0_shoulder_pitch
+    - arm0_elbow_pitch
+    - arm0_elbow_roll
+    - arm0_wrist_pitch
+    - arm0_wrist_roll
+ - name: /spot_arm/finger_controller
+   action_ns: follow_joint_trajectory
+   type: FollowJointTrajectory
+   default: true
+   joints:
+     - arm0_fingers

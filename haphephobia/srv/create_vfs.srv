@@ -1,0 +1,6 @@
+sensor_msgs/PointCloud2[] clusters
+---
+sensor_msgs/PointCloud2[] clusters
+sensor_msgs/PointCloud2[] vfs
+geometry_msgs/Pose[] base_poses
+geometry_msgs/Pose[] camera_poses
