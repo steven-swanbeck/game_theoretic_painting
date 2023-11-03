@@ -35,5 +35,6 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/search/search.h>
 #include <pcl/search/kdtree.h>
+#include <pcl/console/time.h>
 
 #endif // HAPHEPHOBIA_COMMON_H
