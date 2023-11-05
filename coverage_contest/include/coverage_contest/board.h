@@ -1,3 +1,6 @@
+#ifndef GAME_BOARD_H
+#define GAME_BOARD_H
+
 #include "haphephobia/common.h"
 #include "haphephobia/point.h"
 
@@ -15,3 +18,5 @@ struct OctreeData
     std::vector<sensor_msgs::PointCloud2> clusters;
     std::vector<PointT, Eigen::aligned_allocator<PointT>> centroids;
 };
+
+#endif // GAME_BOARD_H
