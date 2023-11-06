@@ -127,14 +127,14 @@ include_directories(
 
 find_package(PCL 1.2 REQUIRED)
 
-add_executable(board_constructor src/board_constructor.cpp)
+add_executable(play_game src/play_game.cpp)
 add_dependencies(
-    board_constructor
+    play_game
     ${catkin_EXPORTED_TARGETS}
     ${pcl_tools_EXPORTED_TARGETS}
 )
 target_link_libraries(
-    board_constructor
+    play_game
     ${catkin_LIBRARIES}
     ${PCL_LIBRARIES}
 )

@@ -31,6 +31,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate services in the 'srv' folder
 add_service_files(
     FILES
+    cluster_pc.srv
     create_vfs.srv
     create_compliant_poses.srv
     generate_cartesian_plan.srv
@@ -73,6 +74,18 @@ include_directories(
 )
 
 find_package(PCL 1.2 REQUIRED)
+
+add_executable(clusterer src/clusterer.cpp)
+add_dependencies(
+    clusterer
+    ${catkin_EXPORTED_TARGETS}
+    ${pcl_tools_EXPORTED_TARGETS}
+)
+target_link_libraries(
+    clusterer
+    ${catkin_LIBRARIES}
+    ${PCL_LIBRARIES}
+)
 
 add_executable(vf_generator src/vf_generator.cpp)
 add_dependencies(

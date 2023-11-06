@@ -36,5 +36,6 @@
 #include <pcl/search/search.h>
 #include <pcl/search/kdtree.h>
 #include <pcl/console/time.h>
+#include <pcl/segmentation/region_growing.h>
 
 #endif // HAPHEPHOBIA_COMMON_H
