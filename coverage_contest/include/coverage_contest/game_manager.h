@@ -11,14 +11,19 @@ class GameManager
 {
 public:
     GameManager ();
-    void instantiateBoard (const std::string &dir, const float &discretization);
-    void instantiatePlayers (const int &num_drones, const int &num_quadrupeds, const int &num_gantries);
+    void instantiateBoard (const std::string &move_dir, const float &move_discretization, const std::string &repair_dir, const float &repair_discretization);
+    void instantiatePlayers (const int &num_drones, const int &num_quadrupeds, const int &num_gantries, int starting_position=0);
     void generateTurnOrder ();
-    std::string upNext ();
+    std::string startNext ();
+    std::string playingNow ();
     void playRandomMove ();
     void simulateRandomGame ();
     void assessValue ();
     bool isOver ();
+    PossibleMoves listMovesfromNode ();
+    PossibleMoves listMovesfromNode (const int &index);
+    bool checkBattery ();
+    void takeTurn ();
 
     // std::vector<int> nextMoves (AgentT agent);
     // template <typename agents::Quadruped> std::vector<int> nextMoves (agents::Quadruped agent);
@@ -28,6 +33,7 @@ private:
     Board board_;
     agents::Party party_;
     int player_turn_;
+    int total_turns_;
 };
 
 #endif // GAME_MANAGER_H

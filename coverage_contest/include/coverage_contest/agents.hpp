@@ -13,16 +13,19 @@ namespace agents
 class Robot
 {
 public:
-    Robot (std::string identifier, bool reach_upper, int max_movement, int max_coverage, int battery_life, int recharge_duration) {
-        id = identifier;
+    Robot (std::string handle, int type_enum, bool reach_upper, int max_movement, int max_coverage, int battery_life, int recharge_duration) {
+        id = handle;
+        type = type_enum;
         can_reach_upper = reach_upper;
         max_turn_movement = max_movement;
-        remaining_movement = max_movement;
+        max_turn_coverage = max_coverage;
         max_battery_life = battery_life;
+        remaining_movement = max_movement;
+        remaining_coverage = max_coverage;
         remaining_battery = battery_life;
         recharge_time = recharge_duration;
-        remaining_charge_time = 0;
-        int score = 0;
+        remaining_charge_time = recharge_time;
+        score = 0;
     }
     // . Info
     int get_max_turn_movement() {
@@ -40,43 +43,63 @@ public:
     int get_max_turn_coverage () {
         return max_turn_coverage;
     }
+    std::string get_id () {
+        return id;
+    }
+    int get_type () {
+        return type;
+    }
+    int get_location () {
+        return location;
+    }
+    int get_score () {
+        return score;
+    }
     // . Reset
     void reset_remaining_movement () {
         remaining_movement = max_turn_movement;
+        std::cout << "\t\t(agent " << id << ") remaining_movement reset to " << max_turn_movement << std::endl;
     }
     void reset_remaining_battery () {
         remaining_battery = max_battery_life;
+        std::cout << "\t\t(agent " << id << ") remaining_battery reset to " << max_battery_life << std::endl;
     }
     void reset_remaining_charge_time () {
-        remaining_charge_time = 0;
+        remaining_charge_time = recharge_time;
+        std::cout << "\t\t(agent " << id << ") remaining_charge_time reset to " << recharge_time << std::endl;
     }
     void reset_remaining_coverage () {
-        remaining_charge_time = max_turn_coverage;
+        remaining_coverage = max_turn_coverage;
+        std::cout << "\t\t(agent " << id << ") remaining_coverage reset to " << max_turn_coverage << std::endl;
     }
     void reset_score () {
         score = 0;
+        std::cout << "\t\t(agent " << id << ") score reset to " << score << std::endl;
     }
     // . Update
-    void update_position (int index) {
-        position = index;
+    void update_location (int index) {
+        location = index;
+        std::cout << "\t\t(agent " << id << ") location updated to " << index << std::endl;
     }
     void update_score (int update) {
         score += update;
+        std::cout << "\t\t(agent " << id << ") score updated by a value of " << update << " to " << score << std::endl;
     }
 
-    std::string id;
     int remaining_movement;
+    int remaining_coverage;
     int remaining_battery;
     int remaining_charge_time;
-    int remaining_coverage;
 
 private:
+    std::string id;
+    int type;
     bool can_reach_upper;
     int max_turn_movement;
+    int max_turn_coverage;
     int max_battery_life;
     int recharge_time;
-    int max_turn_coverage;
-    int position;
+    int location;
     int score;
 };
 
@@ -84,19 +107,19 @@ private:
 class Drone : public Robot
 {
 public:
-    Drone(std::string identifier) : Robot(identifier, true, 5, 10, 2, 2) {}
+    Drone(std::string handle) : Robot(handle, 0, true, 5, 1, 2, 2) {}
 };
 
 class Quadruped : public Robot
 {
 public:
-    Quadruped(std::string identifier) : Robot(identifier, false, 3, 25, 10, 2) {}
+    Quadruped(std::string handle) : Robot(handle, 1, false, 3, 3, 10, 2) {}
 };
 
 class Gantry : public Robot
 {
 public:
-    Gantry(std::string identifier) : Robot(identifier, true, 1, 50, 30, 2) {}
+    Gantry(std::string handle) : Robot(handle, 2, true, 1, 9, 30, 2) {}
 };
 
 // . Instantiation function

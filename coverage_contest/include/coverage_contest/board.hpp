@@ -18,6 +18,7 @@ struct OctreeData
     std::vector<PointT, Eigen::aligned_allocator<PointT>> centroids;
 };
 
+// . Helpful spatial relations
 struct SpatialNode {
     int x_pos {-1};
     float x_pos_d {0};
@@ -34,6 +35,7 @@ struct SpatialNode {
 };
 using SpatialGraph = std::map<int, SpatialNode>;
 
+// . Movement game board
 struct Space {
     int id;
     SpatialNode neighbors;
@@ -43,8 +45,33 @@ struct Space {
     PointT centroid;
     sensor_msgs::PointCloud2 cloud;
     bool is_ground_level {false};
+    std::vector<int> repair_edges;
 };
-using Board = std::map<int, Space>;
+using MoveBoard = std::map<int, Space>;
+
+// . Repair action board
+struct RepairVolume {
+    int id;
+    PointT centroid;
+    sensor_msgs::PointCloud2 cloud;
+    bool covered {false};
+};
+using RepairBoard = std::map<int, RepairVolume>;
+
+// . Overall board struct
+struct Board {
+    MoveBoard movement_spaces;
+    RepairBoard repair_spaces;
+};
+
+// . Possible turns struct
+struct Action {
+    int move_id {-1};
+    int repair_id {-1};
+};
+using PossibleMoves = std::vector<Action>;
+using PossibleTurn = std::queue<Action>;
+using PossibleTurns = std::vector<PossibleTurn>;
 
 namespace board_utils
 {
@@ -57,16 +84,69 @@ void saveOctreeDataClouds (const OctreeData &input, const std::string &dir);
 void loadCloudasMsg (const std::string &dir, sensor_msgs::PointCloud2 &msg);
 SpatialNode findNeighbors (const OctreeData &data, const int &index, const double &tolerance=0.174533);
 SpatialGraph generateSpatialGraph (const OctreeData &data);
-Board generateBoard (const OctreeData &data, SpatialGraph &spatial_graph);
 void assignEdges (SpatialGraph &spatial_graph, Space &node);
 void assignGantryEdges (SpatialGraph &spatial_graph, Space &node);
 void assignQuadrupedEdges (SpatialGraph &spatial_graph, Space &node);
 void assignDroneEdges (SpatialGraph &spatial_graph, Space &node);
+int assignRepairEdge (const PointT &centroid, const std::vector<PointT, Eigen::aligned_allocator<PointT>> &centroids);
+MoveBoard generateMoveBoard (const OctreeData &data, SpatialGraph &spatial_graph);
+MoveBoard generateMoveBoard (const OctreeData &data);
+MoveBoard generateMoveBoard (const sensor_msgs::PointCloud2 &cloud, const float &octree_resolution);
+Board generateBoard (const OctreeData &move_data, SpatialGraph &spatial_graph, const OctreeData &repair_data);
+Board generateBoard (const OctreeData &move_data, const OctreeData &repair_data);
+Board generateBoard (const sensor_msgs::PointCloud2 &move_cloud, const float &move_octree_resolution, const sensor_msgs::PointCloud2 &repair_cloud, const float &repair_octree_resolution);
 
 // . Function Definitions
-Board generateBoard (const OctreeData &data, SpatialGraph &spatial_graph)
+Board generateBoard (const OctreeData &move_data, SpatialGraph &spatial_graph, const OctreeData &repair_data)
 {
     Board board;
+
+    // - assign stuff from move_data to move_board
+    for (std::size_t i = 0; i < move_data.centroids.size(); i++) {
+        Space node;
+        node.id = static_cast<int>(i);
+        node.neighbors = spatial_graph[node.id];
+        node.cloud = move_data.clusters[i];
+        node.centroid = move_data.centroids[i];
+        board_utils::assignEdges(spatial_graph, node);
+        board.movement_spaces.insert({node.id, node});
+    }
+
+    // - assign stuff from repair_data to repair_board
+    for (std::size_t i = 0; i < repair_data.centroids.size(); i++) {
+        RepairVolume node;
+        node.id = static_cast<int>(i);
+        node.cloud = repair_data.clusters[i];
+        node.centroid = repair_data.centroids[i];
+        board.repair_spaces.insert({node.id, node});
+        board.movement_spaces.at(assignRepairEdge(repair_data.centroids[i], move_data.centroids)).repair_edges.push_back(static_cast<int>(i));
+    }
+
+    std::cout << "[Board] Generated a game board with " << move_data.centroids.size() << " movement volumes and " << repair_data.centroids.size() << " repair volumes." << std::endl;
+    return board;
+}
+
+Board generateBoard (const OctreeData &move_data, const OctreeData &repair_data)
+{
+    SpatialGraph spatial_graph {generateSpatialGraph(move_data)}; 
+    return generateBoard(move_data, spatial_graph, repair_data);
+}
+
+Board generateBoard (const sensor_msgs::PointCloud2 &move_cloud, const float &move_octree_resolution, const sensor_msgs::PointCloud2 &repair_cloud, const float &repair_octree_resolution)
+{
+    OctreeData move_data;
+    move_data.name = "moves";
+    extractOctreeData(move_cloud, move_octree_resolution, move_data);
+    SpatialGraph spatial_graph {generateSpatialGraph(move_data)}; 
+    OctreeData repair_data;
+    repair_data.name = "repairs";
+    extractOctreeData(repair_cloud, repair_octree_resolution, repair_data);
+    return generateBoard(move_data, spatial_graph, repair_data);
+}
+
+MoveBoard generateMoveBoard (const OctreeData &data, SpatialGraph &spatial_graph)
+{
+    MoveBoard board;
 
     // - Loop through the centroids
     for (std::size_t i = 0; i < data.centroids.size(); i++) {
@@ -78,23 +158,37 @@ Board generateBoard (const OctreeData &data, SpatialGraph &spatial_graph)
         board_utils::assignEdges(spatial_graph, node);
         board.insert({node.id, node});
     }
-    std::cout << "[Board] Generated a game board for " << data.centroids.size() << " input voxels!" << std::endl;
+    std::cout << "[Board] Generated a game movement board for " << data.centroids.size() << " input voxels!" << std::endl;
     return board;
 }
 
-Board generateBoard (const OctreeData &data)
+MoveBoard generateMoveBoard (const OctreeData &data)
 {
     SpatialGraph spatial_graph {generateSpatialGraph(data)}; 
-    return generateBoard(data, spatial_graph);
+    return generateMoveBoard(data, spatial_graph);
 }
 
-Board generateBoard (const sensor_msgs::PointCloud2 &cloud, const float &octree_resolution)
+MoveBoard generateMoveBoard (const sensor_msgs::PointCloud2 &cloud, const float &octree_resolution)
 {
     OctreeData data;
     data.name = "board";
     extractOctreeData(cloud, octree_resolution, data);
     SpatialGraph spatial_graph {generateSpatialGraph(data)}; 
-    return generateBoard(data, spatial_graph);
+    return generateMoveBoard(data, spatial_graph);
+}
+
+int assignRepairEdge (const PointT &centroid, const std::vector<PointT, Eigen::aligned_allocator<PointT>> &centroids)
+{
+    double min_dist_sqrd {INFINITY};
+    int min_index;
+    for (std::size_t i = 0; i < centroids.size(); i++) {
+        double comp_dist_sqrd {pow(centroids[i].x - centroid.x, 2) + pow(centroids[i].y - centroid.y, 2)};
+        if ((pow(centroids[i].x - centroid.x, 2) + pow(centroids[i].y - centroid.y, 2)) < min_dist_sqrd) {
+            min_dist_sqrd = comp_dist_sqrd;
+            min_index = static_cast<int>(i);
+        }
+    }
+    return min_index;
 }
 
 void assignEdges (SpatialGraph &spatial_graph, Space &node)
@@ -219,7 +313,7 @@ SpatialGraph generateSpatialGraph (const OctreeData &data)
     for (std::size_t i = 0; i < data.centroids.size(); i++) {
         board.insert({static_cast<int>(i), board_utils::findNeighbors(data, static_cast<int>(i))});
     }
-    std::cout << "[Board] Generated a spatial graph for " << data.centroids.size() << " input voxels!" << std::endl;
+    std::cout << "[Board] Generated a spatial graph for " << data.centroids.size() << " input voxels." << std::endl;
     return board;
 }
 

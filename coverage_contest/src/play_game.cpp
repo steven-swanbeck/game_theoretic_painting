@@ -2,14 +2,15 @@
 
 GamePlayer::GamePlayer ()
 {
-    manager_.instantiateBoard("/home/steven/game_theoretic_painting/src/models/clouds/revised/map.pcd", 3.0);
-    manager_.instantiatePlayers(1, 1, 1);
+    manager_.instantiateBoard("/home/steven/game_theoretic_painting/src/models/clouds/revised/map.pcd", 3.0, "/home/steven/game_theoretic_painting/src/models/clouds/revised/marked.pcd", 1.0);
+    manager_.instantiatePlayers(1, 1, 1, 12);
     
-    manager_.upNext();
-    manager_.upNext();
-    manager_.upNext();
-    manager_.upNext();
-    manager_.upNext();
+    // manager_.listMovesfromNode();
+    manager_.takeTurn();
+    manager_.startNext();
+    manager_.takeTurn();
+    manager_.startNext();
+    manager_.takeTurn();
 
     ros::spin();
 }
