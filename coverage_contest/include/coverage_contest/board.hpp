@@ -373,7 +373,7 @@ void extractOctreeData (const sensor_msgs::PointCloud2 &cloud, const float &octr
         pcl::toROSMsg(*cluster, cluster_msg);
         output.clusters.push_back(cluster_msg);
     }
-    std::cout << "[Board] Extracted " << output.clusters.size() << " clusters and " << output.centroids.size() << " centroids from the provided cloud using a resolution of " << octree_resolution << ". " << std::endl;
+    std::cout << "[Board] Extracted " << output.clusters.size() << " clusters and " << output.centroids.size() << " centroids from the provided cloud using a resolution of " << octree_resolution << " m." << std::endl;
 }
 
 PointT colorPairRandomUniform (PointCloud::Ptr &cloud, const PointT &centroid)

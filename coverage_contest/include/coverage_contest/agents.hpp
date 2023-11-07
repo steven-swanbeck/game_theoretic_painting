@@ -3,12 +3,9 @@
 
 #include "haphephobia/common.h"
 #include "haphephobia/point.h"
-
-// TODO construct a base class for player that every different player will inherit from
-// - movement for a single turn
-// - max reach
-// - battery or something similar (?)
-// - efficiency somehow?
+#include <algorithm>
+#include <random>
+#include <any>
 
 namespace agents
 {
@@ -16,28 +13,34 @@ namespace agents
 class Robot
 {
 public:
-    Robot (bool can_reach_upper, int max_movement, int battery_life, int recharge_duration) {
-        reach_upper = can_reach_upper;
+    Robot (std::string identifier, bool reach_upper, int max_movement, int max_coverage, int battery_life, int recharge_duration) {
+        id = identifier;
+        can_reach_upper = reach_upper;
         max_turn_movement = max_movement;
         remaining_movement = max_movement;
         max_battery_life = battery_life;
         remaining_battery = battery_life;
         recharge_time = recharge_duration;
         remaining_charge_time = 0;
+        int score = 0;
     }
-    int get_max_movement() {
+    // . Info
+    int get_max_turn_movement() {
         return max_turn_movement;
     }
-    bool can_reach_upper () {
-        return reach_upper;
+    bool get_can_reach_upper () {
+        return can_reach_upper;
     }
     int get_max_battery() {
         return max_battery_life;
     }
-    int get_charge_time () {
+    int get_recharge_time () {
         return recharge_time;
     }
-
+    int get_max_turn_coverage () {
+        return max_turn_coverage;
+    }
+    // . Reset
     void reset_remaining_movement () {
         remaining_movement = max_turn_movement;
     }
@@ -47,62 +50,95 @@ public:
     void reset_remaining_charge_time () {
         remaining_charge_time = 0;
     }
+    void reset_remaining_coverage () {
+        remaining_charge_time = max_turn_coverage;
+    }
+    void reset_score () {
+        score = 0;
+    }
+    // . Update
+    void update_position (int index) {
+        position = index;
+    }
+    void update_score (int update) {
+        score += update;
+    }
 
+    std::string id;
     int remaining_movement;
     int remaining_battery;
     int remaining_charge_time;
+    int remaining_coverage;
 
 private:
-    bool reach_upper;
+    bool can_reach_upper;
     int max_turn_movement;
     int max_battery_life;
     int recharge_time;
+    int max_turn_coverage;
+    int position;
+    int score;
 };
 
 // . Drone, Quadruped, Gantry classes
 class Drone : public Robot
 {
 public:
-    std::string id;
-    Drone(std::string identifier) : Robot(true, 5, 2, 2) {id = identifier;}
+    Drone(std::string identifier) : Robot(identifier, true, 5, 10, 2, 2) {}
 };
 
 class Quadruped : public Robot
 {
 public:
-    std::string id;
-    Quadruped(std::string identifier) : Robot(false, 3, 10, 2) {id = identifier;}
+    Quadruped(std::string identifier) : Robot(identifier, false, 3, 25, 10, 2) {}
 };
 
 class Gantry : public Robot
 {
 public:
-    std::string id;
-    Gantry(std::string identifier) : Robot(true, 1, 30, 2) {id = identifier;}
+    Gantry(std::string identifier) : Robot(identifier, true, 1, 50, 30, 2) {}
 };
 
 // . Instantiation function
-struct Players
+struct Party
 {
-    std::vector<Drone> drones;
-    std::vector<Quadruped> quadrupeds;
-    std::vector<Gantry> gantries;
+    std::map<std::string, Robot> players;
+    std::vector<std::string> playing_order;
 };
 
-Players instantiatePlayers (const int num_drones, const int num_quadrupeds, const int num_gantries)
+void randomShufflePlayingOrder (agents::Party &party)
 {
-    Players players;
+    std::shuffle(std::begin(party.playing_order), std::end(party.playing_order), std::random_device());
+    std::cout << "[Agents] Player turn order randomly shuffled as: \n";
+    for (std::size_t i = 0; i < party.playing_order.size(); i++) {
+        std::cout << "\t" << static_cast<int>(i) << ": " << party.playing_order[i] << std::endl;;
+    }
+}
+
+Party instantiatePlayers (const int num_drones, const int num_quadrupeds, const int num_gantries, bool random_shuffle=true)
+{
+    Party party;
     for (std::size_t i = 0; i < num_drones; i++) {
-        players.drones.push_back(Drone("drone_" + std::to_string(static_cast<int>(i))));
+        std::string agent_name {"drone_" + std::to_string(static_cast<int>(i))};
+        party.players.insert({agent_name, Drone(agent_name)});
+        party.playing_order.push_back(agent_name);
     }
     for (std::size_t i = 0; i < num_quadrupeds; i++) {
-        players.quadrupeds.push_back(Quadruped("quadruped_" + std::to_string(static_cast<int>(i))));
+        std::string agent_name {"quadruped_" + std::to_string(static_cast<int>(i))};
+        party.players.insert({agent_name, Quadruped(agent_name)});
+        party.playing_order.push_back(agent_name);
     }
     for (std::size_t i = 0; i < num_gantries; i++) {
-        players.gantries.push_back(Gantry("gantry_" + std::to_string(static_cast<int>(i))));
+        std::string agent_name {"gantry_" + std::to_string(static_cast<int>(i))};
+        party.players.insert({agent_name, Gantry(agent_name)});
+        party.playing_order.push_back(agent_name);
     }
-    return players;
+    if (random_shuffle) {
+        randomShufflePlayingOrder(party);
+    }
+    return party;
 }
+
 }
 
 #endif // GAME_PLAYERS_H

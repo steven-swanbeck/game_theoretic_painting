@@ -117,6 +117,9 @@ catkin_package(
 ## Build ##
 ###########
 
+add_library(game_manager src/game_manager.cpp)
+add_library(mcts src/mcts.cpp)
+
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
@@ -137,6 +140,8 @@ target_link_libraries(
     play_game
     ${catkin_LIBRARIES}
     ${PCL_LIBRARIES}
+    game_manager
+    mcts
 )
 
 ## Declare a C++ library
@@ -197,7 +202,7 @@ target_link_libraries(
 #   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 # )
 
-## Mark cpp header files for installation
+# # Mark cpp header files for installation
 # install(DIRECTORY include/${PROJECT_NAME}/
 #   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 #   FILES_MATCHING PATTERN "*.h"
