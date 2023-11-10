@@ -72,20 +72,7 @@ struct Action {
 };
 using PossibleMoves = std::vector<Action>;
 using PossibleTurn = std::queue<Action>;
-using PossibleTurns = std::map<int, PossibleTurn>;
-
-typedef struct TurnNode {
-    TurnNode (int id, int parent, int location, agents::Robot player, RepairBoard repair_board) :
-        id{id}, parent{parent}, location{location}, player{player}, repair_board{repair_board} {}
-    int id;
-    int parent;
-    int location;
-    agents::Robot player;
-    RepairBoard repair_board;
-    Action action;
-    std::vector<int> children;
-} TurnNode;
-using TurnGraph = std::map<int, TurnNode>;
+using PossibleTurns = std::vector<PossibleTurn>;
 
 namespace board_utils
 {

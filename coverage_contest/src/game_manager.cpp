@@ -77,13 +77,6 @@ void GameManager::takeTurn ()
     }
 }
 
-// TODO
-void GameManager::playRandomMove ()
-{
-    
-}
-
-
 void GameManager::printMovesfromState (int state)
 {
     std::cout << "Move candidates at state " << state << ":" << std::endl;
@@ -97,81 +90,95 @@ void GameManager::printMovesfromState (int state)
     }
 }
 
-// ! WILL NOT WORK
-TurnGraph GameManager::createTurnGraph ()
+void GameManager::testRandomTurns (int num)
 {
-    TurnGraph turn_graph;
-    TurnNode current_node {0, -1, party_.players.at(playingNow()).get_location(), party_.players.at(playingNow()), board_.repair_spaces};
-    current_node.action.move_id = current_node.player.get_location();
-    int free_index {current_node.id + 1};
-    growTurnGraphfromNode (turn_graph, current_node, free_index);
-    return turn_graph;
-}
+    PossibleTurns candidates {generateRandomTurns(num)};
 
-// ! WILL NOT WORK
-void GameManager::growTurnGraphfromNode (TurnGraph &turn_graph, TurnNode &turn_node, int &free_index)
-{
-    std::cout << "Entering growTurnGraphfromNode()..." << std::endl;
-    PossibleMoves move_candidates {listMovesfromNodeConstrained(turn_node)};
-    // ! need to add repair/movement options for the current node! maybe have two searches, one for movement and one for repair
+    for (std::size_t i = 0; i < candidates.size(); i++) {
+        std::cout << "Turn option " << static_cast<int>(i) << ": " << std::endl;
+        while (!candidates[i].empty()) {
+            Action action {candidates[i].front()};
 
-    std::cout << "\tSize of move_candidates from node " << turn_node.id << ": " << move_candidates.size() << std::endl;
-    if (move_candidates.size() > 0) {
-        for (std::size_t i = 0; i < move_candidates.size(); i++) {
-            
-            // - fill out child
-            int current_location {move_candidates[i].move_id};
-            if (current_location == -1) {
-                current_location = turn_node.location;
-            }
-            TurnNode child {free_index, turn_node.id, current_location, turn_node.player, turn_node.repair_board};
-            child.action = move_candidates[i];
+            std::cout << "\tAction: (move: " << action.move_id << ", repair: " << action.repair_id << ")" << std::endl; 
 
-            // - increment id
-            free_index++;
-
-            // - add child id to parent
-            turn_node.children.push_back(child.id);
-            std::cout << "\t\t\tChild " << child.id << " added to parent " << child.parent << " with action (move: " << child.action.move_id << ", repair: " << child.action.repair_id << ")" << std::endl; 
-
-            // - set recursion if not at terminal node based on move_candidates
-            if (move_candidates[i].move_id != -1) {
-                child.player.remaining_movement -= 1;
-                std::cout << "Child TurnNode has " << child.player.remaining_movement << " remaining movement, its parent has " << turn_node.player.remaining_movement << std::endl;
-            } else {
-                child.player.remaining_coverage -= 1;
-                child.repair_board.at(move_candidates[i].repair_id).covered = true;
-                std::cout << "Child TurnNode has " << child.player.remaining_coverage << " remaining coverage, its parent has " << turn_node.player.remaining_coverage << std::endl;
-            }
-
-            std::cout << "\t\tRegressing deeper into tree for node " << child.id << std::endl;
-            growTurnGraphfromNode (turn_graph, child, free_index);
+            candidates[i].pop();
         }
-        std::cout << "Trying to enter node with id " << turn_node.id << " into graph" << std::endl;
-        turn_graph.insert({turn_node.id, turn_node});
     }
 }
 
-PossibleMoves GameManager::listMovesfromNodeConstrained (TurnNode &turn_node)
+PossibleTurns GameManager::generateRandomTurns (const int num_moves)
+{
+    PossibleTurns possible_turns;
+    for (std::size_t i = 0; i < num_moves; i++) {
+        possible_turns.push_back(generateRandomTurn());
+    }
+    return possible_turns;
+}
+
+PossibleTurn GameManager::generateRandomTurn ()
+{
+    PossibleTurn possible_turn;
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+
+    // - for current player, get starting state
+    int state {party_.players.at(playingNow()).get_location()};
+    bool reached_terminal_state {false};
+
+    // - add to move until turn reaches a terminal state
+    agents::Robot player {party_.players.at(playingNow())};
+    RepairBoard board {board_.repair_spaces};
+
+    while (!reached_terminal_state) {
+        PossibleMoves candidates {listMovesfromNodeConstrained(player, board)};
+
+        // - return if we are at a terminal state
+        if (candidates.size() < 1) {
+            reached_terminal_state = true;
+        } else {
+            // - randomly sample one of these
+            std::uniform_int_distribution<std::mt19937::result_type> dist(0, candidates.size() - 1);
+            Action move = candidates[dist(rng)];
+
+            // - add it to the PossibleTurn and update state variable
+            possible_turn.push(move);
+
+            // - simulate robot taking that action
+            if (move.move_id != -1) {
+                player.remaining_movement -= 1;
+                player.update_location(move.move_id);
+            } else {
+                player.remaining_coverage -=1;
+                board.at(move.repair_id).covered = true;
+            }
+        }
+    }
+
+    return possible_turn;
+}
+
+
+PossibleMoves GameManager::listMovesfromNodeConstrained (agents::Robot &player, RepairBoard &board)
 {
     PossibleMoves candidates;
 
-    if (turn_node.player.remaining_movement > 0) {
+    if ((player.remaining_movement > 0) && (player.remaining_coverage == player.get_max_turn_coverage())) {
         std::vector<int> movement_edges;
-        switch (turn_node.player.get_type()) {
+        switch (player.get_type()) {
             case 0: // drone
             {
-                movement_edges = board_.movement_spaces.at(turn_node.location).drone_edges;
+                movement_edges = board_.movement_spaces.at(player.get_location()).drone_edges;
                 break;
             }
             case 1: // quadruped
             {
-                movement_edges = board_.movement_spaces.at(turn_node.location).quadruped_edges;
+                movement_edges = board_.movement_spaces.at(player.get_location()).quadruped_edges;
                 break;
             }
             case 2: // gantry
             {
-                movement_edges = board_.movement_spaces.at(turn_node.location).gantry_edges;
+                movement_edges = board_.movement_spaces.at(player.get_location()).gantry_edges;
                 break;
             }
         }
@@ -182,12 +189,11 @@ PossibleMoves GameManager::listMovesfromNodeConstrained (TurnNode &turn_node)
         }
     }
 
-    if (turn_node.player.remaining_coverage > 0) {
-        // TODO make this reflect only uncovered ones
-        std::vector<int> repair_primitives = board_.movement_spaces.at(turn_node.location).repair_edges;
+    if (player.remaining_coverage > 0) {
+        std::vector<int> repair_primitives = board_.movement_spaces.at(player.get_location()).repair_edges;
         std::vector<int> repair_edges;
         for (std::size_t i = 0; i < repair_primitives.size(); i++) {
-            if (turn_node.repair_board.at(repair_primitives[i]).covered == false) {
+            if (board.at(repair_primitives[i]).covered == false) {
                 repair_edges.push_back(repair_primitives[i]);
             }
         }
@@ -197,8 +203,6 @@ PossibleMoves GameManager::listMovesfromNodeConstrained (TurnNode &turn_node)
             candidates.push_back(action);
         }
     }
-    // std::cout << "At location " << turn_node.location << ", robot has remaining movement of " << turn_node.player.remaining_movement << ", remaining coverage of " << turn_node.player.remaining_coverage << " and size of available moves is " << candidates.size() << "." << std::endl;
-
     return candidates;
 }
 
@@ -208,12 +212,15 @@ void GameManager::playRandomMove ()
 
 }
 
-
-
-
-
-
 // TODO
+// - finish is_over function
+// - then make something to play the whole game with each player taking a random turn until someone wins
+// - also need a way of actually playing the turns, so a function that will take in the queue and go through it, updating robot score, movement, coverage, etc.
+
+
+
+
+
 PossibleMoves GameManager::listMovesfromNode (const int &index)
 {
     PossibleMoves candidates;

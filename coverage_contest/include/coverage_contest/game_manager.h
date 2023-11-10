@@ -24,12 +24,11 @@ public:
     bool isOver ();
     PossibleMoves listMovesfromNode ();
     PossibleMoves listMovesfromNode (const int &index);
-    PossibleMoves listMovesfromNode (TurnNode &turn_node);
-    PossibleMoves listMovesfromNodeConstrained (TurnNode &turn_node);
-    TurnGraph createTurnGraph ();
-    void growTurnGraphfromNode (TurnGraph &turn_graph, TurnNode &turn_node, int &free_index);
-    void growRepairScheduleWithinNode (TurnGraph &turn_graph, TurnNode &turn_node, int &free_index);
     void printMovesfromState (int state);
+    PossibleTurns generateRandomTurns (const int num_moves);
+    PossibleTurn generateRandomTurn ();
+    PossibleMoves listMovesfromNodeConstrained (agents::Robot &player, RepairBoard &board);
+    void testRandomTurns (int num);
 
     // std::vector<int> nextMoves (AgentT agent);
     // template <typename agents::Quadruped> std::vector<int> nextMoves (agents::Quadruped agent);
