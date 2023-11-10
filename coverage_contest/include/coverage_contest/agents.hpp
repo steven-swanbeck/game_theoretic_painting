@@ -113,13 +113,13 @@ public:
 class Quadruped : public Robot
 {
 public:
-    Quadruped(std::string handle) : Robot(handle, 1, false, 3, 3, 10, 2) {}
+    Quadruped(std::string handle) : Robot(handle, 1, false, 3, 2, 10, 2) {}
 };
 
 class Gantry : public Robot
 {
 public:
-    Gantry(std::string handle) : Robot(handle, 2, true, 1, 9, 30, 2) {}
+    Gantry(std::string handle) : Robot(handle, 2, true, 1, 5, 30, 2) {}
 };
 
 // . Instantiation function

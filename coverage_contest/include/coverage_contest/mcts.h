@@ -11,6 +11,7 @@
 struct ActiveBoard
 {
     agents::Party party;
+    RepairBoard repair_board;
 };
 using Children = std::map<int, ActiveBoard>;
 

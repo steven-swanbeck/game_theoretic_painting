@@ -16,14 +16,20 @@ public:
     void generateTurnOrder ();
     std::string startNext ();
     std::string playingNow ();
+    bool sufficientBattery ();
+    void takeTurn ();
     void playRandomMove ();
     void simulateRandomGame ();
     void assessValue ();
     bool isOver ();
     PossibleMoves listMovesfromNode ();
     PossibleMoves listMovesfromNode (const int &index);
-    bool checkBattery ();
-    void takeTurn ();
+    PossibleMoves listMovesfromNode (TurnNode &turn_node);
+    PossibleMoves listMovesfromNodeConstrained (TurnNode &turn_node);
+    TurnGraph createTurnGraph ();
+    void growTurnGraphfromNode (TurnGraph &turn_graph, TurnNode &turn_node, int &free_index);
+    void growRepairScheduleWithinNode (TurnGraph &turn_graph, TurnNode &turn_node, int &free_index);
+    void printMovesfromState (int state);
 
     // std::vector<int> nextMoves (AgentT agent);
     // template <typename agents::Quadruped> std::vector<int> nextMoves (agents::Quadruped agent);
