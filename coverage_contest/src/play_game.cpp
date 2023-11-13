@@ -3,21 +3,29 @@
 GamePlayer::GamePlayer ()
 {
     manager_.instantiateBoard("/home/steven/game_theoretic_painting/src/models/clouds/revised/map.pcd", 3.0, "/home/steven/game_theoretic_painting/src/models/clouds/revised/marked.pcd", 1.0);
-    // manager_.instantiatePlayers(1, 1, 1, 12);
-    manager_.instantiatePlayers(1, 0, 0, 0);
+    manager_.instantiatePlayers(1, 1, 1, 12);
+    // manager_.instantiatePlayers(1, 0, 0, 0);
+    
+    manager_.simulateRandomGame();
     
     // manager_.listMovesfromNode();
-    manager_.takeTurn();
-    manager_.printMovesfromState(0);
-    manager_.printMovesfromState(2);
-    manager_.printMovesfromState(4);
-    manager_.testRandomTurns(10);
+    // manager_.takeRandomTurn();
+    // manager_.takeRandomTurn();
+    // manager_.takeRandomTurn();
+    // manager_.takeRandomTurn();
+    // manager_.takeRandomTurn();
+    // manager_.takeRandomTurn();
+    // manager_.takeRandomTurn();
+    // manager_.printMovesfromState(0);
+    // manager_.printMovesfromState(2);
+    // manager_.printMovesfromState(4);
+    // manager_.testRandomTurns(10);
     // manager_.startNext();
     // manager_.takeTurn();
     // manager_.startNext();
     // manager_.takeTurn();
 
-    std::cout << "[Play game] Past game tests." << std::endl;
+    std::cout << "[Play game] Passed game tests." << std::endl;
     ros::spin();
 }
 

@@ -9,6 +9,9 @@
 
 namespace agents
 {
+/** @class Robot
+ * @brief contains and tracks static and dynamic robot state information and attributes
+ */
 // . Base class
 class Robot
 {
@@ -58,32 +61,32 @@ public:
     // . Reset
     void reset_remaining_movement () {
         remaining_movement = max_turn_movement;
-        std::cout << "\t\t(agent " << id << ") remaining_movement reset to " << max_turn_movement << std::endl;
+        // std::cout << "\t\t(agent " << id << ") remaining_movement reset to " << max_turn_movement << std::endl;
     }
     void reset_remaining_battery () {
         remaining_battery = max_battery_life;
-        std::cout << "\t\t(agent " << id << ") remaining_battery reset to " << max_battery_life << std::endl;
+        // std::cout << "\t\t(agent " << id << ") remaining_battery reset to " << max_battery_life << std::endl;
     }
     void reset_remaining_charge_time () {
         remaining_charge_time = recharge_time;
-        std::cout << "\t\t(agent " << id << ") remaining_charge_time reset to " << recharge_time << std::endl;
+        // std::cout << "\t\t(agent " << id << ") remaining_charge_time reset to " << recharge_time << std::endl;
     }
     void reset_remaining_coverage () {
         remaining_coverage = max_turn_coverage;
-        std::cout << "\t\t(agent " << id << ") remaining_coverage reset to " << max_turn_coverage << std::endl;
+        // std::cout << "\t\t(agent " << id << ") remaining_coverage reset to " << max_turn_coverage << std::endl;
     }
     void reset_score () {
         score = 0;
-        std::cout << "\t\t(agent " << id << ") score reset to " << score << std::endl;
+        // std::cout << "\t\t(agent " << id << ") score reset to " << score << std::endl;
     }
     // . Update
     void update_location (int index) {
         location = index;
-        std::cout << "\t\t(agent " << id << ") location updated to " << index << std::endl;
+        // std::cout << "\t\t(agent " << id << ") location updated to " << index << std::endl;
     }
     void update_score (int update) {
         score += update;
-        std::cout << "\t\t(agent " << id << ") score updated by a value of " << update << " to " << score << std::endl;
+        // std::cout << "\t\t(agent " << id << ") score updated by a value of " << update << " to " << score << std::endl;
     }
 
     int remaining_movement;
@@ -104,18 +107,28 @@ private:
 };
 
 // . Drone, Quadruped, Gantry classes
+/** @class Drone
+ * @brief inherits from Robot class and populates with set values for attributes
+ */
 class Drone : public Robot
 {
 public:
-    Drone(std::string handle) : Robot(handle, 0, true, 5, 1, 2, 2) {}
+    Drone(std::string handle) : Robot(handle, 0, true, 10, 2, 3, 2) {}
+    // Drone(std::string handle) : Robot(handle, 0, true, 5, 1, 2, 2) {} // & definitely too weak
 };
 
+/** @class Quadruped
+ * @brief inherits from Robot class and populates with set values for attributes
+ */
 class Quadruped : public Robot
 {
 public:
     Quadruped(std::string handle) : Robot(handle, 1, false, 3, 2, 10, 2) {}
 };
 
+/** @class Gantry
+ * @brief inherits from Robot class and populates with set values for attributes
+ */
 class Gantry : public Robot
 {
 public:
@@ -123,12 +136,19 @@ public:
 };
 
 // . Instantiation function
+/** @struct Party
+ * @brief contains a map of Robot players with keys that match the elements of a vector that tracks playing order 
+ */
 struct Party
 {
     std::map<std::string, Robot> players;
     std::vector<std::string> playing_order;
 };
 
+/** Randmly shuffles a party
+ * @brief randomly shuffles the playing order of a given party
+ * @param party Party type object with a playing order to be shuffled 
+ */
 void randomShufflePlayingOrder (agents::Party &party)
 {
     std::shuffle(std::begin(party.playing_order), std::end(party.playing_order), std::random_device());
@@ -138,6 +158,14 @@ void randomShufflePlayingOrder (agents::Party &party)
     }
 }
 
+/** Instantiates the party for the current game
+ * @brief creates a party object with players and a playing order for a game
+ * @param num_drones the number of Drone type players to instantiate
+ * @param num_quadrupeds the number of Drone type players to instantiate
+ * @param num_gantries the number of Drone type players to instantiate
+ * @param random_shuffle tells whether the playing order should be randomly shuffled after instantiation or not
+ * @return Party type, as map with players and an order in which they play
+ */
 Party instantiatePlayers (const int num_drones, const int num_quadrupeds, const int num_gantries, bool random_shuffle=true)
 {
     Party party;
