@@ -89,7 +89,7 @@ void GameManager::takeRandomTurn ()
     startNext();
 }
 
-void GameManager::playRandomMove (TurnSequences candidates)
+void GameManager::playRandomMove (TurnOptions candidates)
 {
     // - randomly pick a possilbe turn
     std::random_device dev;
@@ -146,9 +146,9 @@ std::vector<std::string> GameManager::determineWinners ()
     return winners;
 }
 
-TurnSequences GameManager::generateRandomTurns (const int num_moves)
+TurnOptions GameManager::generateRandomTurns (const int num_moves)
 {
-    TurnSequences possible_turns;
+    TurnOptions possible_turns;
     for (std::size_t i = 0; i < num_moves; i++) {
         possible_turns.push_back(generateRandomTurn());
     }
@@ -336,7 +336,7 @@ void GameManager::printMovesfromState (int state)
 
 void GameManager::testRandomTurns (int num)
 {
-    TurnSequences candidates {generateRandomTurns(num)};
+    TurnOptions candidates {generateRandomTurns(num)};
 
     for (std::size_t i = 0; i < candidates.size(); i++) {
         std::cout << "Turn option " << static_cast<int>(i) << ": " << std::endl;

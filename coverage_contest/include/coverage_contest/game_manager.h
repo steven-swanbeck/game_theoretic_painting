@@ -34,9 +34,9 @@ public:
 
     /** Given a set of candiate turns, randomly selects one and plays it
      * @brief executes a turn randomly chosen from a set of options
-     * @param candidates TurnSequences type, set of possible valid turns
+     * @param candidates TurnOptions type, set of possible valid turns
      */
-    void playRandomMove (TurnSequences candidates);
+    void playRandomMove (TurnOptions candidates);
 
     /** Plays a given turn, adjusting robot params and values accordingly  
      * @brief executes a turn
@@ -127,9 +127,9 @@ public:
     /** Generates a number of random possible turns for the current player accounting for the current game state
      * @brief randomly generate moves for the current player given the current game state
      * @param num_moves the number of random candidate moves that should be generated
-     * @return TurnSequences, vector of TurnSequence types, each with a queue of Action types
+     * @return TurnOptions, vector of TurnSequence types, each with a queue of Action types
      */
-    TurnSequences generateRandomTurns (const int num_moves);
+    TurnOptions generateRandomTurns (const int num_moves);
 
     // Testing functions
     void printMovesfromState (int state);

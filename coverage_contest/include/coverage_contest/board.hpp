@@ -122,7 +122,7 @@ struct Action {
 };
 using MoveOptions = std::vector<Action>;
 using TurnSequence = std::queue<Action>;
-using TurnSequences = std::vector<TurnSequence>;
+using TurnOptions = std::vector<TurnSequence>;
 
 namespace board_utils
 {
