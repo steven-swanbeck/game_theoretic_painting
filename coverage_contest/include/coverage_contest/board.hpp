@@ -120,9 +120,9 @@ struct Action {
     int move_id {-1};
     int repair_id {-1};
 };
-using PossibleMoves = std::vector<Action>;
-using PossibleTurn = std::queue<Action>;
-using PossibleTurns = std::vector<PossibleTurn>;
+using MoveOptions = std::vector<Action>;
+using TurnSequence = std::queue<Action>;
+using TurnSequences = std::vector<TurnSequence>;
 
 namespace board_utils
 {

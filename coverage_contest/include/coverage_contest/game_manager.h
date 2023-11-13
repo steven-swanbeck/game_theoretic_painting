@@ -34,15 +34,15 @@ public:
 
     /** Given a set of candiate turns, randomly selects one and plays it
      * @brief executes a turn randomly chosen from a set of options
-     * @param candidates PossibleTurns type, set of possible valid turns
+     * @param candidates TurnSequences type, set of possible valid turns
      */
-    void playRandomMove (PossibleTurns candidates);
+    void playRandomMove (TurnSequences candidates);
 
     /** Plays a given turn, adjusting robot params and values accordingly  
      * @brief executes a turn
-     * @param sequence PossibleTurn type, queue of actions to execute
+     * @param sequence TurnSequence type, queue of actions to execute
      */
-    void playSequence (PossibleTurn &sequence);
+    void playSequence (TurnSequence &sequence);
 
     /** Monitors for terminal state after each turn
      * @brief looks through RepairBoard and checks if any spots have yet to be covered
@@ -99,37 +99,37 @@ public:
     
     /** Lists all possible actions that can be taken at a particular graph node for currently playing robot at its current location
      * @brief list moves that can be taken at a particular location given robot-specific movement constraints
-     * @return PossibleMoves type, as vector of Action types
+     * @return MoveOptions type, as vector of Action types
      */
-    PossibleMoves listMovesfromNode ();
+    MoveOptions listMovesfromNode ();
     
     /** Lists all possible actions that can be taken at a particular graph node for currently playing robot
      * @brief list moves that can be taken at a particular location given robot-specific movement constraints
      * @param index int type, denotes node id for which moves should be generated
-     * @return PossibleMoves type, as vector of Action types
+     * @return MoveOptions type, as vector of Action types
      */
-    PossibleMoves listMovesfromNode (const int &index);
+    MoveOptions listMovesfromNode (const int &index);
     
     /** Lists all possible actions that can be taken at the current location of a robot accounting for that robot's attributes
      * @brief list moves that can be taken at a particular location given robot-specific movement constraints and decaying attributes
      * @param player agents::Robot type with assigned relevant attributes
      * @param board RepairBoard type tracking areas that still need to be repaired
-     * @return PossibleMoves type, as vector of Action types
+     * @return MoveOptions type, as vector of Action types
      */
-    PossibleMoves listMovesfromNodeConstrained (agents::Robot &player, RepairBoard &board);
+    MoveOptions listMovesfromNodeConstrained (agents::Robot &player, RepairBoard &board);
     
     /** Generates a random possible turn for the current player accounting for the current game state
      * @brief randomly generate a move for the current player given the current game state
-     * @return PossibleTurn type, with a queue of Action types
+     * @return TurnSequence type, with a queue of Action types
      */
-    PossibleTurn generateRandomTurn ();
+    TurnSequence generateRandomTurn ();
     
     /** Generates a number of random possible turns for the current player accounting for the current game state
      * @brief randomly generate moves for the current player given the current game state
      * @param num_moves the number of random candidate moves that should be generated
-     * @return PossibleTurns, vector of PossibleTurn types, each with a queue of Action types
+     * @return TurnSequences, vector of TurnSequence types, each with a queue of Action types
      */
-    PossibleTurns generateRandomTurns (const int num_moves);
+    TurnSequences generateRandomTurns (const int num_moves);
 
     // Testing functions
     void printMovesfromState (int state);

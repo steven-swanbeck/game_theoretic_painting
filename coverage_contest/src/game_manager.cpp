@@ -89,7 +89,7 @@ void GameManager::takeRandomTurn ()
     startNext();
 }
 
-void GameManager::playRandomMove (PossibleTurns candidates)
+void GameManager::playRandomMove (TurnSequences candidates)
 {
     // - randomly pick a possilbe turn
     std::random_device dev;
@@ -98,7 +98,7 @@ void GameManager::playRandomMove (PossibleTurns candidates)
     playSequence (candidates[dist(rng)]);
 }
 
-void GameManager::playSequence (PossibleTurn &sequence)
+void GameManager::playSequence (TurnSequence &sequence)
 {
     // - play the sequence, updating the global board and party accordingly
     while (!sequence.empty()) {
@@ -146,18 +146,18 @@ std::vector<std::string> GameManager::determineWinners ()
     return winners;
 }
 
-PossibleTurns GameManager::generateRandomTurns (const int num_moves)
+TurnSequences GameManager::generateRandomTurns (const int num_moves)
 {
-    PossibleTurns possible_turns;
+    TurnSequences possible_turns;
     for (std::size_t i = 0; i < num_moves; i++) {
         possible_turns.push_back(generateRandomTurn());
     }
     return possible_turns;
 }
 
-PossibleTurn GameManager::generateRandomTurn ()
+TurnSequence GameManager::generateRandomTurn ()
 {
-    PossibleTurn possible_turn;
+    TurnSequence possible_turn;
 
     std::random_device dev;
     std::mt19937 rng(dev());
@@ -171,7 +171,7 @@ PossibleTurn GameManager::generateRandomTurn ()
     RepairBoard board {board_.repair_spaces};
 
     while (!reached_terminal_state) {
-        PossibleMoves candidates {listMovesfromNodeConstrained(player, board)};
+        MoveOptions candidates {listMovesfromNodeConstrained(player, board)};
 
         // - return if we are at a terminal state
         if (candidates.size() < 1) {
@@ -181,7 +181,7 @@ PossibleTurn GameManager::generateRandomTurn ()
             std::uniform_int_distribution<std::mt19937::result_type> dist(0, candidates.size() - 1);
             Action move = candidates[dist(rng)];
 
-            // - add it to the PossibleTurn and update state variable
+            // - add it to the TurnSequence and update state variable
             possible_turn.push(move);
 
             // - simulate robot taking that action
@@ -198,9 +198,9 @@ PossibleTurn GameManager::generateRandomTurn ()
     return possible_turn;
 }
 
-PossibleMoves GameManager::listMovesfromNodeConstrained (agents::Robot &player, RepairBoard &board)
+MoveOptions GameManager::listMovesfromNodeConstrained (agents::Robot &player, RepairBoard &board)
 {
-    PossibleMoves candidates;
+    MoveOptions candidates;
 
     if ((player.remaining_movement > 0) && (player.remaining_coverage == player.get_max_turn_coverage())) {
         std::vector<int> movement_edges;
@@ -253,9 +253,9 @@ PossibleMoves GameManager::listMovesfromNodeConstrained (agents::Robot &player, 
     return candidates;
 }
 
-PossibleMoves GameManager::listMovesfromNode (const int &index)
+MoveOptions GameManager::listMovesfromNode (const int &index)
 {
-    PossibleMoves candidates;
+    MoveOptions candidates;
 
     // - create a move for all movement options and repair options
     std::vector<int> movement_edges;
@@ -301,7 +301,7 @@ PossibleMoves GameManager::listMovesfromNode (const int &index)
     return candidates;
 }
 
-PossibleMoves GameManager::listMovesfromNode ()
+MoveOptions GameManager::listMovesfromNode ()
 {
     return listMovesfromNode (party_.players.at(playingNow()).get_location());
 }
@@ -324,7 +324,7 @@ bool GameManager::hasSufficientBattery ()
 void GameManager::printMovesfromState (int state)
 {
     std::cout << "Move candidates at state " << state << ":" << std::endl;
-    PossibleMoves candidates {listMovesfromNode(state)};
+    MoveOptions candidates {listMovesfromNode(state)};
     for (int i = 0; i < candidates.size(); i++) {
         if (candidates[i].repair_id == -1) {
             std::cout << "\tMovement option: " << candidates[i].move_id << std::endl; 
@@ -336,7 +336,7 @@ void GameManager::printMovesfromState (int state)
 
 void GameManager::testRandomTurns (int num)
 {
-    PossibleTurns candidates {generateRandomTurns(num)};
+    TurnSequences candidates {generateRandomTurns(num)};
 
     for (std::size_t i = 0; i < candidates.size(); i++) {
         std::cout << "Turn option " << static_cast<int>(i) << ": " << std::endl;
