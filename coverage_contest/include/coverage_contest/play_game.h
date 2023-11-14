@@ -1,8 +1,8 @@
 #ifndef GAME_PLAYER_H
 #define GAME_PLAYER_H
 
-#include "haphephobia/common.h"
-#include "haphephobia/point.h"
+#include "common.h"
+#include "point.h"
 #include "board.hpp"
 #include "agents.hpp"
 #include "game_manager.h"

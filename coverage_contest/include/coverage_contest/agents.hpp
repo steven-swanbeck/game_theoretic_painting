@@ -1,8 +1,8 @@
 #ifndef GAME_PLAYERS_H
 #define GAME_PLAYERS_H
 
-#include "haphephobia/common.h"
-#include "haphephobia/point.h"
+#include "common.h"
+#include "point.h"
 #include <algorithm>
 #include <random>
 #include <any>

@@ -2,7 +2,7 @@
 
 GamePlayer::GamePlayer ()
 {
-    manager_.instantiateBoard("/home/steven/game_theoretic_painting/src/models/clouds/revised/map.pcd", 3.0, "/home/steven/game_theoretic_painting/src/models/clouds/revised/marked.pcd", 1.0);
+    manager_.instantiateBoard("/home/Research/Workspaces/ASE_389/src/game_theoretic_painting/models/clouds/revised/map.pcd", 3.0, "/home/Research/Workspaces/ASE_389/src/models/clouds/revised/marked.pcd", 1.0);
     manager_.instantiatePlayers(1, 1, 1, 12);
     // manager_.instantiatePlayers(1, 0, 0, 0);
     

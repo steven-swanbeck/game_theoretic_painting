@@ -14,7 +14,6 @@ find_package(catkin REQUIRED COMPONENTS
     message_generation
     pcl_ros
     pcl_conversions
-    haphephobia
 )
 
 ## System dependencies are found with CMake's conventions

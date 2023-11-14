@@ -1,8 +1,8 @@
 #ifndef MONTE_CARLO_TREE_SEARCH
 #define MONTE_CARLO_TREE_SEARCH
 
-#include "haphephobia/common.h"
-#include "haphephobia/point.h"
+#include "common.h"
+#include "point.h"
 #include "board.hpp"
 #include "agents.hpp"
 #include <chrono>
