@@ -10,4 +10,4 @@ game_theoretic_painting:
     n_drones:                   1
     n_quadrupeds:               1
     n_gantries:                 1
-    starting_location:          12
+    starting_location:          12 # ? any negative number (ie. -1) will make starting locations be randomly assigned

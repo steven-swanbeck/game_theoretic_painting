@@ -78,7 +78,7 @@ public:
      * @param num_gantries number of gantry players
      * @param starting_position node id in spatial graph from which play begins for all players
      */
-    void instantiatePlayers (const int &num_drones, const int &num_quadrupeds, const int &num_gantries, int starting_position=0);
+    void instantiatePlayers (const int &num_drones, const int &num_quadrupeds, const int &num_gantries, int starting_position=-1);
     
     /** Generates random playing turn order for the party
      * @brief uses agents::randomShufflePlayingOrder on instantiated party to generate a random turn order

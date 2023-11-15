@@ -28,8 +28,24 @@ void GameManager::instantiatePlayers (const int &num_drones, const int &num_quad
     party_ = agents::instantiatePlayers(num_drones, num_quadrupeds, num_gantries);
     player_turn_ = 0;
     total_turns_ = 0;
-    for (std::size_t i = 0; i < party_.playing_order.size(); i++) {
-        party_.players.at(party_.playing_order[i]).update_location(starting_position);
+    if (starting_position < 0) {
+        // - enumerate possible options
+        std::vector<int> viable_starting_locations;
+        MoveBoard::iterator it;
+        for (it = board_.movement_spaces.begin(); it != board_.movement_spaces.end(); it++) {
+            viable_starting_locations.push_back(it->first);
+        }
+        // - randomly assign one to each of them
+        std::random_device rd;
+        std::mt19937 rng(rd());
+        std::uniform_int_distribution<> distr(0, viable_starting_locations.size() - 1);
+        for (std::size_t i = 0; i < party_.playing_order.size(); i++) {
+            party_.players.at(party_.playing_order[i]).update_location(viable_starting_locations[distr(rng)]);
+        }
+    } else {
+        for (std::size_t i = 0; i < party_.playing_order.size(); i++) {
+            party_.players.at(party_.playing_order[i]).update_location(starting_position);
+        }
     }
     if (log_level_) {
         std::cout << "[Manager]\n------------------------------------------------------------\nStarting Party Turn " << total_turns_ << "\n------------------------------------------------------------" << std::endl;

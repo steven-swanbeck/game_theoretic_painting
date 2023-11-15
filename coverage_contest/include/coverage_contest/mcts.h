@@ -15,16 +15,23 @@ struct DynamicBoard
     RepairBoard repair_board;
 };
 
-struct Leaf {
-    // DynamicBoard game_state;
+struct PrimalLeaf {
     GameManager game_state;
     float value {0};
     int episodes {0};
     TurnSequence turn;
-    Leaf(Board board, agents::Party party, int player_turn) : game_state(board, party, player_turn) {}
+    PrimalLeaf(Board board, agents::Party party, int player_turn) : game_state(board, party, player_turn) {}
 };
 
-typedef std::vector<Leaf> Children;
+struct GeneticLeaf {
+    GameManager game_state;
+    float value {0};
+    int episodes {0};
+    GeneticLeaf(Board board, agents::Party party, int player_turn) : game_state(board, party, player_turn) {}
+};
+
+typedef std::vector<PrimalLeaf> Ancestors;
+typedef std::vector<GeneticLeaf> Children;
 
 // TODO
 // - generate set of random turns from the current state
@@ -42,9 +49,13 @@ public:
 private:
     // TurnSequence constructTreeSearch (int num_candidates, std::chrono::duration<float> duration);
     TurnSequence constructTreeSearch (int num_candidates, std::chrono::duration<float> duration);
-    Leaf upperConfidenceStrategy (Children &children);
-    Leaf findLeaf (Children &children);
-    void backpropagate (Leaf &node, float result);
+    Ancestors generateCandidates (int num_candidates);
+    PrimalLeaf generateCandidate (TurnSequence &turn);
+    PrimalLeaf upperConfidenceStrategy (Ancestors &candidates, float c=1.4142136);
+    PrimalLeaf findLeaf (Ancestors &candidates);
+    void backpropagate (PrimalLeaf &ancestor, GeneticLeaf &child);
+    float calculateCumulativeValue (GameManager &state);
+    float calculateAverageValue (GameManager &state);
 
     GameManager manager_;
 };

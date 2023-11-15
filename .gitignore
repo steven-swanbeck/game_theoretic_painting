@@ -1,3 +1,4 @@
 models/CAD/*
 models/clouds/*
 .vscode/
+coverage_contest/config/params.yaml
