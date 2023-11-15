@@ -118,6 +118,7 @@ catkin_package(
 
 add_library(game_manager src/game_manager.cpp)
 add_library(mcts src/mcts.cpp)
+add_library(game_visualizer src/game_visualizer.cpp)
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
@@ -141,6 +142,7 @@ target_link_libraries(
     ${PCL_LIBRARIES}
     game_manager
     mcts
+    game_visualizer
 )
 
 ## Declare a C++ library

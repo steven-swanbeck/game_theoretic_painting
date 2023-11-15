@@ -2,11 +2,12 @@
 
 GamePlayer::GamePlayer ()
 {
-    manager_.instantiateBoard("/home/Research/Workspaces/ASE_389/src/game_theoretic_painting/models/clouds/revised/map.pcd", 3.0, "/home/Research/Workspaces/ASE_389/src/models/clouds/revised/marked.pcd", 1.0);
+    // Create boards for movement and repair tasks
+    manager_.instantiateBoard("${HOME}/Research/Workspaces/ASE_389/src/game_theoretic_painting/models/clouds/revised/map.pcd", 3.0, "${HOME}/Research/Workspaces/ASE_389/src/models/clouds/revised/marked.pcd", 1.0);
     manager_.instantiatePlayers(1, 1, 1, 12);
     // manager_.instantiatePlayers(1, 0, 0, 0);
     
-    manager_.simulateRandomGame();
+    // manager_.simulateRandomGame();
     
     // manager_.listMovesfromNode();
     // manager_.takeRandomTurn();
@@ -25,7 +26,10 @@ GamePlayer::GamePlayer ()
     // manager_.startNext();
     // manager_.takeTurn();
 
-    std::cout << "[Play game] Passed game tests." << std::endl;
+    // std::cout << "[Play game] Passed game tests." << std::endl;
+
+    visualizer_(nh_);
+
     ros::spin();
 }
 
@@ -36,4 +40,8 @@ int main (int argc, char **argv)
     ros::init(argc, argv, "play_game");
     GamePlayer game_player;
     return 0;
+}
+
+void visualizer_test(void) {
+
 }

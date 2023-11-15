@@ -7,6 +7,7 @@
 #include "agents.hpp"
 #include "game_manager.h"
 #include "mcts.h"
+#include "game_visualizer.h"
 
 class GamePlayer
 {
@@ -22,6 +23,7 @@ private:
     Board board_;
     agents::Party party_;
     MCTS mcts_;
+    GameVisualizer visualizer_;
 };
 
 #endif // GAME_PLAYER_H
