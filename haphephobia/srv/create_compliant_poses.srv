@@ -1,7 +1,0 @@
-sensor_msgs/PointCloud2 cluster
-sensor_msgs/PointCloud2 vf_cloud
-geometry_msgs/Pose base_pose
----
-geometry_msgs/Pose[] vf_poses
-geometry_msgs/Pose[] eef_poses
-int32[] planning_status

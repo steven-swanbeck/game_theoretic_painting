@@ -1,8 +1,8 @@
 #ifndef GAME_BOARD_H
 #define GAME_BOARD_H
 
-#include "haphephobia/common.h"
-#include "haphephobia/point.h"
+#include "coverage_contest/common.h"
+#include "coverage_contest/point.h"
 #include <pcl/octree/octree_pointcloud_voxelcentroid.h>
 #include <pcl/octree/octree_pointcloud_density.h>
 #include <pcl/octree/octree_pointcloud_pointvector.h>

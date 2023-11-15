@@ -1,4 +1,0 @@
-sensor_msgs/PointCloud2 input
----
-sensor_msgs/PointCloud2 colored
-sensor_msgs/PointCloud2[] clusters
