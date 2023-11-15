@@ -25,7 +25,7 @@ private:
     Board board_;
     agents::Party party_;
     // MCTS mcts_;
-    GameVisualizer visualizer_;
+    // GameVisualizer visualizer_;
 };
 
 #endif // GAME_PLAYER_H

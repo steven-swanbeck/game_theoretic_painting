@@ -48,7 +48,8 @@ GamePlayer::GamePlayer ()
 
     // std::cout << "[Play game] Passed game tests." << std::endl;
 
-    visualizer_(nh_);
+    // visualizer_(nh_);
+    // visualizer_ = GameVisualizer(nh_);
 
     ros::spin();
 }
@@ -74,8 +75,4 @@ int main (int argc, char **argv)
     ros::init(argc, argv, "play_game");
     GamePlayer game_player;
     return 0;
-}
-
-void visualizer_test(void) {
-
 }
