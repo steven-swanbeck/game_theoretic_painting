@@ -1,0 +1,13 @@
+game_theoretic_painting:
+  paths:
+    src_path:                    /home/steven/game_theoretic_painting/src/
+  board:
+    movement:
+      discretization:           3.0
+    repair:
+      discretization:           1.0
+  party:
+    n_drones:                   1
+    n_quadrupeds:               1
+    n_gantries:                 1
+    starting_location:          12

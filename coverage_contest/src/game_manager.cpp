@@ -1,8 +1,17 @@
 #include "coverage_contest/game_manager.h"
 
-GameManager::GameManager ()
+GameManager::GameManager (bool log_level)
 {
-    // TODO
+    log_level_ = log_level;
+}
+
+GameManager::GameManager (Board board, agents::Party party, int player_turn, bool log_level)
+{
+    board_ = board;
+    party_ = party;
+    player_turn_ = player_turn;
+    total_turns_ = 0;
+    log_level_ = log_level;
 }
 
 void GameManager::instantiateBoard (const std::string &move_dir, const float &move_discretization, const std::string &repair_dir, const float &repair_discretization)
@@ -22,8 +31,10 @@ void GameManager::instantiatePlayers (const int &num_drones, const int &num_quad
     for (std::size_t i = 0; i < party_.playing_order.size(); i++) {
         party_.players.at(party_.playing_order[i]).update_location(starting_position);
     }
-    std::cout << "[Manager]\n------------------------------------------------------------\nStarting Party Turn " << total_turns_ << "\n------------------------------------------------------------" << std::endl;
-    std::cout << "[Manager] " << party_.playing_order[player_turn_] << " is starting their turn." << std::endl;
+    if (log_level_) {
+        std::cout << "[Manager]\n------------------------------------------------------------\nStarting Party Turn " << total_turns_ << "\n------------------------------------------------------------" << std::endl;
+        std::cout << "[Manager] " << party_.playing_order[player_turn_] << " is starting their turn." << std::endl;
+    }
 }
 
 void GameManager::generateTurnOrder ()
@@ -38,9 +49,13 @@ std::string GameManager::startNext ()
     if (player_turn_ > (party_.playing_order.size() - 1)) {
         player_turn_ = 0;
         total_turns_++;
-        std::cout << "[Manager]\n------------------------------------------------------------\nStarting Party Turn " << total_turns_ << "\n------------------------------------------------------------" << std::endl;
+        if (log_level_) {
+            std::cout << "[Manager]\n------------------------------------------------------------\nStarting Party Turn " << total_turns_ << "\n------------------------------------------------------------" << std::endl;
+        }
     }
-    std::cout << "[Manager] " << party_.playing_order[player_turn_] << " is starting their turn." << std::endl;
+    if (log_level_) {
+        std::cout << "[Manager] " << party_.playing_order[player_turn_] << " is starting their turn." << std::endl;
+    }
     // std::cout << "[Manager] Up next is " << party_.players.at(party_.playing_order[player_turn_]).get_id() << std::endl;
     return party_.playing_order[player_turn_];
 }
@@ -51,18 +66,39 @@ std::string GameManager::playingNow ()
     return party_.playing_order[player_turn_];
 }
 
-void GameManager::simulateRandomGame ()
+void GameManager::playRandomGame ()
 {
     while (!isOver()) {
         takeRandomTurn();
     }
-    std::cout << "[Manager]\n------------------------------------------------------------\nGame has reached terminal state after " << total_turns_  << " turns!" << "\n------------------------------------------------------------" << std::endl;
     std::vector<std::string> winners {determineWinners()};
-    std::cout << "\tWinner(s):";
-    for (std::string winner : winners) {
-        std::cout << winner << " (" << party_.players.at(winner).get_score() << "),";
+    if (log_level_) {
+        std::cout << "[Manager]\n------------------------------------------------------------\nGame has reached terminal state after " << total_turns_  << " turns!" << "\n------------------------------------------------------------" << std::endl;
+        std::cout << "\tWinner(s):";
+        for (std::string winner : winners) {
+            std::cout << winner << " (" << party_.players.at(winner).get_score() << "),";
+        }
+        std::cout << std::endl;
     }
-    std::cout << std::endl;
+}
+
+void GameManager::playToDepth (const int &depth)
+{
+    for (std::size_t i = 0; i < depth; i++) {
+        if (isOver()) {
+            break;
+        }
+        takeRandomTurn();
+    }
+    std::vector<std::string> winners {determineWinners()};
+    if (log_level_) {
+        std::cout << "[Manager] Game has reached recursed to set depth of " << depth  << " turns!" << std::endl;
+        std::cout << "\tWinner(s):";
+        for (std::string winner : winners) {
+            std::cout << winner << " (" << party_.players.at(winner).get_score() << "),";
+        }
+        std::cout << std::endl;
+    }
 }
 
 void GameManager::takeRandomTurn ()
@@ -78,13 +114,14 @@ void GameManager::takeRandomTurn ()
     // - reset turn-based decaying values
     party_.players.at(playingNow()).reset_remaining_movement();
     party_.players.at(playingNow()).reset_remaining_coverage();
-    std::cout << "\tPlayer update:" << std::endl;
-    std::cout << "\t\tid: " << party_.players.at(playingNow()).get_id() << std::endl;
-    std::cout << "\t\tlocation: " << party_.players.at(playingNow()).get_location() << std::endl;
-    std::cout << "\t\tscore: " << party_.players.at(playingNow()).get_score() << std::endl;
-    std::cout << "\t\tbattery: " << party_.players.at(playingNow()).remaining_battery << std::endl;
-    std::cout << "\t\tcharge: " << party_.players.at(playingNow()).remaining_charge_time << std::endl;
-
+    if (log_level_) {
+        std::cout << "\tPlayer update:" << std::endl;
+        std::cout << "\t\tid: " << party_.players.at(playingNow()).get_id() << std::endl;
+        std::cout << "\t\tlocation: " << party_.players.at(playingNow()).get_location() << std::endl;
+        std::cout << "\t\tscore: " << party_.players.at(playingNow()).get_score() << std::endl;
+        std::cout << "\t\tbattery: " << party_.players.at(playingNow()).remaining_battery << std::endl;
+        std::cout << "\t\tcharge: " << party_.players.at(playingNow()).remaining_charge_time << std::endl;
+    }
     // - start the next player's turn
     startNext();
 }
@@ -103,16 +140,15 @@ void GameManager::playSequence (TurnSequence &sequence)
     // - play the sequence, updating the global board and party accordingly
     while (!sequence.empty()) {
         Action action {sequence.front()};
-
         if (action.move_id != -1) {
             // - handle movements
             party_.players.at(playingNow()).update_location(action.move_id);
-            std::cout << "\t\tRobot moved to move node " << action.move_id << std::endl;
+            if (log_level_) {std::cout << "\t\tRobot moved to move node " << action.move_id << std::endl;}
         } else {
             // - handle repairs and add to score
             board_.repair_spaces.at(action.repair_id).covered = true;
             party_.players.at(playingNow()).update_score(1);
-            std::cout << "\t\tRobot repaired repair node " << action.repair_id << std::endl;
+            if (log_level_) {std::cout << "\t\tRobot repaired repair node " << action.repair_id << std::endl;}
         }
         sequence.pop();
     }

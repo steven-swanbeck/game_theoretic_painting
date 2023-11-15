@@ -1,8 +1,8 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
-#include "common.h"
-#include "point.h"
+#include "coverage_contest/common.h"
+#include "coverage_contest/point.h"
 #include "board.hpp"
 #include "agents.hpp"
 
@@ -20,17 +20,23 @@
 class GameManager
 {
 public:
-    GameManager ();
+    GameManager (bool log_level=true);
+    GameManager (Board board, agents::Party party, int player_turn, bool log_level=false);
 
     /** Plays random valid moves for each player until a terminal state is reached
-     * @brief simulates a game randomly to completion
+     * @brief plays a game randomly to completion
      */
-    void simulateRandomGame ();
+    void playRandomGame ();
 
     /** Randomly generates and executes a turn for the current player and updates game state accordingly 
      * @brief executes a random turn for the current player
      */
     void takeRandomTurn ();
+
+    /** Randomly generates and executes a set number of individual turns into the future
+     * @brief executes a random number of turns
+     */
+    void playToDepth (const int &depth);
 
     /** Given a set of candiate turns, randomly selects one and plays it
      * @brief executes a turn randomly chosen from a set of options
@@ -135,11 +141,13 @@ public:
     void printMovesfromState (int state);
     void testRandomTurns (int num);
 
-private:
     Board board_;
     agents::Party party_;
     int player_turn_;
+
+private:
     int total_turns_;
+    bool log_level_;
 };
 
 #endif // GAME_MANAGER_H
