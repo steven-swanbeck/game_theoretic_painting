@@ -1,6 +1,6 @@
 game_theoretic_painting:
   paths:
-    src_path:                    /home/steven/game_theoretic_painting/src/
+    src_path:                    /home/Research/Workspaces/ASE_389/src/game_theoretic_painting/src/
   board:
     movement:
       discretization:           3.0

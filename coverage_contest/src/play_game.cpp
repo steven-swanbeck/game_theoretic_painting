@@ -48,8 +48,16 @@ GamePlayer::GamePlayer ()
 
     // std::cout << "[Play game] Passed game tests." << std::endl;
 
+    // Create visualizer object
+    visualizer_ = new GameVisualizer(nh_);
+
     play_random_game_server_ = nh_.advertiseService("play_random_game", &GamePlayer::playRandomGame, this);
+
+    // Create a service for testing GameVisualizer functionality
+    test_game_visualizer_ = nh_.advertiseService("test_game_visualizer", &GamePlayer::testGameVisualizer, this);
+
     ROS_INFO_STREAM("[GamePlayer] Up and ready.");
+
     ros::spin();
 }
 
@@ -89,6 +97,52 @@ void GamePlayer::simulateGame ()
     }
 
     // std::cout << alt_manager.party_.players.at("gantry_0").get_score() << std::endl;
+}
+
+// TODO Add these to the YAML file
+#define ENVIRONMENT_MESH  "package://coverage_contest/meshes/URSA.stl"
+#define QUADRUPED_MESH  "package://coverage_contest/meshes/spot_body.dae"
+
+bool GamePlayer::testGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+{
+    ros::Rate r(1);
+    r.sleep();
+
+    // Add environment
+    visualizer_->addEnvironmentMarker(ENVIRONMENT_MESH);
+    visualizer_->publishEnvironmentMarker();
+
+    // Add players
+    visualizer_->addPlayer("quadruped0", QUADRUPED_MESH);
+    visualizer_->movePlayerMarker("quadruped0", std::vector<float_t>{0.0, 0.0, 0.0});
+    visualizer_->publishPlayerMarker("quadruped0");
+
+    visualizer_->addPlayer("quadruped1", QUADRUPED_MESH);
+    visualizer_->movePlayerMarker("quadruped1", std::vector<float_t>{0.0, 1.0, 0.0});
+    visualizer_->publishPlayerMarker("quadruped1");
+
+    // Move players
+    for (uint8_t i = 0; i < 10; i++) {
+        visualizer_->publishPlayerMarker("quadruped0");
+        visualizer_->movePlayerMarker("quadruped0", std::vector<float_t>{(float)(0.5 * i), 0.0, 0.0});
+        visualizer_->publishPlayerMarker("quadruped0");
+
+        visualizer_->publishPlayerMarker("quadruped1");
+        visualizer_->movePlayerMarker("quadruped1", std::vector<float_t>{(float)(0.5 * i), 1.0, 0.0});
+        visualizer_->publishPlayerMarker("quadruped1");
+        
+        r.sleep();
+    }
+
+    r.sleep();
+
+    // Clear visualizer
+    visualizer_->clearVisualizer();
+
+
+    res.success = true;
+    res.message = "Test Completed!";
+    return res.success;
 }
 
 // TODO add ability to cluster and generate vfs for objects here once board graph is ready

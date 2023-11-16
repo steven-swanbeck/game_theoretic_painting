@@ -16,10 +16,12 @@ public:
 private:
     void simulateGame ();
     bool playRandomGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
+    bool testGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
 
     ros::NodeHandle nh_;
 
     ros::ServiceServer play_random_game_server_;
+    ros::ServiceServer test_game_visualizer_;
     
     sensor_msgs::PointCloud2 map_;
     sensor_msgs::PointCloud2 marked_;
@@ -28,7 +30,8 @@ private:
     Board board_;
     agents::Party party_;
     // MCTS mcts_;
-    // GameVisualizer visualizer_;
+    GameVisualizer *visualizer_;
+    // boost::scoped_ptr<GameVisualizer> visualizer_;
 };
 
 #endif // GAME_PLAYER_H

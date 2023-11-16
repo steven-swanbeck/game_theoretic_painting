@@ -1,12 +1,12 @@
 #include "coverage_contest/game_visualizer.h"
 
-GameVisualizer::GameVisualizer (ros::NodeHandle &nh) {
-    // TODO Fix getting the node handle
-    // Initialize node handle
-    nh_ = nh;
+GameVisualizer::GameVisualizer (ros::NodeHandle nh) : nh_(nh) {
+    ROS_INFO_STREAM("[GameVisualizer] Created game visualizer.");
 
     // Create marker publisher
     marker_pub_ = nh_.advertise<visualization_msgs::Marker>(marker_topic_, 10);
+
+    ROS_INFO_STREAM("[GameVisualizer] Created a marker publisher.");
 }
 
 void GameVisualizer::clearVisualizer(void) {
@@ -23,6 +23,8 @@ void GameVisualizer::clearVisualizer(void) {
 
     // Clear all players
     players_.clear();
+
+    ROS_INFO_STREAM("[GameVisualizer] Cleared game visualizer.");
 }
 
 void GameVisualizer::addEnvironmentMarker(std::string mesh) {
@@ -32,9 +34,10 @@ void GameVisualizer::addEnvironmentMarker(std::string mesh) {
     env_marker_.id = 0;
     env_marker_.type = visualization_msgs::Marker::MESH_RESOURCE;
     env_marker_.action = visualization_msgs::Marker::ADD;
-    env_marker_.pose.position.x = 0.0;
+    // TODO Check with Steven and adjust position of the mesh.
+    env_marker_.pose.position.x = 30.0;
     env_marker_.pose.position.y = 0.0;
-    env_marker_.pose.position.z = 0.0;
+    env_marker_.pose.position.z = -13.0;
     env_marker_.pose.orientation.x = 0.0;
     env_marker_.pose.orientation.y = 0.0;
     env_marker_.pose.orientation.z = 0.0;
@@ -45,10 +48,18 @@ void GameVisualizer::addEnvironmentMarker(std::string mesh) {
     env_marker_.mesh_resource = mesh;
     env_marker_.mesh_use_embedded_materials = true;
     env_marker_.lifetime = ros::Duration();
+
+    ROS_INFO_STREAM("[GameVisualizer] Created an environment marker.");
 }
 
 void GameVisualizer::publishEnvironmentMarker(void) {
-    env_points_pub_.publish(env_marker_);
+    // Adjust marker
+    env_marker_.header.stamp = ros::Time::now();
+
+    // Publishe marker msg
+    marker_pub_.publish(env_marker_);
+
+    ROS_INFO_STREAM("[GameVisualizer] Published an environment marker.");
 }
 
 void GameVisualizer::addEnvironmentPoints(sensor_msgs::PointCloud2 points) {
@@ -76,6 +87,13 @@ void GameVisualizer::addPlayer(std::string player_id, std::string mesh) {
     player_vis.marker.id = 0;
     player_vis.marker.type = visualization_msgs::Marker::MESH_RESOURCE;
     player_vis.marker.action = visualization_msgs::Marker::ADD;
+    player_vis.marker.pose.position.x = 30.0;
+    player_vis.marker.pose.position.y = 0.0;
+    player_vis.marker.pose.position.z = -13.0;
+    player_vis.marker.pose.orientation.x = 0.0;
+    player_vis.marker.pose.orientation.y = 0.0;
+    player_vis.marker.pose.orientation.z = 0.0;
+    player_vis.marker.pose.orientation.w = 1.0;
     player_vis.marker.scale.x = 1.0;
     player_vis.marker.scale.y = 1.0;
     player_vis.marker.scale.z = 1.0;
@@ -92,27 +110,29 @@ void GameVisualizer::addPlayer(std::string player_id, std::string mesh) {
     // Add to the player list
     // TODO Need to deepcopy?
     players_.insert({player_vis.id, player_vis});
+
+    ROS_INFO_STREAM("[GameVisualizer] Created a player: " + player_id);
 }
 
 void GameVisualizer::movePlayerMarker(std::string player_id, std::vector<float_t> position) {
     // Retrieve player visualizer
-    PlayerVisualizer_t player_vis = players_.at(player_id);
+    PlayerVisualizer_t *player_vis = &players_.at(player_id);
 
     // Update marker positions
-    player_vis.marker.pose.position.x = position.at(0);
-    player_vis.marker.pose.position.x = position.at(1);
-    player_vis.marker.pose.position.x = position.at(2);
+    player_vis->marker.pose.position.x = position.at(0);
+    player_vis->marker.pose.position.y = position.at(1);
+    player_vis->marker.pose.position.z = position.at(2);
 }
 
 void GameVisualizer::publishPlayerMarker(std::string player_id) {
     // Retrieve player visualizer
-    PlayerVisualizer_t player_vis = players_.at(player_id);
+    PlayerVisualizer_t *player_vis = &players_.at(player_id);
     
     // Adjust marker
-    player_vis.marker.header.stamp = ros::Time::now();
+    player_vis->marker.header.stamp = ros::Time::now();
 
-    // Publishe marker msg
-    marker_pub_.publish(player_vis.marker);
+    // Publish marker msg
+    marker_pub_.publish(player_vis->marker);
 }
 
 void GameVisualizer::addPlayerPoints(std::string player_id,  sensor_msgs::PointCloud2 new_points) {

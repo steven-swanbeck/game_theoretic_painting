@@ -9,12 +9,6 @@
 
 #include "board.hpp"
 
-// TODO
-// #define ENVIRONMENT_MESH  ""
-// #define DRONE_MESH        ""
-// #define QUADRUPED_MESH    ""
-// #define GANTRY_MESH       ""
-
 struct PlayerVisualizer_t {
   std::string id;
   visualization_msgs::Marker marker;
@@ -25,9 +19,8 @@ struct PlayerVisualizer_t {
 
 class GameVisualizer {
   public:
-    GameVisualizer (ros::NodeHandle &nh);
+    GameVisualizer (ros::NodeHandle nh);
 
-  private:
     void clearVisualizer(void);
 
     void addEnvironmentMarker(std::string mesh);
@@ -79,7 +72,7 @@ class GameVisualizer {
 
     void displayPlayerTurn(std::string player_id, TurnSequence turn_sequence);
 
-    // Private variables
+  private:
     ros::NodeHandle nh_;
     ros::Publisher marker_pub_;
     std::string marker_topic_ = "/visualization_marker";
