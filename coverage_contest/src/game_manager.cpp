@@ -100,7 +100,8 @@ void GameManager::playRandomGame ()
 
 void GameManager::playToDepth (const int &depth)
 {
-    for (std::size_t i = 0; i < depth; i++) {
+    int num_turns {depth * party_.playing_order.size()};
+    for (std::size_t i = 0; i < num_turns; i++) {
         if (isOver()) {
             break;
         }
@@ -399,5 +400,14 @@ void GameManager::testRandomTurns (int num)
 
             candidates[i].pop();
         }
+    }
+}
+
+void GameManager::printSequence (TurnSequence sequence)
+{
+    while(!sequence.empty()) {
+        Action action {sequence.front()};
+        std::cout << "\tAction: (move: " << action.move_id << ", repair: " << action.repair_id << ")" << std::endl; 
+        sequence.pop();
     }
 }

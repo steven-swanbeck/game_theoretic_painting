@@ -140,13 +140,14 @@ public:
     // Testing functions
     void printMovesfromState (int state);
     void testRandomTurns (int num);
+    void printSequence (TurnSequence sequence);
 
     Board board_;
     agents::Party party_;
     int player_turn_;
+    int total_turns_;
 
 private:
-    int total_turns_;
     bool log_level_;
 };
 
