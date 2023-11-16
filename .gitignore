@@ -1,4 +1,5 @@
-models/CAD/*
-models/clouds/*
+coverage_contest/models/clouds/*
+coverage_contest/models/meshes/*
+# coverage_contest/models/meshes/facility.stl
 .vscode/
 coverage_contest/config/params.yaml

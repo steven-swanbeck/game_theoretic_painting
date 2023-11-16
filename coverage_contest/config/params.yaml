@@ -1,6 +1,6 @@
 game_theoretic_painting:
   paths:
-    src_path:                    /home/steven/game_theoretic_painting/src/
+    pkg_path:                    /home/steven/game_theoretic_painting/src/
   board:
     movement:
       discretization:           3.0
