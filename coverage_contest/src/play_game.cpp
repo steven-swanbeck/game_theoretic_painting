@@ -2,6 +2,59 @@
 
 GamePlayer::GamePlayer ()
 {
+    // std::string ws_dir {};
+    // nh_.getParam("/game_theoretic_painting/paths/src_path", ws_dir);
+    // float movement_discretization, repair_discretization {};
+    // nh_.getParam("/game_theoretic_painting/board/movement/discretization", movement_discretization);
+    // nh_.getParam("/game_theoretic_painting/board/repair/discretization", repair_discretization);
+    // int n_drones, n_quadrupeds, n_gantries {};
+    // nh_.getParam("/game_theoretic_painting/party/n_drones", n_drones);
+    // nh_.getParam("/game_theoretic_painting/party/n_quadrupeds", n_quadrupeds);
+    // nh_.getParam("/game_theoretic_painting/party/n_gantries", n_gantries);
+    // int starting_location {};
+    // nh_.getParam("/game_theoretic_painting/party/starting_location", starting_location);
+    
+
+
+    // manager_.instantiateBoard(ws_dir + "/models/clouds/revised/map.pcd", movement_discretization, ws_dir + "/models/clouds/revised/marked.pcd", repair_discretization);
+    // manager_.instantiatePlayers(n_drones, n_quadrupeds, n_gantries, starting_location);
+
+    // // GameManager alt_manager {manager_.board_, manager_.party_};
+    
+    // manager_.playRandomGame();
+
+    // // std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
+    // // alt_manager.playRandomGame();
+
+    
+    // // manager_.listMovesfromNode();
+    // // manager_.takeRandomTurn();
+    // // manager_.takeRandomTurn();
+    // // manager_.takeRandomTurn();
+    // // manager_.takeRandomTurn();
+    // // manager_.takeRandomTurn();
+    // // manager_.takeRandomTurn();
+    // // manager_.takeRandomTurn();
+    // // manager_.printMovesfromState(0);
+    // // manager_.printMovesfromState(2);
+    // // manager_.printMovesfromState(4);
+    // // manager_.testRandomTurns(10);
+    // // manager_.startNext();
+    // // manager_.takeTurn();
+    // // manager_.startNext();
+    // // manager_.takeTurn();
+
+    // simulateGame();
+
+    // std::cout << "[Play game] Passed game tests." << std::endl;
+
+    play_random_game_server_ = nh_.advertiseService("play_random_game", &GamePlayer::playRandomGame, this);
+    ROS_INFO_STREAM("[GamePlayer] Up and ready.");
+    ros::spin();
+}
+
+bool GamePlayer::playRandomGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+{
     std::string ws_dir {};
     nh_.getParam("/game_theoretic_painting/paths/src_path", ws_dir);
     float movement_discretization, repair_discretization {};
@@ -14,44 +67,14 @@ GamePlayer::GamePlayer ()
     int starting_location {};
     nh_.getParam("/game_theoretic_painting/party/starting_location", starting_location);
     
-
-
     manager_.instantiateBoard(ws_dir + "/models/clouds/revised/map.pcd", movement_discretization, ws_dir + "/models/clouds/revised/marked.pcd", repair_discretization);
     manager_.instantiatePlayers(n_drones, n_quadrupeds, n_gantries, starting_location);
 
-    // GameManager alt_manager {manager_.board_, manager_.party_};
-    
     manager_.playRandomGame();
 
-    // std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << std::endl;
-    // alt_manager.playRandomGame();
-
-    
-    // manager_.listMovesfromNode();
-    // manager_.takeRandomTurn();
-    // manager_.takeRandomTurn();
-    // manager_.takeRandomTurn();
-    // manager_.takeRandomTurn();
-    // manager_.takeRandomTurn();
-    // manager_.takeRandomTurn();
-    // manager_.takeRandomTurn();
-    // manager_.printMovesfromState(0);
-    // manager_.printMovesfromState(2);
-    // manager_.printMovesfromState(4);
-    // manager_.testRandomTurns(10);
-    // manager_.startNext();
-    // manager_.takeTurn();
-    // manager_.startNext();
-    // manager_.takeTurn();
-
-    simulateGame();
-
-    // std::cout << "[Play game] Passed game tests." << std::endl;
-
-    // visualizer_(nh_);
-    // visualizer_ = GameVisualizer(nh_);
-
-    ros::spin();
+    res.success = true;
+    res.message = "Randomly played a game to completion!";
+    return res.success;
 }
 
 void GamePlayer::simulateGame ()
