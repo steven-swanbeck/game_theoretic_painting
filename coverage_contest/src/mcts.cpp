@@ -11,6 +11,8 @@ MCTS::MCTS (Board board, agents::Party party, int player_turn, int duration, int
 TurnSequence MCTS::search ()
 {
     Ancestors candidates {generateCandidates()};
+    // std::cout << "MCTS candidates: " << candidates.size() << std::endl;
+    // std::cout << "Battery: " << manager_.party_.players.at().remaining_battery;
 
     // int it {};
     std::chrono::milliseconds durationToRun(search_duration_ms_);
