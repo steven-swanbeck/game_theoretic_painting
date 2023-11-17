@@ -1,13 +1,13 @@
 <launch>
     <rosparam command="load" file="$(find coverage_contest)/config/params.yaml"/>
-    <!-- <node
+    <node
         name    = "play_game"
         pkg     = "coverage_contest"
         type    = "play_game"
         args    = ""
         output  = "screen"
     >
-    </node> -->
+    </node>
     <node 
         type="rviz"
         name="rviz"

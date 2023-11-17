@@ -56,7 +56,7 @@ Visualization Manager:
       Marker Topic: visualization_marker
       Name: Markers
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -143,6 +143,30 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /drone_marker
+      Name: Drone
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /quadruped_marker
+      Name: Quadruped
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /gantry_marker
+      Name: Gantry
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 0; 0; 0
@@ -171,7 +195,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 10
+      Distance: 3.544558048248291
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -179,17 +203,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: -0.04171569272875786
+        Y: -0.30095207691192627
+        Z: 0.48675939440727234
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.785398006439209
+      Pitch: 0.4153982996940613
       Target Frame: <Fixed Frame>
-      Yaw: 0.785398006439209
+      Yaw: 0.5953982472419739
     Saved: ~
 Window Geometry:
   Displays:
@@ -207,5 +231,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 72
-  Y: 23
+  X: 101
+  Y: 32

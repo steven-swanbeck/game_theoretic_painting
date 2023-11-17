@@ -61,6 +61,11 @@ void GameManager::generateTurnOrder ()
 
 std::string GameManager::startNext () 
 {
+    // - reset turn values
+    party_.players.at(playingNow()).reset_remaining_movement();
+    party_.players.at(playingNow()).reset_remaining_coverage();
+
+    // - increment turn
     player_turn_++;
     if (player_turn_ > (party_.playing_order.size() - 1)) {
         player_turn_ = 0;
@@ -71,14 +76,13 @@ std::string GameManager::startNext ()
     }
     if (log_level_) {
         std::cout << "[Manager] " << party_.playing_order[player_turn_] << " is starting their turn." << std::endl;
+        std::cout << "\tRemaining battery: " << party_.players.at(party_.playing_order[player_turn_]).remaining_battery << ", Current score: " << party_.players.at(party_.playing_order[player_turn_]).get_score() << std::endl;
     }
-    // std::cout << "[Manager] Up next is " << party_.players.at(party_.playing_order[player_turn_]).get_id() << std::endl;
     return party_.playing_order[player_turn_];
 }
 
 std::string GameManager::playingNow () 
 {
-    // std::cout << "[Manager] Playing now is: " << party_.playing_order[player_turn_] << std::endl;
     return party_.playing_order[player_turn_];
 }
 
@@ -100,7 +104,8 @@ void GameManager::playRandomGame ()
 
 void GameManager::playToDepth (const int &depth)
 {
-    for (std::size_t i = 0; i < depth; i++) {
+    int num_turns {depth * party_.playing_order.size()};
+    for (std::size_t i = 0; i < num_turns; i++) {
         if (isOver()) {
             break;
         }
@@ -122,7 +127,6 @@ void GameManager::takeRandomTurn ()
     // - enforce battery limitations
     if (hasSufficientBattery()) {
         // - sample and play a random turn
-        // TODO replace this with MCTS version
         const int num_candidates {10};
         playRandomMove(generateRandomTurns(num_candidates));
     }
@@ -144,11 +148,13 @@ void GameManager::takeRandomTurn ()
 
 void GameManager::playRandomMove (TurnOptions candidates)
 {
-    // - randomly pick a possilbe turn
-    std::random_device dev;
-    std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(0, candidates.size() - 1);
-    playSequence (candidates[dist(rng)]);
+    if (candidates.size() > 0) {
+        // - randomly pick a possilbe turn
+        std::random_device dev;
+        std::mt19937 rng(dev());
+        std::uniform_int_distribution<std::mt19937::result_type> dist(0, candidates.size() - 1);
+        playSequence (candidates[dist(rng)]);
+    }
 }
 
 void GameManager::playSequence (TurnSequence &sequence)
@@ -200,7 +206,7 @@ std::vector<std::string> GameManager::determineWinners ()
 
 TurnOptions GameManager::generateRandomTurns (const int num_moves)
 {
-    TurnOptions possible_turns;
+    TurnOptions possible_turns {};
     for (std::size_t i = 0; i < num_moves; i++) {
         possible_turns.push_back(generateRandomTurn());
     }
@@ -399,5 +405,14 @@ void GameManager::testRandomTurns (int num)
 
             candidates[i].pop();
         }
+    }
+}
+
+void GameManager::printSequence (TurnSequence sequence)
+{
+    while(!sequence.empty()) {
+        Action action {sequence.front()};
+        std::cout << "\tAction: (move: " << action.move_id << ", repair: " << action.repair_id << ")" << std::endl; 
+        sequence.pop();
     }
 }

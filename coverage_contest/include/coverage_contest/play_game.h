@@ -14,14 +14,23 @@ class GamePlayer
 public:
     GamePlayer();
 private:
-    void simulateGame ();
+    void loadGame ();
     bool playRandomGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
+    bool testMCTS (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
+    void takeTurnMCTS ();
+    bool testMarker (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
+    void visualizeTurn (TurnSequence sequence);
     bool testGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
     bool clearGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
 
     ros::NodeHandle nh_;
 
     ros::ServiceServer play_random_game_server_;
+    ros::ServiceServer test_mcts_server_;
+    ros::Publisher gantry_visualizer_;
+    ros::Publisher quadruped_visualizer_;
+    ros::Publisher drone_visualizer_;
+    ros::ServiceServer test_marker_server_;
     ros::ServiceServer test_game_visualizer_;
     ros::ServiceServer clear_game_visualizer_;
     
@@ -31,7 +40,6 @@ private:
     GameManager manager_;
     Board board_;
     agents::Party party_;
-    // MCTS mcts_;
     GameVisualizer *visualizer_;
 };
 
