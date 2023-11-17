@@ -34,6 +34,8 @@ class GameVisualizer {
 
     void clearVisualizer(void);
 
+    void clearObjects(void);
+
     void addEnvironment(std::string env_id, std::vector<int16_t>points_rgb);
 
     void addEnvironmentMarker(std::string env_id, std::string mesh, std::vector<float_t> position);

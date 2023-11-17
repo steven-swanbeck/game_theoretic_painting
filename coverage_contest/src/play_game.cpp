@@ -160,8 +160,15 @@ bool GamePlayer::testGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::
 
 bool GamePlayer::clearGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
 {
+    ros::Rate r(0.2);
+
     // Clear visualizer
     visualizer_->clearVisualizer();
+
+    r.sleep();
+
+    // Clear objects
+    visualizer_->clearObjects();
 
     res.success = true;
     res.message = "Game Visualizer Cleared!";

@@ -25,7 +25,6 @@ void GameVisualizer::clearVisualizer(void) {
     EnvironmentVisualizer_t *env_vis;
     for (const auto &p : envs_) {
         env_vis = &envs_.at(p.first);
-        std:: cout << env_vis->id << std::endl;
         env_vis->points_pub.publish(points);
     }
 
@@ -39,6 +38,14 @@ void GameVisualizer::clearVisualizer(void) {
     ROS_INFO_STREAM("[GameVisualizer] Cleared game visualizer.");
 }
 
+void GameVisualizer::clearObjects(void) {
+    // Clear environments map
+    envs_.clear();
+
+    // Clear players map
+    players_.clear();
+}
+
 void GameVisualizer::addEnvironment(std::string env_id, std::vector<int16_t> points_rgb) {
     // Create new environment
     EnvironmentVisualizer_t env_vis;
@@ -47,7 +54,9 @@ void GameVisualizer::addEnvironment(std::string env_id, std::vector<int16_t> poi
     env_vis.id = env_id;
 
     // TODO Set point cloud color, if -1 randomize.
-    // Also check with Steven for RViz settings for color.
+    env_vis.points_rgb.at(0) = points_rgb.at(0);
+    env_vis.points_rgb.at(1) = points_rgb.at(1);
+    env_vis.points_rgb.at(2) = points_rgb.at(2);
 
     // Add initial empty point cloud
     PointCloud::Ptr pcl_points (new PointCloud);
@@ -163,7 +172,9 @@ void GameVisualizer::addPlayer(std::string player_id, std::vector<int16_t>points
     player_vis.marker.lifetime = ros::Duration();
 
     // TODO Set point cloud color, if -1 randomize.
-    // Also check with Steven for RViz settings for color.
+    player_vis.points_rgb.at(0) = points_rgb.at(0);
+    player_vis.points_rgb.at(1) = points_rgb.at(1);
+    player_vis.points_rgb.at(2) = points_rgb.at(2);
 
     // Add initial empty point cloud
     PointCloud::Ptr pcl_points (new PointCloud);
