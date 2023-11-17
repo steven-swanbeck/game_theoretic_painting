@@ -1,4 +1,4 @@
-models/CAD/*
-models/clouds/*
 .vscode/
 coverage_contest/config/params.yaml
+coverage_contest/models/CAD/*
+coverage_contest/models/clouds/*

@@ -53,8 +53,10 @@ GamePlayer::GamePlayer ()
 
     play_random_game_server_ = nh_.advertiseService("play_random_game", &GamePlayer::playRandomGame, this);
 
-    // Create a service for testing GameVisualizer functionality
+    // Create services for the Game Visualizer
     test_game_visualizer_ = nh_.advertiseService("test_game_visualizer", &GamePlayer::testGameVisualizer, this);
+
+    clear_game_visualizer_ = nh_.advertiseService("clear_game_visualizer", &GamePlayer::clearGameVisualizer, this);
 
     ROS_INFO_STREAM("[GamePlayer] Up and ready.");
 
@@ -100,48 +102,69 @@ void GamePlayer::simulateGame ()
 }
 
 // TODO Add these to the YAML file
-#define ENVIRONMENT_MESH  "package://coverage_contest/meshes/URSA.stl"
-#define QUADRUPED_MESH  "package://coverage_contest/meshes/spot_body.dae"
+#define MAP_MESH    "package://coverage_contest/models/meshes/URSA.stl"
+#define MAP_POINTS  "/home/daniel/Research/Workspaces/ASE_389/src/game_theoretic_painting/coverage_contest/models/clouds/revised/map.pcd"
+
+#define REPAIR_POINTS       "/home/daniel/Research/Workspaces/ASE_389/src/game_theoretic_painting/coverage_contest/models/clouds/revised/marked.pcd"
+
+#define QUADRUPED_MESH      "package://coverage_contest/models/meshes/spot_body.dae"
+
 
 bool GamePlayer::testGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
 {
     ros::Rate r(1);
-    r.sleep();
 
-    // Add environment
-    visualizer_->addEnvironmentMarker(ENVIRONMENT_MESH);
-    visualizer_->publishEnvironmentMarker();
+    // Map environment
+    visualizer_->addEnvironment("map", std::vector<int16_t>{75, 75, 75});
+    
+    visualizer_->addEnvironmentMarker("map", MAP_MESH, std::vector<float_t>{40.0, 0.0, -15.0});
+    visualizer_->publishEnvironmentMarker("map");
 
-    // Add players
-    visualizer_->addPlayer("quadruped0", QUADRUPED_MESH);
-    visualizer_->movePlayerMarker("quadruped0", std::vector<float_t>{0.0, 0.0, 0.0});
-    visualizer_->publishPlayerMarker("quadruped0");
+    visualizer_->addEnvironmentPoints("map", MAP_POINTS);
+    visualizer_->publishEnvironmentPoints("map");
 
-    visualizer_->addPlayer("quadruped1", QUADRUPED_MESH);
-    visualizer_->movePlayerMarker("quadruped1", std::vector<float_t>{0.0, 1.0, 0.0});
-    visualizer_->publishPlayerMarker("quadruped1");
+    // Repair environment
+    visualizer_->addEnvironment("repair", std::vector<int16_t>{255, 255, 255});
 
-    // Move players
-    for (uint8_t i = 0; i < 10; i++) {
+    visualizer_->addEnvironmentPoints("repair", REPAIR_POINTS);
+    visualizer_->publishEnvironmentPoints("repair");
+
+    // Creating point cloud msg from PCD file for testing.
+    sensor_msgs::PointCloud2 repair_points;
+    pcl::PCDReader reader;
+    PointCloud::Ptr pcl_points (new PointCloud);
+    reader.read(REPAIR_POINTS, *pcl_points);
+    pcl::toROSMsg(*pcl_points, repair_points);
+
+    // Quadruped Players
+    visualizer_->addPlayer("quadruped0", std::vector<int16_t>{255, 0, 0}, QUADRUPED_MESH);
+    visualizer_->addPlayer("quadruped1", std::vector<int16_t>{0, 255, 0}, QUADRUPED_MESH);
+
+    visualizer_->addPlayerPoints("quadruped0", repair_points);
+    visualizer_->publishPlayerPoints("quadruped0");
+
+    for (uint8_t i = 0; i < 5; i++) {
+        visualizer_->movePlayerMarker("quadruped0", std::vector<float_t>{(float)0.5 * i, 0.0, 0.5});
         visualizer_->publishPlayerMarker("quadruped0");
-        visualizer_->movePlayerMarker("quadruped0", std::vector<float_t>{(float)(0.5 * i), 0.0, 0.0});
-        visualizer_->publishPlayerMarker("quadruped0");
 
+        visualizer_->movePlayerMarker("quadruped1", std::vector<float_t>{0.0, (float)0.5 * i, 0.5});
         visualizer_->publishPlayerMarker("quadruped1");
-        visualizer_->movePlayerMarker("quadruped1", std::vector<float_t>{(float)(0.5 * i), 1.0, 0.0});
-        visualizer_->publishPlayerMarker("quadruped1");
-        
+
         r.sleep();
     }
 
-    r.sleep();
+    res.success = true;
+    res.message = "Test Completed!";
+    return res.success;
+}
 
+bool GamePlayer::clearGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+{
     // Clear visualizer
     visualizer_->clearVisualizer();
 
-
     res.success = true;
-    res.message = "Test Completed!";
+    res.message = "Game Visualizer Cleared!";
     return res.success;
 }
 
