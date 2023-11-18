@@ -74,7 +74,7 @@ void GameVisualizer::addEnvironment(std::string env_id, std::vector<int16_t> poi
     ROS_INFO_STREAM("[GameVisualizer] Added an environment: " + env_id);
 }
 
-void GameVisualizer::addEnvironmentMarker(std::string env_id, std::string mesh, std::vector<float_t> position) {
+void GameVisualizer::addEnvironmentMarker(std::string env_id, std::string mesh, std::vector<float_t> position, float alpha) {
     // Retrieve environment visualizer
     EnvironmentVisualizer_t *env_vis = &envs_.at(env_id);
 
@@ -99,7 +99,7 @@ void GameVisualizer::addEnvironmentMarker(std::string env_id, std::string mesh, 
     env_vis->marker.color.b = 0.50f;
     env_vis->marker.color.g = 0.50f;
     env_vis->marker.color.r = 0.50;
-    env_vis->marker.color.a = 0.3;
+    env_vis->marker.color.a = alpha;
     env_vis->marker.lifetime = ros::Duration();
 
     ROS_INFO_STREAM("[GameVisualizer] Added environment marker: " + env_id);
@@ -169,12 +169,28 @@ void GameVisualizer::publishEnvironmentPoints(std::string env_id) {
 }
 
 // void GameVisualizer::addPlayer(std::string player_id, std::vector<int16_t>points_rgb, std::string mesh) {
-void GameVisualizer::addPlayer(std::string player_id, std::string mesh, bool input_color) {
+void GameVisualizer::addPlayer(std::string player_id, std::string mesh, bool input_color, bool use_color_for_player) {
     // Create new player
     PlayerVisualizer_t player_vis;
 
     // Set player id
     player_vis.id = player_id;
+
+    if (input_color == true) {
+        // User input case
+        std::vector<int16_t> colors = inputColors();
+        player_vis.points_rgb.at(0) = colors.at(0);
+        player_vis.points_rgb.at(1) = colors.at(1);
+        player_vis.points_rgb.at(2) = colors.at(2);
+    } else {
+        // Random Case
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distr(0, 255);
+        player_vis.points_rgb.at(0) = distr(gen);
+        player_vis.points_rgb.at(1) = distr(gen);
+        player_vis.points_rgb.at(2) = distr(gen);
+    }
 
     // Set marker
     player_vis.marker.header.frame_id = frame_id_;
@@ -193,23 +209,14 @@ void GameVisualizer::addPlayer(std::string player_id, std::string mesh, bool inp
     player_vis.marker.scale.y = 1.0;
     player_vis.marker.scale.z = 1.0;
     player_vis.marker.mesh_resource = mesh;
-    player_vis.marker.mesh_use_embedded_materials = true;
     player_vis.marker.lifetime = ros::Duration();
-
-    if (input_color == true) {
-        // User input case
-        std::vector<int16_t> colors = inputColors();
-        player_vis.points_rgb.at(0) = colors.at(0);
-        player_vis.points_rgb.at(1) = colors.at(1);
-        player_vis.points_rgb.at(2) = colors.at(2);
+    if (use_color_for_player) {
+        player_vis.marker.color.r = static_cast<float>(player_vis.points_rgb.at(0)) / 255;
+        player_vis.marker.color.g = static_cast<float>(player_vis.points_rgb.at(1)) / 255;
+        player_vis.marker.color.b = static_cast<float>(player_vis.points_rgb.at(2)) / 255;
+        player_vis.marker.color.a = 1.0;
     } else {
-        // Random Case
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distr(0, 255);
-        player_vis.points_rgb.at(0) = distr(gen);
-        player_vis.points_rgb.at(1) = distr(gen);
-        player_vis.points_rgb.at(2) = distr(gen);
+        player_vis.marker.mesh_use_embedded_materials = true;
     }
 
     // Add initial empty point cloud

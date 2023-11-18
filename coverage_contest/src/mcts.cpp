@@ -23,14 +23,14 @@ TurnSequence MCTS::search ()
         // - choose leaf to visit
         int ancestor_id {findLeaf(candidates)};
 
-        // - construct a child
-        GeneticLeaf child {GeneticLeaf(candidates[ancestor_id].game_state)};
+        // - construct a descendent
+        GeneticLeaf descendent {GeneticLeaf(candidates[ancestor_id].game_state)};
 
         // - simulate random game
-        simulate(child);
+        simulate(descendent);
 
         // - backpropagate score and update num_episodes
-        backpropagate(candidates[ancestor_id], child);
+        backpropagate(candidates[ancestor_id], descendent);
 
         // it++;
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -60,7 +60,8 @@ void MCTS::simulate (GeneticLeaf &node)
     // std::cout << "Player id in: " << node.game_state.party_.players.at(node.game_state.party_.playing_order[node.game_state.player_turn_]).get_id() << ", " << node.game_state.total_turns_ << std::endl;
     
     node.game_state.playToDepth(search_depth_);
-    node.value = node.game_state.party_.players.at(node.game_state.party_.playing_order[node.game_state.player_turn_]).get_score();
+    // node.value = node.game_state.party_.players.at(node.game_state.party_.playing_order[node.game_state.player_turn_]).get_score();
+    node.value = node.game_state.party_.players.at(node.game_state.party_.playing_order[node.game_state.player_turn_]).get_score() - calculateAverageValue (node.game_state);
 
     // std::cout << "Player id out: " << node.game_state.party_.players.at(node.game_state.party_.playing_order[node.game_state.player_turn_]).get_id() << ", " << node.game_state.total_turns_ << std::endl;
 }
@@ -114,7 +115,7 @@ int MCTS::upperConfidenceStrategy (Ancestors &candidates)
         total_episodes += candidates[i].episodes;
     }
 
-    // - accumulate values for each child
+    // - accumulate values for each descendent
     std::vector<double> values (candidates.size());
     for (std::size_t i = 0; i < candidates.size(); i++) {
         double explore {c_ * sqrt(log(total_episodes) / candidates[i].episodes)};
@@ -140,14 +141,15 @@ int MCTS::findLeaf (Ancestors &candidates)
     return upperConfidenceStrategy(candidates);
 }
 
-void MCTS::backpropagate (PrimalLeaf &ancestor, GeneticLeaf &child)
+void MCTS::backpropagate (PrimalLeaf &ancestor, GeneticLeaf &descendent)
 {
     ancestor.episodes++;
-    ancestor.value += child.value;
+    ancestor.value += descendent.value;
 
-    // float value_difference {child.value - ancestor.value};
-    // float average_value_difference {calculateAverageValue(child.game_state) - calculateAverageValue(ancestor.game_state)};
-    // TODO calculate cumulative change in reward for all players, calculate average reward each player could get, assign value for performance relative to this value  
+    // float value_difference {descendent.value - ancestor.value};
+    // float average_value_difference {calculateAverageValue(descendent.game_state) - calculateAverageValue(ancestor.game_state)};
+    // TODO calculate cumulative change in reward for all players, calculate average reward each player could get, assign value for performance relative to this value
+    
 }
 
 float MCTS::calculateCumulativeValue (GameManager &state)

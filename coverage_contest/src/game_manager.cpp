@@ -426,3 +426,11 @@ void GameManager::printSequence (TurnSequence sequence)
         sequence.pop();
     }
 }
+
+void GameManager::printScoreboard ()
+{
+    std::cout << "\tScores: " << std::endl;
+    for (std::size_t i = 0; i < party_.playing_order.size(); i++) {
+        std::cout << "\t\t" << party_.players.at(party_.playing_order[i]).get_id() << ": " << party_.players.at(party_.playing_order[i]).get_score() << std::endl;
+    }
+}

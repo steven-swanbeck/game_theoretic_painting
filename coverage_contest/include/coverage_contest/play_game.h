@@ -16,13 +16,14 @@ public:
 private:
     void loadGame ();
     bool playRandomGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
-    bool testMCTS (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
+    bool playGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
     void takeTurnMCTS ();
     bool testMarker (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
     void visualizeTurn (TurnSequence sequence);
 
     bool clearGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
     void instantiateVisualizer ();
+    void interpolatePath (const int &start_node, const int &end_node);
 
     std::vector<float_t> getLocationVector (const std::string &id);
     std::vector<float_t> getLocationVector (const int &id);
@@ -31,7 +32,7 @@ private:
     ros::NodeHandle nh_;
 
     ros::ServiceServer play_random_game_server_;
-    ros::ServiceServer test_mcts_server_;
+    ros::ServiceServer play_game_server_;
     ros::Publisher gantry_visualizer_;
     ros::Publisher quadruped_visualizer_;
     ros::Publisher drone_visualizer_;

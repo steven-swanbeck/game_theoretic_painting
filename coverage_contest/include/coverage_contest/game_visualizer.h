@@ -39,7 +39,7 @@ class GameVisualizer {
 
     void addEnvironment(std::string env_id, std::vector<int16_t>points_rgb);
 
-    void addEnvironmentMarker(std::string env_id, std::string mesh, std::vector<float_t> position);
+    void addEnvironmentMarker(std::string env_id, std::string mesh, std::vector<float_t> position, float alpha=1.0);
 
     void publishEnvironmentMarker(std::string env_id);
 
@@ -57,7 +57,7 @@ class GameVisualizer {
      * @return TODO
      */
     // void addPlayer(std::string player_id, std::vector<int16_t>points_rgb, std::string mesh);
-    void addPlayer(std::string player_id, std::string mesh, bool input_color=false);
+    void addPlayer(std::string player_id, std::string mesh, bool input_color=false, bool use_color_for_player=true);
 
     /** Move a player's marker
      * @brief TODO

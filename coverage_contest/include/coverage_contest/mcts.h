@@ -29,7 +29,7 @@ struct PrimalLeaf {
 };
 
 /** @struct GeneticLeaf
- * @brief used as child of primal nodes in MCTS formulation; ie. the sequences of actions beyond those that can actually be made in a given turn
+ * @brief used as descendent of primal nodes in MCTS formulation; ie. the sequences of actions beyond those that can actually be made in a given turn
  * @var GeneticLeaf::game_state
  * 'game_state' copies the board and party details from a higher manager and is used to simulate play
  * @var GeneticLeaf::value
@@ -45,7 +45,7 @@ struct GeneticLeaf {
 };
 
 typedef std::vector<PrimalLeaf> Ancestors;
-typedef std::vector<GeneticLeaf> Children;
+typedef std::vector<GeneticLeaf> Descendents;
 
 /** @class MCTS
  * @brief randomly generates a tree of sampled possible future game states and uses them to recommend the immediate action of the current game player
@@ -105,11 +105,11 @@ private:
     void simulate (GeneticLeaf &node);
 
     /** Backpropagates information upon completion of a simulation
-     * @brief backprogagates cumulative value and episode count from a child to its ancestor
-     * @param ancestor PrimalLead type, values are updated using simulation results of child that descended from it
-     * @param child GeneticLeaf type, used to update parameters of parent
+     * @brief backprogagates cumulative value and episode count from a descendent to its ancestor
+     * @param ancestor PrimalLead type, values are updated using simulation results of descendent that descended from it
+     * @param descendent GeneticLeaf type, used to update parameters of parent
      */
-    void backpropagate (PrimalLeaf &ancestor, GeneticLeaf &child);
+    void backpropagate (PrimalLeaf &ancestor, GeneticLeaf &descendent);
 
     /** Calculates the value of all players at a given game state
      * @brief Calculates the value of all players at a given game state

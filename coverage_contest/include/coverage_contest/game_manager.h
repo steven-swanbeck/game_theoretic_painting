@@ -144,6 +144,7 @@ public:
     void printMovesfromState (int state);
     void testRandomTurns (int num);
     void printSequence (TurnSequence sequence);
+    void printScoreboard ();
 
     Board board_;
     agents::Party party_;

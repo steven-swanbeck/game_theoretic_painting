@@ -8,7 +8,7 @@
 GamePlayer::GamePlayer ()
 {
     play_random_game_server_ = nh_.advertiseService("play_random_game", &GamePlayer::playRandomGame, this);
-    test_mcts_server_ = nh_.advertiseService("test_mcts", &GamePlayer::testMCTS, this);
+    play_game_server_ = nh_.advertiseService("play_game", &GamePlayer::playGame, this);
     test_marker_server_ = nh_.advertiseService("test_marker", &GamePlayer::testMarker, this);
     gantry_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/gantry_marker", 1, this);
     quadruped_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/quadruped_marker", 1, this);
@@ -28,17 +28,60 @@ GamePlayer::GamePlayer ()
 
 void GamePlayer::visualizeTurn (TurnSequence sequence)
 {
+    ros::Rate r(1);
+    int turn_start_location {manager_.party_.players.at(manager_.playingNow()).get_location()};
     while (!sequence.empty()) {
         Action action {sequence.front()};
         if (action.move_id != -1) {
             // - handle movements
             // . move appropriate player marker to target location
-            visualizer_->movePlayerMarker(manager_.playingNow(), getLocationVector(action.move_id));
+            // visualizer_->movePlayerMarker(manager_.playingNow(), getLocationVector(action.move_id));
+            interpolatePath(turn_start_location, action.move_id);
+            turn_start_location = action.move_id;
         } else {
             // - handle repairs and add to score
             visualizer_->addPlayerPoints(manager_.playingNow(), manager_.board_.repair_spaces.at(action.repair_id).cloud);
+            r.sleep();
         }
         sequence.pop();
+    }
+}
+
+void GamePlayer::interpolatePath (const int &start_node, const int &end_node)
+{
+    ros::Rate r(20);
+    int num_steps {10};
+    switch (manager_.party_.players.at(manager_.playingNow()).get_type()) {
+        case 0:
+        {
+            num_steps = 10;
+            break;
+        }
+        case 1:
+        {
+            num_steps = 15;
+            break;
+        }
+        case 2:
+        {
+            num_steps = 20;
+            break;
+        }
+    }
+
+    std::vector<float_t> location {getLocationVector(start_node)};
+    std::vector<float_t> goal {getLocationVector(end_node)};
+
+    float_t x_step = (goal[0] - location[0]) / num_steps;
+    float_t y_step = (goal[1] - location[1]) / num_steps;
+    float_t z_step = (goal[2] - location[2]) / num_steps;
+
+    for (std::size_t i = 0; i < num_steps; i++) {
+        location[0] += x_step;
+        location[1] += y_step;
+        location[2] += z_step;
+        visualizer_->movePlayerMarker(manager_.playingNow(), location);
+        r.sleep();
     }
 }
 
@@ -55,9 +98,10 @@ void GamePlayer::takeTurnMCTS ()
         MCTS mcts {MCTS(manager_.board_, manager_.party_, manager_.player_turn_, search_duration_ms, num_candidates, search_depth, uct_c)};
 
         TurnSequence sequence {mcts.search()};
-        manager_.printSequence(sequence);
+        // manager_.printSequence(sequence);
         visualizeTurn(sequence);
         manager_.playSequence(sequence);
+        manager_.printScoreboard();
     }
     manager_.startNext();
 }
@@ -138,7 +182,7 @@ bool GamePlayer::playRandomGame (std_srvs::Trigger::Request &req, std_srvs::Trig
     return res.success;
 }
 
-bool GamePlayer::testMCTS (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+bool GamePlayer::playGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
 {
     loadGame();
 
@@ -199,13 +243,17 @@ void GamePlayer::instantiateVisualizer ()
 {
     bool user_input_color {};
     if (!nh_.param<bool>("/game_theoretic_painting/party/user_input_color", user_input_color, false));
+    bool use_color_for_player {};
+    if (!nh_.param<bool>("/game_theoretic_painting/party/use_color_for_player", use_color_for_player, true));
+    float environment_alpha {};
+    if (!nh_.param<float>("/game_theoretic_painting/board/mesh_alpha", environment_alpha, 1.0));
 
     map_visualizer_.publish(map_);
     marked_visualizer_.publish(marked_);
 
     // - map environment
     visualizer_->addEnvironment("environment", std::vector<int16_t>{100, 100, 100});
-    visualizer_->addEnvironmentMarker("environment", environment_mesh_, std::vector<float_t>{40.0, 0.0, -15.0});
+    visualizer_->addEnvironmentMarker("environment", environment_mesh_, std::vector<float_t>{40.0, 0.0, -15.0}, environment_alpha);
     visualizer_->publishEnvironmentMarker("environment");
     visualizer_->addEnvironmentPoints("environment", map_);
     visualizer_->publishEnvironmentPoints("environment");
@@ -262,53 +310,6 @@ std::vector<float_t> GamePlayer::pointToVector (const PointT &point)
     return location;
 }
 
-// bool GamePlayer::testGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
-// {
-//     ros::Rate r(1);
-
-//     // Map environment
-//     visualizer_->addEnvironment("map", std::vector<int16_t>{75, 75, 75});
-    
-//     visualizer_->addEnvironmentMarker("map", environment_mesh_, std::vector<float_t>{40.0, 0.0, -15.0});
-//     visualizer_->publishEnvironmentMarker("map");
-
-//     visualizer_->addEnvironmentPoints("map", map_);
-//     visualizer_->publishEnvironmentPoints("map");
-
-//     // Repair environment
-//     visualizer_->addEnvironment("repair", std::vector<int16_t>{255, 255, 255});
-
-//     visualizer_->addEnvironmentPoints("repair", marked_);
-//     visualizer_->publishEnvironmentPoints("repair");
-
-
-
-//     // Quadruped Players
-//     visualizer_->addPlayer("quadruped0", std::vector<int16_t>{255, 0, 0}, "package://coverage_contest/models/meshes/quadruped.dae");
-//     visualizer_->addPlayer("quadruped1", std::vector<int16_t>{255, 0, 0}, "package://coverage_contest/models/meshes/quadruped.dae");
-//     // std::string test {"package://coverage_contest/models/meshes/quadruped.dae"};
-//     // visualizer_->addPlayer("quadruped0", std::vector<int16_t>{0, 255, 0}, test);
-//     // visualizer_->addPlayer("quadruped0", std::vector<int16_t>{0, 255, 0}, quadruped_mesh_);
-//     // visualizer_->addPlayer("quadruped1", std::vector<int16_t>{0, 255, 0}, quadruped_mesh_);
-
-//     // visualizer_->addPlayerPoints("quadruped0", marked_);
-//     // visualizer_->publishPlayerPoints("quadruped0");
-
-//     for (uint8_t i = 0; i < 5; i++) {
-//         visualizer_->movePlayerMarker("quadruped0", std::vector<float_t>{(float)0.5 * i, 0.0, 0.5});
-//         visualizer_->publishPlayerMarker("quadruped0");
-
-//         visualizer_->movePlayerMarker("quadruped1", std::vector<float_t>{0.0, (float)0.5 * i, 0.5});
-//         visualizer_->publishPlayerMarker("quadruped1");
-
-//         r.sleep();
-//     }
-
-//     res.success = true;
-//     res.message = "Test Completed!";
-//     return res.success;
-// }
-
 bool GamePlayer::clearGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
 {
     ros::Rate r(0.2);
@@ -325,8 +326,6 @@ bool GamePlayer::clearGameVisualizer (std_srvs::Trigger::Request &req, std_srvs:
     res.message = "Game Visualizer Cleared!";
     return res.success;
 }
-
-// TODO add ability to cluster and generate vfs for objects here once board graph is ready
 
 int main (int argc, char **argv)
 {
