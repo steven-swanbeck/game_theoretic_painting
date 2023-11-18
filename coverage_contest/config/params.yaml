@@ -1,19 +1,40 @@
 game_theoretic_painting:
   paths:
-    pkg_path:                    /home/steven/game_theoretic_painting/src/
+    pkg_path:                   /home/steven/game_theoretic_painting/src/
+    clouds:
+      raw:
+        map:                    /coverage_contest/models/clouds/revised/map.pcd
+        marked:                 /coverage_contest/models/clouds/revised/marked.pcd
+      discretized:
+        map:                    /output/map_clusters.pcd
+        marked:                 /output/marked_clusters.pcd
+    meshes:
+      # environment:              package://coverage_contest/models/meshes/facility.stl
+      environment:              /coverage_contest/models/meshes/facility.stl
+      players:
+        drone:                  package://coverage_contest/models/meshes/drone.dae
+        # drone:                  /coverage_contest/models/meshes/drone.dae
+        quadruped:              package://coverage_contest/models/meshes/quadruped.dae
+        # quadruped:              /coverage_contest/models/meshes/quadruped.dae
+        gantry:                 package://coverage_contest/models/meshes/gantry.dae
+        # gantry:                 /coverage_contest/models/meshes/gantry.dae
+
   board:
     movement:
       discretization:           3.0
     repair:
-      discretization:           1.0
+      discretization:           0.5 #1.0
   party:
+    user_input_color:           false #true
     n_drones:                   1
     n_quadrupeds:               1
     n_gantries:                 1
     starting_location:          12 # ? any negative number (ie. -1) will make starting locations be randomly assigned
   mcts:
-    search_duration_ms:         3000 #1000 # ms
-    num_candidates:             50 #20
-    search_depth:               20 #5 # num party cycles to simulate ahead (p_start will play x times)
+    search_duration_ms:         10000 #3000 #1000 # ms
+    num_candidates:             100 #50 #20
+    search_depth:               20 #20 #5 # ? num party cycles to simulate ahead (p_start will play x times)
     uct_c:                      10 #1.4142136
+
+
 

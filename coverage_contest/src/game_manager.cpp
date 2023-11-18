@@ -23,6 +23,16 @@ void GameManager::instantiateBoard (const std::string &move_dir, const float &mo
     board_ = board_utils::generateBoard(move_map, move_discretization, repair_map, repair_discretization);
 }
 
+void GameManager::instantiateBoard (const std::string &move_dir, const float &move_discretization, sensor_msgs::PointCloud2 &move_board, const std::string &repair_dir, const float &repair_discretization, sensor_msgs::PointCloud2 &repair_board)
+{
+    sensor_msgs::PointCloud2 move_map;
+    board_utils::loadCloudasMsg(move_dir, move_map);
+    sensor_msgs::PointCloud2 repair_map;
+    board_utils::loadCloudasMsg(repair_dir, repair_map);
+    board_ = board_utils::generateBoard(move_map, move_discretization, repair_map, repair_discretization);
+    board_utils::buildColoredClouds(board_, move_board, repair_board);
+}
+
 void GameManager::instantiatePlayers (const int &num_drones, const int &num_quadrupeds, const int &num_gantries, int starting_position)
 {
     party_ = agents::instantiatePlayers(num_drones, num_quadrupeds, num_gantries);
@@ -104,7 +114,7 @@ void GameManager::playRandomGame ()
 
 void GameManager::playToDepth (const int &depth)
 {
-    int num_turns {depth * party_.playing_order.size()};
+    int num_turns {depth * static_cast<int>(party_.playing_order.size())};
     for (std::size_t i = 0; i < num_turns; i++) {
         if (isOver()) {
             break;

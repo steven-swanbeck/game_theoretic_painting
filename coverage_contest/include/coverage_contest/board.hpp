@@ -156,6 +156,20 @@ namespace board_utils
      */
     PointT colorPairRandomUniform(PointCloud::Ptr &cloud, const PointT &centroid);
 
+    /** Colors a cloud a random color
+     * @brief Colors a cloud a random color
+     * @param cloud cloud to be colored
+     */
+    void colorCloudRandomUniform(PointCloud::Ptr &cloud);
+
+    /** Creates randomly colored clouds to show the movment and repair spaces of a board
+     * @brief Creates colorful movement and repair clouds for visualization
+     * @param board board from which cloud information is extracted
+     * @param map_cloud cloud msg for map modified in place
+     * @param marked_cloud cloud msg for repair modified in place
+     */
+    void buildColoredClouds (Board &board, sensor_msgs::PointCloud2 &map_cloud, sensor_msgs::PointCloud2 &marked_cloud);
+
     /** Saves octree data in easily-visualizable format
      * @brief saves octree data into mulit-colored clouds
      * @param input octree data to be converted
@@ -229,6 +243,54 @@ namespace board_utils
     Board generateBoard(const sensor_msgs::PointCloud2 &move_cloud, const float &move_octree_resolution, const sensor_msgs::PointCloud2 &repair_cloud, const float &repair_octree_resolution);
 
     // . Function Definitions
+    void buildColoredClouds (Board &board, sensor_msgs::PointCloud2 &map_cloud, sensor_msgs::PointCloud2 &marked_cloud)
+    {
+        PointCloud::Ptr map (new PointCloud);
+        PointCloud::Ptr marked (new PointCloud);
+        pcl::fromROSMsg(map_cloud, *map);
+        pcl::fromROSMsg(marked_cloud, *marked);
+
+        // - iterate over board and generate randomly colored clouds for each region
+        MoveBoard::iterator it;
+        std::cout << "starting loop through move:" << std::endl;
+        for (it = board.movement_spaces.begin(); it != board.movement_spaces.end(); it++) {
+            PointCloud::Ptr board_space (new PointCloud);
+            pcl::fromROSMsg(it->second.cloud, *board_space);
+            colorCloudRandomUniform(board_space);
+            *map += *board_space;
+        }
+
+        std::cout << "starting loop through repair:" << std::endl;
+        RepairBoard::iterator itr;
+        for (itr = board.repair_spaces.begin(); itr != board.repair_spaces.end(); itr++) {
+            PointCloud::Ptr board_volume (new PointCloud);
+            pcl::fromROSMsg(itr->second.cloud, *board_volume);
+            colorCloudRandomUniform(board_volume);
+            *marked += *board_volume;
+        }
+
+        std::cout << "converting to msgs:" << std::endl;
+        pcl::toROSMsg(*map, map_cloud);
+        pcl::toROSMsg(*marked, marked_cloud);
+    }
+
+    void colorCloudRandomUniform(PointCloud::Ptr &cloud)
+    {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distr(0, 255);
+        int r{distr(gen)};
+        int g{distr(gen)};
+        int b{distr(gen)};
+
+        for (std::size_t i = 0; i < cloud->points.size(); i++)
+        {
+            cloud->points[i].r = r;
+            cloud->points[i].g = g;
+            cloud->points[i].b = b;
+        }
+    }
+
     Board generateBoard(const OctreeData &move_data, SpatialGraph &spatial_graph, const OctreeData &repair_data)
     {
         Board board;

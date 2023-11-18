@@ -6,16 +6,27 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl/point_cloud.h>
 #include <pcl_conversions/pcl_conversions.h>
-
 #include "board.hpp"
 #include "point.h"
 
-struct PlayerVisualizer_t {
+
+// TODO These two can be combined into the same object
+struct EnvironmentVisualizer_t {
   std::string id;
   visualization_msgs::Marker marker;
   sensor_msgs::PointCloud2 points;
   std::vector<uint8_t> points_rgb{0, 0, 0};
   ros::Publisher points_pub;
+  ros::Publisher marker_pub;
+};
+
+struct PlayerVisualizer_t {
+  std::string id;
+  visualization_msgs::Marker marker;
+  sensor_msgs::PointCloud2 points;
+  std::vector<int16_t> points_rgb{0, 0, 0};
+  ros::Publisher points_pub;
+  ros::Publisher marker_pub;
 };
 
 class GameVisualizer {
@@ -24,20 +35,29 @@ class GameVisualizer {
 
     void clearVisualizer(void);
 
-    void addEnvironmentMarker(std::string mesh, std::vector<float_t> position);
+    void clearObjects(void);
 
-    void publishEnvironmentMarker(void);
+    void addEnvironment(std::string env_id, std::vector<int16_t>points_rgb);
 
-    void addEnvironmentPoints(sensor_msgs::PointCloud2 points);
+    void addEnvironmentMarker(std::string env_id, std::string mesh, std::vector<float_t> position);
 
-    void publishEnvironmentPoints(void);
+    void publishEnvironmentMarker(std::string env_id);
+
+    void addEnvironmentPoints(std::string env_id, std::string pcd);
+    void addEnvironmentPoints(std::string env_id, sensor_msgs::PointCloud2 &cloud);
+    void addEnvironmentPoints(std::string env_id, PointCloud::Ptr &pcl_points);
+
+    void publishEnvironmentPoints(std::string env_id);
+
+    std::vector<int16_t> inputColors();
 
     /** Adds a player to the game visualizer
      * @brief TODO
      * @param player_id string identifier for the player
      * @return TODO
      */
-    void addPlayer(std::string player_id, std::string mesh);
+    // void addPlayer(std::string player_id, std::vector<int16_t>points_rgb, std::string mesh);
+    void addPlayer(std::string player_id, std::string mesh, bool input_color=false);
 
     /** Move a player's marker
      * @brief TODO
@@ -71,18 +91,16 @@ class GameVisualizer {
      */
     void publishPlayerPoints(std::string player_id);
 
-    void playTurn(std::string player_id, TurnSequence turn_sequence);
-
   private:
     ros::NodeHandle nh_;
     ros::Publisher marker_pub_;
-    std::string marker_topic_ = "/visualization_marker";
-    visualization_msgs::Marker env_marker_;
-    ros::Publisher env_points_pub_;
+
+    std::string marker_topic_ = "/marker";
     std::string points_topic_ = "/points";
-    sensor_msgs::PointCloud2 env_points_;
-    std::map<std::string, PlayerVisualizer_t> players_;
     std::string frame_id_ = "map";
+
+    std::map<std::string, EnvironmentVisualizer_t> envs_;
+    std::map<std::string, PlayerVisualizer_t> players_;
 };
 
 

@@ -1,5 +1,10 @@
 #include "coverage_contest/play_game.h"
 
+#define environment_mesh_ "package://coverage_contest/models/meshes/facility.stl"
+#define drone_mesh_ "package://coverage_contest/models/meshes/drone.dae"
+#define quadruped_mesh_ "package://coverage_contest/models/meshes/quadruped.dae"
+#define gantry_mesh_ "/coverage_contest/models/meshes/gantry.dae"
+
 GamePlayer::GamePlayer ()
 {
     play_random_game_server_ = nh_.advertiseService("play_random_game", &GamePlayer::playRandomGame, this);
@@ -8,6 +13,12 @@ GamePlayer::GamePlayer ()
     gantry_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/gantry_marker", 1, this);
     quadruped_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/quadruped_marker", 1, this);
     drone_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/drone_marker", 1, this);
+
+    map_visualizer_ = nh_.advertise<sensor_msgs::PointCloud2>("/map", 1, this);
+    marked_visualizer_ = nh_.advertise<sensor_msgs::PointCloud2>("/marked", 1, this);
+    environment_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/environment_marker", 1, this);
+
+    clear_game_visualizer_ = nh_.advertiseService("test_vis_clear", &GamePlayer::clearGameVisualizer, this);
     
     visualizer_ = new GameVisualizer(nh_);
     
@@ -21,11 +32,11 @@ void GamePlayer::visualizeTurn (TurnSequence sequence)
         Action action {sequence.front()};
         if (action.move_id != -1) {
             // - handle movements
-            // movePlayerMarker();
-
+            // . move appropriate player marker to target location
+            visualizer_->movePlayerMarker(manager_.playingNow(), getLocationVector(action.move_id));
         } else {
             // - handle repairs and add to score
-
+            visualizer_->addPlayerPoints(manager_.playingNow(), manager_.board_.repair_spaces.at(action.repair_id).cloud);
         }
         sequence.pop();
     }
@@ -150,19 +161,169 @@ bool GamePlayer::testMCTS (std_srvs::Trigger::Request &req, std_srvs::Trigger::R
 void GamePlayer::loadGame ()
 {
     std::string ws_dir {};
-    nh_.getParam("/game_theoretic_painting/paths/pkg_path", ws_dir);
+    if (!nh_.param<std::string>("/game_theoretic_painting/paths/pkg_path", ws_dir, "/home/steven/game_theoretic_painting/src/"));
     float movement_discretization, repair_discretization {};
-    nh_.getParam("/game_theoretic_painting/board/movement/discretization", movement_discretization);
-    nh_.getParam("/game_theoretic_painting/board/repair/discretization", repair_discretization);
+    if (!nh_.param<float>("/game_theoretic_painting/board/movement/discretization", movement_discretization, 3.0));
+    if (!nh_.param<float>("/game_theoretic_painting/board/repair/discretization", repair_discretization, 1.0));
     int n_drones, n_quadrupeds, n_gantries {};
-    nh_.getParam("/game_theoretic_painting/party/n_drones", n_drones);
-    nh_.getParam("/game_theoretic_painting/party/n_quadrupeds", n_quadrupeds);
-    nh_.getParam("/game_theoretic_painting/party/n_gantries", n_gantries);
+    if (!nh_.param<int>("/game_theoretic_painting/party/n_drones", n_drones, 1));
+    if (!nh_.param<int>("/game_theoretic_painting/party/n_quadrupeds", n_quadrupeds, 1));
+    if (!nh_.param<int>("/game_theoretic_painting/party/n_gantries", n_gantries, 1));
     int starting_location {};
-    nh_.getParam("/game_theoretic_painting/party/starting_location", starting_location);
+    if (!nh_.param<int>("/game_theoretic_painting/party/starting_location", starting_location, 0));
+
+    // if (!nh_.param<std::string>("/game_theoretic_painting/paths/meshes/environment", environment_mesh_, "package://coverage_contest/models/meshes/facility.stl"));
+    // if (!nh_.param<std::string>("/game_theoretic_painting/paths/meshes/players/drone", drone_mesh_, "package://coverage_contest/models/meshes/drone.dae"));
+    // if (!nh_.param<std::string>("/game_theoretic_painting/paths/meshes/players/quadruped", quadruped_mesh_, "package://coverage_contest/models/meshes/quadruped.dae"));
+    // if (!nh_.param<std::string>("/game_theoretic_painting/paths/meshes/players/gantry", gantry_mesh_, "package://coverage_contest/models/meshes/gantry.dae"));
+
+    std::string rel_map_dir {};
+    if (!nh_.param<std::string>("/game_theoretic_painting/paths/clouds/raw/map", rel_map_dir, "/coverage_contest/models/clouds/revised/map.pcd"));
+    std::string map_dir {ws_dir + rel_map_dir};
+
+    std::string rel_marked_dir {};
+    if (!nh_.param<std::string>("/game_theoretic_painting/paths/clouds/raw/marked", rel_marked_dir, "/coverage_contest/models/clouds/revised/marked.pcd"));
+    std::string marked_dir {ws_dir + rel_marked_dir};
+
+    // manager_.instantiateBoard(ws_dir + "coverage_contest/models/clouds/revised/map.pcd", movement_discretization, ws_dir + "coverage_contest/models/clouds/revised/marked.pcd", repair_discretization);
     
-    manager_.instantiateBoard(ws_dir + "coverage_contest/models/clouds/revised/map.pcd", movement_discretization, ws_dir + "coverage_contest/models/clouds/revised/marked.pcd", repair_discretization);
+    manager_.instantiateBoard(map_dir, movement_discretization, map_, marked_dir, repair_discretization, marked_);
     manager_.instantiatePlayers(n_drones, n_quadrupeds, n_gantries, starting_location);
+
+    map_.header.frame_id = "map";
+    marked_.header.frame_id = "map";
+    instantiateVisualizer ();
+}
+
+void GamePlayer::instantiateVisualizer ()
+{
+    bool user_input_color {};
+    if (!nh_.param<bool>("/game_theoretic_painting/party/user_input_color", user_input_color, false));
+
+    map_visualizer_.publish(map_);
+    marked_visualizer_.publish(marked_);
+
+    // - map environment
+    visualizer_->addEnvironment("environment", std::vector<int16_t>{100, 100, 100});
+    visualizer_->addEnvironmentMarker("environment", environment_mesh_, std::vector<float_t>{40.0, 0.0, -15.0});
+    visualizer_->publishEnvironmentMarker("environment");
+    visualizer_->addEnvironmentPoints("environment", map_);
+    visualizer_->publishEnvironmentPoints("environment");
+
+    // - repair environment
+    visualizer_->addEnvironment("repair", std::vector<int16_t>{255, 255, 255});
+    visualizer_->addEnvironmentPoints("repair", marked_);
+    visualizer_->publishEnvironmentPoints("repair");
+
+    // - create player visualizations
+    for (std::size_t i = 0; i < manager_.party_.playing_order.size(); i++) {
+        switch (manager_.party_.players.at(manager_.party_.playing_order[i]).get_type()) {
+            case 0:
+            {
+                std::cout << "Trying to add marker for drone type" << std::endl;
+                // visualizer_->addPlayer(manager_.party_.playing_order[i], std::vector<int16_t>{255, 0, 0}, "package://coverage_contest/models/meshes/drone.dae");
+                visualizer_->addPlayer(manager_.party_.playing_order[i], "package://coverage_contest/models/meshes/drone.dae", user_input_color);
+                visualizer_->movePlayerMarker(manager_.party_.playing_order[i], getLocationVector(manager_.party_.playing_order[i]));
+                break;
+            }
+            case 1:
+            {
+                std::cout << "Trying to add marker for quadruped type" << std::endl;
+                visualizer_->addPlayer(manager_.party_.playing_order[i], "package://coverage_contest/models/meshes/quadruped.dae", user_input_color);
+                visualizer_->movePlayerMarker(manager_.party_.playing_order[i], 
+                getLocationVector(manager_.party_.playing_order[i]));
+                break;
+            }
+            case 2:
+            {
+                std::cout << "Trying to add marker for gantry type" << std::endl;
+                visualizer_->addPlayer(manager_.party_.playing_order[i], "package://coverage_contest/models/meshes/gantry.dae", user_input_color);
+                visualizer_->movePlayerMarker(manager_.party_.playing_order[i], getLocationVector(manager_.party_.playing_order[i]));
+                break;
+            }
+        }
+    }
+}
+
+std::vector<float_t> GamePlayer::getLocationVector (const int &id)
+{
+    return pointToVector(manager_.board_.movement_spaces.at(id).centroid);
+}
+
+std::vector<float_t> GamePlayer::getLocationVector (const std::string &id)
+{
+    int location {manager_.party_.players.at(id).get_location()};
+    return pointToVector(manager_.board_.movement_spaces.at(location).centroid);
+}
+
+std::vector<float_t> GamePlayer::pointToVector (const PointT &point)
+{
+    std::vector<float_t> location {point.x, point.y, point.z + static_cast<float>(0.8)};
+    return location;
+}
+
+// bool GamePlayer::testGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+// {
+//     ros::Rate r(1);
+
+//     // Map environment
+//     visualizer_->addEnvironment("map", std::vector<int16_t>{75, 75, 75});
+    
+//     visualizer_->addEnvironmentMarker("map", environment_mesh_, std::vector<float_t>{40.0, 0.0, -15.0});
+//     visualizer_->publishEnvironmentMarker("map");
+
+//     visualizer_->addEnvironmentPoints("map", map_);
+//     visualizer_->publishEnvironmentPoints("map");
+
+//     // Repair environment
+//     visualizer_->addEnvironment("repair", std::vector<int16_t>{255, 255, 255});
+
+//     visualizer_->addEnvironmentPoints("repair", marked_);
+//     visualizer_->publishEnvironmentPoints("repair");
+
+
+
+//     // Quadruped Players
+//     visualizer_->addPlayer("quadruped0", std::vector<int16_t>{255, 0, 0}, "package://coverage_contest/models/meshes/quadruped.dae");
+//     visualizer_->addPlayer("quadruped1", std::vector<int16_t>{255, 0, 0}, "package://coverage_contest/models/meshes/quadruped.dae");
+//     // std::string test {"package://coverage_contest/models/meshes/quadruped.dae"};
+//     // visualizer_->addPlayer("quadruped0", std::vector<int16_t>{0, 255, 0}, test);
+//     // visualizer_->addPlayer("quadruped0", std::vector<int16_t>{0, 255, 0}, quadruped_mesh_);
+//     // visualizer_->addPlayer("quadruped1", std::vector<int16_t>{0, 255, 0}, quadruped_mesh_);
+
+//     // visualizer_->addPlayerPoints("quadruped0", marked_);
+//     // visualizer_->publishPlayerPoints("quadruped0");
+
+//     for (uint8_t i = 0; i < 5; i++) {
+//         visualizer_->movePlayerMarker("quadruped0", std::vector<float_t>{(float)0.5 * i, 0.0, 0.5});
+//         visualizer_->publishPlayerMarker("quadruped0");
+
+//         visualizer_->movePlayerMarker("quadruped1", std::vector<float_t>{0.0, (float)0.5 * i, 0.5});
+//         visualizer_->publishPlayerMarker("quadruped1");
+
+//         r.sleep();
+//     }
+
+//     res.success = true;
+//     res.message = "Test Completed!";
+//     return res.success;
+// }
+
+bool GamePlayer::clearGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+{
+    ros::Rate r(0.2);
+
+    // Clear visualizer
+    visualizer_->clearVisualizer();
+
+    r.sleep();
+
+    // Clear objects
+    visualizer_->clearObjects();
+
+    res.success = true;
+    res.message = "Game Visualizer Cleared!";
+    return res.success;
 }
 
 // TODO add ability to cluster and generate vfs for objects here once board graph is ready

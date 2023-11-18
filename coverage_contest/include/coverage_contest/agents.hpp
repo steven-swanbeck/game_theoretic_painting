@@ -123,7 +123,7 @@ public:
 class Quadruped : public Robot
 {
 public:
-    Quadruped(std::string handle) : Robot(handle, 1, false, 3, 2, 10, 2) {}
+    Quadruped(std::string handle) : Robot(handle, 1, false, 3, 2, 8, 2) {}
 };
 
 /** @class Gantry

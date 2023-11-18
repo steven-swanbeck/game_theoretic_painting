@@ -68,9 +68,12 @@ public:
      * @param move_discretization voxel size for movement graph
      * @param repair_dir location on disk from which to load cloud to generate repair graph
      * @param repair_discretization voxel size for repair graph
+     * @param move_board randomly colored cloud to visualize movement spaces
+     * @param repair_board randomly colored cloud to visualize repair spaces
      */
     void instantiateBoard (const std::string &move_dir, const float &move_discretization, const std::string &repair_dir, const float &repair_discretization);
-    
+    void instantiateBoard (const std::string &move_dir, const float &move_discretization, sensor_msgs::PointCloud2 &move_board, const std::string &repair_dir, const float &repair_discretization, sensor_msgs::PointCloud2 &repair_board);
+
     /** Instantiates the party for the current game
      * @brief uses agents::instantiatePlayers to generate a party of players
      * @param num_drones number of drone players
