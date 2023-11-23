@@ -8,6 +8,7 @@
 #include <pcl/octree/octree_pointcloud_pointvector.h>
 #include <random>
 #include <math.h>
+#include <unordered_map>
 #include "agents.hpp"
 
 // . Data Structures
@@ -41,7 +42,7 @@ struct SpatialNode
     int z_neg{-1};
     float z_neg_d{0};
 };
-using SpatialGraph = std::map<int, SpatialNode>;
+using SpatialGraph = std::unordered_map<int, SpatialNode>;
 
 // . Movement game board
 /** @struct Space
@@ -75,7 +76,7 @@ struct Space
     bool is_ground_level{false};
     std::vector<int> repair_edges;
 };
-using MoveBoard = std::map<int, Space>;
+using MoveBoard = std::unordered_map<int, Space>;
 
 // . Repair action board
 /** @struct RepairVolume
@@ -96,7 +97,7 @@ struct RepairVolume
     sensor_msgs::PointCloud2 cloud;
     bool covered{false};
 };
-using RepairBoard = std::map<int, RepairVolume>;
+using RepairBoard = std::unordered_map<int, RepairVolume>;
 
 // . Overall board struct
 /** @struct Board
@@ -251,20 +252,18 @@ namespace board_utils
         pcl::fromROSMsg(marked_cloud, *marked);
 
         // - iterate over board and generate randomly colored clouds for each region
-        MoveBoard::iterator it;
         std::cout << "starting loop through move:" << std::endl;
-        for (it = board.movement_spaces.begin(); it != board.movement_spaces.end(); it++) {
+        for (auto it : board.movement_spaces) {
             PointCloud::Ptr board_space (new PointCloud);
-            pcl::fromROSMsg(it->second.cloud, *board_space);
+            pcl::fromROSMsg(it.second.cloud, *board_space);
             colorCloudRandomUniform(board_space);
             *map += *board_space;
         }
 
         std::cout << "starting loop through repair:" << std::endl;
-        RepairBoard::iterator itr;
-        for (itr = board.repair_spaces.begin(); itr != board.repair_spaces.end(); itr++) {
+        for (auto it : board.repair_spaces) {
             PointCloud::Ptr board_volume (new PointCloud);
-            pcl::fromROSMsg(itr->second.cloud, *board_volume);
+            pcl::fromROSMsg(it.second.cloud, *board_volume);
             colorCloudRandomUniform(board_volume);
             *marked += *board_volume;
         }

@@ -1,6 +1,6 @@
 game_theoretic_painting:
   paths:
-    pkg_path:                   /home/steven/game_theoretic_painting/src/
+    pkg_path:                   /home/steven/workspace/coursework/gtmmas/project/game_theoretic_painting/src/
     clouds:
       raw:
         map:                    /coverage_contest/models/clouds/revised/map.pcd
@@ -26,11 +26,12 @@ game_theoretic_painting:
       discretization:           0.5 #1.0
     mesh_alpha:                 0.3 #0.3
   party:
+    num_games:                  10
     user_input_color:           false #true
     use_color_for_player:       true
-    n_drones:                   2 #1
-    n_quadrupeds:               2 #1
-    n_gantries:                 2 #1
+    n_drones:                   1 #2 #1
+    n_quadrupeds:               1 #2 #1
+    n_gantries:                 1 #2 #1
     starting_location:          0 #12 # ? any negative number (ie. -1) will make starting locations be randomly assigned
   mcts:
     search_duration_ms:         1000 #10000 #3000 #1000 # ms

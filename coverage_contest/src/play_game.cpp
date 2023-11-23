@@ -9,6 +9,7 @@ GamePlayer::GamePlayer ()
 {
     play_random_game_server_ = nh_.advertiseService("play_random_game", &GamePlayer::playRandomGame, this);
     play_game_server_ = nh_.advertiseService("play_game", &GamePlayer::playGame, this);
+    play_n_games_server_ = nh_.advertiseService("play_n_games", &GamePlayer::playNGames, this);
     test_marker_server_ = nh_.advertiseService("test_marker", &GamePlayer::testMarker, this);
     gantry_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/gantry_marker", 1, this);
     quadruped_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/quadruped_marker", 1, this);
@@ -18,6 +19,7 @@ GamePlayer::GamePlayer ()
     marked_visualizer_ = nh_.advertise<sensor_msgs::PointCloud2>("/marked", 1, this);
     environment_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/environment_marker", 1, this);
 
+    reset_game_ = nh_.advertiseService("reset_game", &GamePlayer::resetGame, this);
     clear_game_visualizer_ = nh_.advertiseService("test_vis_clear", &GamePlayer::clearGameVisualizer, this);
     
     visualizer_ = new GameVisualizer(nh_);
@@ -29,7 +31,7 @@ GamePlayer::GamePlayer ()
 void GamePlayer::visualizeTurn (TurnSequence sequence)
 {
     ros::Rate r(1);
-    int turn_start_location {manager_.party_.players.at(manager_.playingNow()).get_location()};
+    int turn_start_location {manager_->party_.players.at(manager_->playingNow()).get_location()};
     while (!sequence.empty()) {
         Action action {sequence.front()};
         if (action.move_id != -1) {
@@ -40,7 +42,7 @@ void GamePlayer::visualizeTurn (TurnSequence sequence)
             turn_start_location = action.move_id;
         } else {
             // - handle repairs and add to score
-            visualizer_->addPlayerPoints(manager_.playingNow(), manager_.board_.repair_spaces.at(action.repair_id).cloud);
+            visualizer_->addPlayerPoints(manager_->playingNow(), manager_->board_.repair_spaces.at(action.repair_id).cloud);
             r.sleep();
         }
         sequence.pop();
@@ -51,7 +53,7 @@ void GamePlayer::interpolatePath (const int &start_node, const int &end_node)
 {
     ros::Rate r(20);
     int num_steps {10};
-    switch (manager_.party_.players.at(manager_.playingNow()).get_type()) {
+    switch (manager_->party_.players.at(manager_->playingNow()).get_type()) {
         case 0:
         {
             num_steps = 10;
@@ -80,14 +82,14 @@ void GamePlayer::interpolatePath (const int &start_node, const int &end_node)
         location[0] += x_step;
         location[1] += y_step;
         location[2] += z_step;
-        visualizer_->movePlayerMarker(manager_.playingNow(), location);
+        visualizer_->movePlayerMarker(manager_->playingNow(), location);
         r.sleep();
     }
 }
 
 void GamePlayer::takeTurnMCTS ()
 {
-    if (manager_.hasSufficientBattery()) {
+    if (manager_->hasSufficientBattery()) {
         int search_duration_ms, num_candidates, search_depth {};
         float uct_c {};
         if (!nh_.param<int>("/game_theoretic_painting/mcts/search_duration_ms", search_duration_ms, 1000));
@@ -95,15 +97,15 @@ void GamePlayer::takeTurnMCTS ()
         if (!nh_.param<int>("/game_theoretic_painting/mcts/search_depth", search_depth, 5));
         if (!nh_.param<float>("/game_theoretic_painting/mcts/uct_c", uct_c, 1.4142136));
 
-        MCTS mcts {MCTS(manager_.board_, manager_.party_, manager_.player_turn_, search_duration_ms, num_candidates, search_depth, uct_c)};
+        MCTS mcts {MCTS(manager_->board_, manager_->party_, manager_->player_turn_, search_duration_ms, num_candidates, search_depth, uct_c)};
 
         TurnSequence sequence {mcts.search()};
         // manager_.printSequence(sequence);
         visualizeTurn(sequence);
-        manager_.playSequence(sequence);
-        manager_.printScoreboard();
+        manager_->playSequence(sequence);
+        manager_->printScoreboard();
     }
-    manager_.startNext();
+    manager_->startNext();
 }
 
 bool GamePlayer::testMarker (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
@@ -175,7 +177,7 @@ bool GamePlayer::playRandomGame (std_srvs::Trigger::Request &req, std_srvs::Trig
 {
     loadGame();
 
-    manager_.playRandomGame();
+    manager_->playRandomGame();
 
     res.success = true;
     res.message = "Randomly played a game to completion!";
@@ -186,14 +188,14 @@ bool GamePlayer::playGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::R
 {
     loadGame();
 
-    while (!manager_.isOver()) {
+    while (!manager_->isOver()) {
         takeTurnMCTS();
     }
-    std::vector<std::string> winners {manager_.determineWinners()};
-    std::cout << "[Manager]\n------------------------------------------------------------\nGame has reached terminal state after " << manager_.total_turns_  << " turns!" << "\n------------------------------------------------------------" << std::endl;
+    std::vector<std::string> winners {manager_->determineWinners()};
+    std::cout << "[Manager]\n------------------------------------------------------------\nGame has reached terminal state after " << manager_->total_turns_  << " turns!" << "\n------------------------------------------------------------" << std::endl;
     std::cout << "\tWinner(s):";
     for (std::string winner : winners) {
-        std::cout << winner << " (" << manager_.party_.players.at(winner).get_score() << "),";
+        std::cout << winner << " (" << manager_->party_.players.at(winner).get_score() << "),";
     }
     std::cout << std::endl;
 
@@ -202,8 +204,67 @@ bool GamePlayer::playGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::R
     return res.success;
 }
 
+bool GamePlayer::playNGames (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+{
+    // - create an output file (csv or txt?)
+    std::ofstream results_log;
+    std::string ws_dir {};
+    if (!nh_.param<std::string>("/game_theoretic_painting/paths/pkg_path", ws_dir, "/home/steven/game_theoretic_painting/src/"));
+    std::string file_name {ws_dir + "coverage_contest/logs/" + std::to_string(ros::Time::now().toSec()) + ".csv"};
+    results_log.open(file_name);
+    std::cout << "Recording game results to " << file_name << std::endl;
+
+    // - get param for number of games to play
+    int num_games {};
+    if (!nh_.param<int>("/game_theoretic_painting/party/num_games", num_games, 2));
+
+    results_log << "Num Games" << ", " << num_games << "\n\n";
+    results_log.close();
+
+    // - iterate that many times, but with the added clearing after each has concluded
+    for (std::size_t i = 0; i < num_games; i++) {
+        results_log.open(file_name, std::ios::out | std::ios::app);
+
+        loadGame();
+
+        // results_log << static_cast<int>(i) << ", " << "Players:" << ", ";
+        // for (std::size_t j = 0; j < manager_->party_.playing_order.size(); j++) {
+        //     results_log << manager_->party_.players.at(manager_->party_.playing_order[j]).get_id() << ", ";
+        // }
+        // results_log << "\n";
+
+        std_srvs::Trigger srv;
+        playGame(srv.request, srv.response);
+
+        results_log << static_cast<int>(i) << ", " << "Id" << ", " << "Score" << ", " << "\n";
+        for (std::size_t j = 0; j < manager_->party_.playing_order.size(); j++) {
+            results_log << ", " << manager_->party_.players.at(manager_->party_.playing_order[j]).get_id() << ", " << manager_->party_.players.at(manager_->party_.playing_order[j]).get_score() << ", " << "\n";
+            // results_log << manager_->party_.players.at(manager_->party_.playing_order[j]).get_score() << ", ";
+        }
+        results_log << ", " << "Total Turns " << ", " << manager_->total_turns_ << ", ";
+        results_log << "\n" << "\n";
+        results_log.close();
+
+        resetGame(srv.request, srv.response);
+        std::cout << "Finished simulating game " << static_cast<int>(i) << "!\n\n\n" << std::endl;
+    }
+    res.success = true;
+    return res.success;
+}
+
+bool GamePlayer::resetGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+{
+    delete manager_;
+    std_srvs::Trigger srv;
+    clearGameVisualizer(srv.request, srv.response);
+    res.success = true;
+    return res.success;
+}
+
 void GamePlayer::loadGame ()
 {
+    manager_ = new GameManager();
+
     std::string ws_dir {};
     if (!nh_.param<std::string>("/game_theoretic_painting/paths/pkg_path", ws_dir, "/home/steven/game_theoretic_painting/src/"));
     float movement_discretization, repair_discretization {};
@@ -231,8 +292,8 @@ void GamePlayer::loadGame ()
 
     // manager_.instantiateBoard(ws_dir + "coverage_contest/models/clouds/revised/map.pcd", movement_discretization, ws_dir + "coverage_contest/models/clouds/revised/marked.pcd", repair_discretization);
     
-    manager_.instantiateBoard(map_dir, movement_discretization, map_, marked_dir, repair_discretization, marked_);
-    manager_.instantiatePlayers(n_drones, n_quadrupeds, n_gantries, starting_location);
+    manager_->instantiateBoard(map_dir, movement_discretization, map_, marked_dir, repair_discretization, marked_);
+    manager_->instantiatePlayers(n_drones, n_quadrupeds, n_gantries, starting_location);
 
     map_.header.frame_id = "map";
     marked_.header.frame_id = "map";
@@ -264,29 +325,29 @@ void GamePlayer::instantiateVisualizer ()
     visualizer_->publishEnvironmentPoints("repair");
 
     // - create player visualizations
-    for (std::size_t i = 0; i < manager_.party_.playing_order.size(); i++) {
-        switch (manager_.party_.players.at(manager_.party_.playing_order[i]).get_type()) {
+    for (std::size_t i = 0; i < manager_->party_.playing_order.size(); i++) {
+        switch (manager_->party_.players.at(manager_->party_.playing_order[i]).get_type()) {
             case 0:
             {
                 std::cout << "Trying to add marker for drone type" << std::endl;
                 // visualizer_->addPlayer(manager_.party_.playing_order[i], std::vector<int16_t>{255, 0, 0}, "package://coverage_contest/models/meshes/drone.dae");
-                visualizer_->addPlayer(manager_.party_.playing_order[i], "package://coverage_contest/models/meshes/drone.dae", user_input_color);
-                visualizer_->movePlayerMarker(manager_.party_.playing_order[i], getLocationVector(manager_.party_.playing_order[i]));
+                visualizer_->addPlayer(manager_->party_.playing_order[i], "package://coverage_contest/models/meshes/drone.dae", user_input_color);
+                visualizer_->movePlayerMarker(manager_->party_.playing_order[i], getLocationVector(manager_->party_.playing_order[i]));
                 break;
             }
             case 1:
             {
                 std::cout << "Trying to add marker for quadruped type" << std::endl;
-                visualizer_->addPlayer(manager_.party_.playing_order[i], "package://coverage_contest/models/meshes/quadruped.dae", user_input_color);
-                visualizer_->movePlayerMarker(manager_.party_.playing_order[i], 
-                getLocationVector(manager_.party_.playing_order[i]));
+                visualizer_->addPlayer(manager_->party_.playing_order[i], "package://coverage_contest/models/meshes/quadruped.dae", user_input_color);
+                visualizer_->movePlayerMarker(manager_->party_.playing_order[i], 
+                getLocationVector(manager_->party_.playing_order[i]));
                 break;
             }
             case 2:
             {
                 std::cout << "Trying to add marker for gantry type" << std::endl;
-                visualizer_->addPlayer(manager_.party_.playing_order[i], "package://coverage_contest/models/meshes/gantry.dae", user_input_color);
-                visualizer_->movePlayerMarker(manager_.party_.playing_order[i], getLocationVector(manager_.party_.playing_order[i]));
+                visualizer_->addPlayer(manager_->party_.playing_order[i], "package://coverage_contest/models/meshes/gantry.dae", user_input_color);
+                visualizer_->movePlayerMarker(manager_->party_.playing_order[i], getLocationVector(manager_->party_.playing_order[i]));
                 break;
             }
         }
@@ -295,13 +356,13 @@ void GamePlayer::instantiateVisualizer ()
 
 std::vector<float_t> GamePlayer::getLocationVector (const int &id)
 {
-    return pointToVector(manager_.board_.movement_spaces.at(id).centroid);
+    return pointToVector(manager_->board_.movement_spaces.at(id).centroid);
 }
 
 std::vector<float_t> GamePlayer::getLocationVector (const std::string &id)
 {
-    int location {manager_.party_.players.at(id).get_location()};
-    return pointToVector(manager_.board_.movement_spaces.at(location).centroid);
+    int location {manager_->party_.players.at(id).get_location()};
+    return pointToVector(manager_->board_.movement_spaces.at(location).centroid);
 }
 
 std::vector<float_t> GamePlayer::pointToVector (const PointT &point)

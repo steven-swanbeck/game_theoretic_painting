@@ -41,9 +41,8 @@ void GameManager::instantiatePlayers (const int &num_drones, const int &num_quad
     if (starting_position < 0) {
         // - enumerate possible options
         std::vector<int> viable_starting_locations;
-        MoveBoard::iterator it;
-        for (it = board_.movement_spaces.begin(); it != board_.movement_spaces.end(); it++) {
-            viable_starting_locations.push_back(it->first);
+        for (auto it : board_.movement_spaces) {
+            viable_starting_locations.push_back(it.first);
         }
         // - randomly assign one to each of them
         std::random_device rd;
@@ -188,9 +187,8 @@ void GameManager::playSequence (TurnSequence &sequence)
 
 bool GameManager::isOver ()
 {
-    RepairBoard::iterator it;
-    for (it = board_.repair_spaces.begin(); it != board_.repair_spaces.end(); it++) {
-        if (it->second.covered == false) {
+    for (auto it : board_.repair_spaces) {
+        if (it.second.covered == false) {
             return false;
         }
     }
@@ -200,15 +198,14 @@ bool GameManager::isOver ()
 std::vector<std::string> GameManager::determineWinners ()
 {
     std::vector<std::string> winners;
-    std::map<std::string, agents::Robot>::iterator it;
-    for (it = party_.players.begin(); it != party_.players.end(); it++) {
+    for (auto it : party_.players) {
         if (winners.size() < 1) {
-            winners.push_back(it->first);
-        } else if (it->second.get_score() > party_.players.at(winners[0]).get_score()) {
+            winners.push_back(it.first);
+        } else if (it.second.get_score() > party_.players.at(winners[0]).get_score()) {
             winners.clear();
-            winners.push_back(it->first);
-        } else if (it->second.get_score() == party_.players.at(winners[0]).get_score()) {
-            winners.push_back(it->first);
+            winners.push_back(it.first);
+        } else if (it.second.get_score() == party_.players.at(winners[0]).get_score()) {
+            winners.push_back(it.first);
         }
     }
     return winners;

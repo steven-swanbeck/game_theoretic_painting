@@ -1,0 +1,62 @@
+Num Games, 10
+
+0, Id, Score, 
+, quadruped_0, 74, 
+, gantry_0, 148, 
+, drone_0, 30, 
+, Total Turns , 140, 
+
+1, Id, Score, 
+, gantry_0, 147, 
+, drone_0, 34, 
+, quadruped_0, 71, 
+, Total Turns , 110, 
+
+2, Id, Score, 
+, drone_0, 40, 
+, gantry_0, 124, 
+, quadruped_0, 88, 
+, Total Turns , 100, 
+
+3, Id, Score, 
+, quadruped_0, 98, 
+, gantry_0, 120, 
+, drone_0, 34, 
+, Total Turns , 110, 
+
+4, Id, Score, 
+, gantry_0, 129, 
+, quadruped_0, 90, 
+, drone_0, 33, 
+, Total Turns , 100, 
+
+5, Id, Score, 
+, gantry_0, 126, 
+, drone_0, 36, 
+, quadruped_0, 90, 
+, Total Turns , 100, 
+
+6, Id, Score, 
+, drone_0, 36, 
+, quadruped_0, 96, 
+, gantry_0, 120, 
+, Total Turns , 111, 
+
+7, Id, Score, 
+, quadruped_0, 65, 
+, gantry_0, 148, 
+, drone_0, 39, 
+, Total Turns , 130, 
+
+8, Id, Score, 
+, quadruped_0, 88, 
+, drone_0, 31, 
+, gantry_0, 133, 
+, Total Turns , 111, 
+
+9, Id, Score, 
+, drone_0, 41, 
+, quadruped_0, 72, 
+, gantry_0, 139, 
+, Total Turns , 111, 
+

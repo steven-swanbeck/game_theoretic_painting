@@ -8,6 +8,7 @@
 #include "game_manager.h"
 #include "mcts.h"
 #include "game_visualizer.h"
+#include <fstream>
 
 class GamePlayer
 {
@@ -25,6 +26,9 @@ private:
     void instantiateVisualizer ();
     void interpolatePath (const int &start_node, const int &end_node);
 
+    bool playNGames (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
+    bool resetGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
+
     std::vector<float_t> getLocationVector (const std::string &id);
     std::vector<float_t> getLocationVector (const int &id);
     std::vector<float_t> pointToVector (const PointT &point);
@@ -33,6 +37,7 @@ private:
 
     ros::ServiceServer play_random_game_server_;
     ros::ServiceServer play_game_server_;
+    ros::ServiceServer play_n_games_server_;
     ros::Publisher gantry_visualizer_;
     ros::Publisher quadruped_visualizer_;
     ros::Publisher drone_visualizer_;
@@ -42,6 +47,7 @@ private:
     ros::Publisher marked_visualizer_;
     ros::Publisher environment_visualizer_;
 
+    ros::ServiceServer reset_game_;
     ros::ServiceServer clear_game_visualizer_;
     
     sensor_msgs::PointCloud2 map_;
@@ -51,9 +57,7 @@ private:
     // std::string quadruped_mesh_;
     // std::string gantry_mesh_;
 
-    GameManager manager_;
-    Board board_;
-    agents::Party party_;
+    GameManager *manager_;
     GameVisualizer *visualizer_;
 };
 
