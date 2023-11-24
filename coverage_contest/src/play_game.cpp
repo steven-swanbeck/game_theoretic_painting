@@ -10,6 +10,8 @@ GamePlayer::GamePlayer ()
     play_random_game_server_ = nh_.advertiseService("play_random_game", &GamePlayer::playRandomGame, this);
     play_game_server_ = nh_.advertiseService("play_game", &GamePlayer::playGame, this);
     play_n_games_server_ = nh_.advertiseService("play_n_games", &GamePlayer::playNGames, this);
+    exhaustive_search_server_ = nh_.advertiseService("exhaustive_search", &GamePlayer::exhaustiveSearch, this);
+
     test_marker_server_ = nh_.advertiseService("test_marker", &GamePlayer::testMarker, this);
     gantry_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/gantry_marker", 1, this);
     quadruped_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/quadruped_marker", 1, this);
@@ -87,7 +89,7 @@ void GamePlayer::interpolatePath (const int &start_node, const int &end_node)
     }
 }
 
-void GamePlayer::takeTurnMCTS ()
+void GamePlayer::takeTurnMCTS (bool should_visualize)
 {
     if (manager_->hasSufficientBattery()) {
         int search_duration_ms, num_candidates, search_depth {};
@@ -101,7 +103,9 @@ void GamePlayer::takeTurnMCTS ()
 
         TurnSequence sequence {mcts.search()};
         // manager_.printSequence(sequence);
-        visualizeTurn(sequence);
+        if (should_visualize) {
+            visualizeTurn(sequence);
+        }
         manager_->playSequence(sequence);
         manager_->printScoreboard();
     }
@@ -187,9 +191,17 @@ bool GamePlayer::playRandomGame (std_srvs::Trigger::Request &req, std_srvs::Trig
 bool GamePlayer::playGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
 {
     loadGame();
+    playMCTSGame();
 
+    res.success = true;
+    res.message = "Played a series of moves using MCTS!";
+    return res.success;
+}
+
+void GamePlayer::playMCTSGame (bool should_visualize)
+{
     while (!manager_->isOver()) {
-        takeTurnMCTS();
+        takeTurnMCTS(should_visualize);
     }
     std::vector<std::string> winners {manager_->determineWinners()};
     std::cout << "[Manager]\n------------------------------------------------------------\nGame has reached terminal state after " << manager_->total_turns_  << " turns!" << "\n------------------------------------------------------------" << std::endl;
@@ -198,9 +210,49 @@ bool GamePlayer::playGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::R
         std::cout << winner << " (" << manager_->party_.players.at(winner).get_score() << "),";
     }
     std::cout << std::endl;
+}
 
+bool GamePlayer::exhaustiveSearch (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+{
+    std::ofstream results_log;
+    std::string ws_dir {};
+    if (!nh_.param<std::string>("/game_theoretic_painting/paths/pkg_path", ws_dir, "/home/steven/game_theoretic_painting/src/"));
+    std::string file_name {ws_dir + "coverage_contest/logs/" + std::to_string(ros::Time::now().toSec()) + ".csv"};
+    results_log.open(file_name);
+    std::cout << "Recording game results to " << file_name << std::endl;
+
+    int num_games {};
+    if (!nh_.param<int>("/game_theoretic_painting/party/num_games", num_games, 2));
+
+    results_log << "Search Ceiling" << ", " << num_games << "\n\n";
+    results_log.close();
+
+    for (std::size_t i = 0; i < num_games; i++) {
+        for (std::size_t j = 0; j < num_games; j++) {
+            for (std::size_t k = 0; k < num_games; k++) {
+
+                results_log.open(file_name, std::ios::out | std::ios::app);
+                
+                loadGame (static_cast<int>(i + 1), static_cast<int>(j + 1), static_cast<int>(k + 1));
+                playMCTSGame(false);
+
+                results_log << "n_drones: " << ", " << static_cast<int>(i + 1) << ", " << "n_quadrupeds: " << ", " << static_cast<int>(j + 1) << ", " << "n_gantries: " << ", " << static_cast<int>(k + 1) << ", " << "\n";
+                results_log << ", " << "Id" << ", " << "Score" << ", " << "\n";
+                
+                for (std::size_t l = 0; l < manager_->party_.playing_order.size(); l++) {
+                    results_log << ", " << manager_->party_.players.at(manager_->party_.playing_order[l]).get_id() << ", " << manager_->party_.players.at(manager_->party_.playing_order[l]).get_score() << ", " << "\n";
+                }
+                results_log << ", " << "Total Turns " << ", " << manager_->total_turns_ << ", ";
+                results_log << "\n" << "\n";
+                results_log.close();
+
+                std_srvs::Trigger srv;
+                resetGame(srv.request, srv.response);
+                // std::cout << "Finished simulating game " << static_cast<int>(i) << "!\n\n\n" << std::endl;
+            }
+        }
+    }
     res.success = true;
-    res.message = "Played a series of moves using MCTS!";
     return res.success;
 }
 
@@ -227,19 +279,12 @@ bool GamePlayer::playNGames (std_srvs::Trigger::Request &req, std_srvs::Trigger:
 
         loadGame();
 
-        // results_log << static_cast<int>(i) << ", " << "Players:" << ", ";
-        // for (std::size_t j = 0; j < manager_->party_.playing_order.size(); j++) {
-        //     results_log << manager_->party_.players.at(manager_->party_.playing_order[j]).get_id() << ", ";
-        // }
-        // results_log << "\n";
-
         std_srvs::Trigger srv;
         playGame(srv.request, srv.response);
 
         results_log << static_cast<int>(i) << ", " << "Id" << ", " << "Score" << ", " << "\n";
         for (std::size_t j = 0; j < manager_->party_.playing_order.size(); j++) {
             results_log << ", " << manager_->party_.players.at(manager_->party_.playing_order[j]).get_id() << ", " << manager_->party_.players.at(manager_->party_.playing_order[j]).get_score() << ", " << "\n";
-            // results_log << manager_->party_.players.at(manager_->party_.playing_order[j]).get_score() << ", ";
         }
         results_log << ", " << "Total Turns " << ", " << manager_->total_turns_ << ", ";
         results_log << "\n" << "\n";
@@ -259,6 +304,32 @@ bool GamePlayer::resetGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::
     clearGameVisualizer(srv.request, srv.response);
     res.success = true;
     return res.success;
+}
+
+void GamePlayer::loadGame (int n_drones, int n_quadrupeds, int n_gantries)
+{
+    manager_ = new GameManager();
+
+    std::string ws_dir {};
+    if (!nh_.param<std::string>("/game_theoretic_painting/paths/pkg_path", ws_dir, "/home/steven/game_theoretic_painting/src/"));
+    float movement_discretization, repair_discretization {};
+    if (!nh_.param<float>("/game_theoretic_painting/board/movement/discretization", movement_discretization, 3.0));
+    if (!nh_.param<float>("/game_theoretic_painting/board/repair/discretization", repair_discretization, 1.0));
+    int starting_location {};
+    if (!nh_.param<int>("/game_theoretic_painting/party/starting_location", starting_location, 0));
+    std::string rel_map_dir {};
+    if (!nh_.param<std::string>("/game_theoretic_painting/paths/clouds/raw/map", rel_map_dir, "/coverage_contest/models/clouds/revised/map.pcd"));
+    std::string map_dir {ws_dir + rel_map_dir};
+    std::string rel_marked_dir {};
+    if (!nh_.param<std::string>("/game_theoretic_painting/paths/clouds/raw/marked", rel_marked_dir, "/coverage_contest/models/clouds/revised/marked.pcd"));
+    std::string marked_dir {ws_dir + rel_marked_dir};
+
+    manager_->instantiateBoard(map_dir, movement_discretization, map_, marked_dir, repair_discretization, marked_);
+    manager_->instantiatePlayers(n_drones, n_quadrupeds, n_gantries, starting_location);
+
+    map_.header.frame_id = "map";
+    marked_.header.frame_id = "map";
+    instantiateVisualizer ();
 }
 
 void GamePlayer::loadGame ()

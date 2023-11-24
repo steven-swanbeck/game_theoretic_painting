@@ -140,7 +140,7 @@ public:
     // Gantry(std::string handle) : Robot(handle, 2, true, 1, 5, 30, 2) {}
     // Gantry(std::string handle) : Robot(handle, 2, true, 10, 30, 1, 9) {}
     // Gantry(std::string handle) : Robot(handle, 2, true, 100, 100, 1, 20) {}
-    Gantry(std::string handle) : Robot(handle, 2, true, 100, 100, 1, 9) {}
+    Gantry(std::string handle) : Robot(handle, 2, true, 20, 100, 1, 9) {}
 };
 
 // . Instantiation function

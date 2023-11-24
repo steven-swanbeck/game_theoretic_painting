@@ -16,18 +16,19 @@ public:
     GamePlayer();
 private:
     void loadGame ();
+    void loadGame (int n_drones, int n_quadrupeds, int n_gantries);
     bool playRandomGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
     bool playGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
-    void takeTurnMCTS ();
+    void takeTurnMCTS (bool should_visualize=true);
+    void playMCTSGame (bool should_visualize=true);
     bool testMarker (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
     void visualizeTurn (TurnSequence sequence);
-
     bool clearGameVisualizer (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
     void instantiateVisualizer ();
     void interpolatePath (const int &start_node, const int &end_node);
-
     bool playNGames (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
     bool resetGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
+    bool exhaustiveSearch (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
 
     std::vector<float_t> getLocationVector (const std::string &id);
     std::vector<float_t> getLocationVector (const int &id);
@@ -38,6 +39,7 @@ private:
     ros::ServiceServer play_random_game_server_;
     ros::ServiceServer play_game_server_;
     ros::ServiceServer play_n_games_server_;
+    ros::ServiceServer exhaustive_search_server_;
     ros::Publisher gantry_visualizer_;
     ros::Publisher quadruped_visualizer_;
     ros::Publisher drone_visualizer_;
