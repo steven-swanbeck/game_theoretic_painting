@@ -29,6 +29,7 @@ private:
     bool playNGames (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
     bool resetGame (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
     bool exhaustiveSearch (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
+    bool customSearch (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
 
     std::vector<float_t> getLocationVector (const std::string &id);
     std::vector<float_t> getLocationVector (const int &id);
@@ -40,6 +41,7 @@ private:
     ros::ServiceServer play_game_server_;
     ros::ServiceServer play_n_games_server_;
     ros::ServiceServer exhaustive_search_server_;
+    ros::ServiceServer custom_search_server_;
     ros::Publisher gantry_visualizer_;
     ros::Publisher quadruped_visualizer_;
     ros::Publisher drone_visualizer_;

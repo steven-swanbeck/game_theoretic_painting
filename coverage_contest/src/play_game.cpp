@@ -11,6 +11,7 @@ GamePlayer::GamePlayer ()
     play_game_server_ = nh_.advertiseService("play_game", &GamePlayer::playGame, this);
     play_n_games_server_ = nh_.advertiseService("play_n_games", &GamePlayer::playNGames, this);
     exhaustive_search_server_ = nh_.advertiseService("exhaustive_search", &GamePlayer::exhaustiveSearch, this);
+    custom_search_server_ = nh_.advertiseService("custom_search", &GamePlayer::customSearch, this);
 
     test_marker_server_ = nh_.advertiseService("test_marker", &GamePlayer::testMarker, this);
     gantry_visualizer_ = nh_.advertise<visualization_msgs::Marker>("/gantry_marker", 1, this);
@@ -210,6 +211,76 @@ void GamePlayer::playMCTSGame (bool should_visualize)
         std::cout << winner << " (" << manager_->party_.players.at(winner).get_score() << "),";
     }
     std::cout << std::endl;
+}
+
+bool GamePlayer::customSearch (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
+{
+    // std::vector<int> drone_schedule {1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6};
+    // std::vector<int> quadruped_schedule {0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6};
+    // std::vector<int> gantry_schedule {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6};
+
+    std::vector<int> drone_schedule {1, 2, 3, 4, 5,
+                                    0, 0, 0, 0, 0, 
+                                    0, 0, 0, 0, 0, 
+                                    1, 2, 3, 4, 5, 
+                                    0, 0, 0, 0, 0, 
+                                    1, 2, 3, 4, 5, 
+                                    1, 2, 3, 4, 5};
+    std::vector<int> quadruped_schedule {0, 0, 0, 0, 0, 
+                                    1, 2, 3, 4, 5, 
+                                    0, 0, 0, 0, 0, 
+                                    1, 2, 3, 4, 5, 
+                                    1, 2, 3, 4, 5, 
+                                    0, 0, 0, 0, 0, 
+                                    1, 2, 3, 4, 5};
+    std::vector<int> gantry_schedule {0, 0, 0, 0, 0, 
+                                    0, 0, 0, 0, 0, 
+                                    1, 2, 3, 4, 5, 
+                                    0, 0, 0, 0, 0, 
+                                    1, 2, 3, 4, 5, 
+                                    1, 2, 3, 4, 5, 
+                                    1, 2, 3, 4, 5};
+
+    // std::vector<int> drone_schedule {1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5};
+    // std::vector<int> quadruped_schedule {0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5};
+    // std::vector<int> gantry_schedule {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0};
+
+    assert((drone_schedule.size() == quadruped_schedule.size()) && (quadruped_schedule.size() == gantry_schedule.size()));
+
+    int num_games {};
+    if (!nh_.param<int>("/game_theoretic_painting/party/num_games", num_games, 2));
+
+    std::ofstream results_log;
+    std::string ws_dir {};
+    if (!nh_.param<std::string>("/game_theoretic_painting/paths/pkg_path", ws_dir, "/home/steven/game_theoretic_painting/src/"));
+    std::string file_name {ws_dir + "coverage_contest/logs/" + std::to_string(ros::Time::now().toSec()) + ".csv"};
+    results_log.open(file_name);
+    std::cout << "Recording game results to " << file_name << std::endl;
+
+    results_log.close();
+
+    for (std::size_t i = 0; i < drone_schedule.size(); i++) {
+        for (std::size_t j = 0; j < num_games; j++) {
+            loadGame(drone_schedule[i], quadruped_schedule[i], gantry_schedule[i]);
+            playMCTSGame(false);
+
+            results_log.open(file_name, std::ios::out | std::ios::app);
+            results_log << ", " << "Id" << ", " << "Score" << ", " << "\n";
+            for (std::size_t l = 0; l < manager_->party_.playing_order.size(); l++) {
+                results_log << ", " << manager_->party_.players.at(manager_->party_.playing_order[l]).get_id() << ", " << manager_->party_.players.at(manager_->party_.playing_order[l]).get_score() << ", " << "\n";
+            }
+            results_log << ", " << "Total Turns " << ", " << manager_->total_turns_ << ", ";
+            results_log << "\n" << "\n";
+            results_log.close();
+
+            std_srvs::Trigger srv;
+            resetGame(srv.request, srv.response);
+
+            std::cout << "Finished game " << static_cast<int>(j) << " for schedule index " << static_cast<int>(i) << std::endl;
+        }
+    }
+    res.success = true;
+    return res.success;
 }
 
 bool GamePlayer::exhaustiveSearch (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
