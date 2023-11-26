@@ -26,7 +26,7 @@ game_theoretic_painting:
       discretization:           0.5 #1.0
     mesh_alpha:                 0.3 #0.3
   party:
-    num_games:                  2 #5 #11
+    num_games:                  3 #5 #11
     user_input_color:           false #true
     use_color_for_player:       true
     n_drones:                   3 #1

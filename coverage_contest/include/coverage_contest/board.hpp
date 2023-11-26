@@ -252,7 +252,6 @@ namespace board_utils
         pcl::fromROSMsg(marked_cloud, *marked);
 
         // - iterate over board and generate randomly colored clouds for each region
-        std::cout << "starting loop through move:" << std::endl;
         for (auto it : board.movement_spaces) {
             PointCloud::Ptr board_space (new PointCloud);
             pcl::fromROSMsg(it.second.cloud, *board_space);
@@ -260,7 +259,6 @@ namespace board_utils
             *map += *board_space;
         }
 
-        std::cout << "starting loop through repair:" << std::endl;
         for (auto it : board.repair_spaces) {
             PointCloud::Ptr board_volume (new PointCloud);
             pcl::fromROSMsg(it.second.cloud, *board_volume);
@@ -268,7 +266,6 @@ namespace board_utils
             *marked += *board_volume;
         }
 
-        std::cout << "converting to msgs:" << std::endl;
         pcl::toROSMsg(*map, map_cloud);
         pcl::toROSMsg(*marked, marked_cloud);
     }
