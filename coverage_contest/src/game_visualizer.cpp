@@ -54,8 +54,6 @@ void GameVisualizer::addEnvironment(std::string env_id, std::vector<int16_t> poi
 
     // Set environment id
     env_vis.id = env_id;
-
-    // TODO Set point cloud color, if -1 randomize.
     env_vis.points_rgb.at(0) = points_rgb.at(0);
     env_vis.points_rgb.at(1) = points_rgb.at(1);
     env_vis.points_rgb.at(2) = points_rgb.at(2);

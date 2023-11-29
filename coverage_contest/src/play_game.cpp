@@ -3,7 +3,7 @@
 #define environment_mesh_ "package://coverage_contest/models/meshes/facility.stl"
 #define drone_mesh_ "package://coverage_contest/models/meshes/drone.dae"
 #define quadruped_mesh_ "package://coverage_contest/models/meshes/quadruped.dae"
-#define gantry_mesh_ "/coverage_contest/models/meshes/gantry.dae"
+#define gantry_mesh_ "package://coverage_contest/models/meshes/gantry.dae"
 
 GamePlayer::GamePlayer ()
 {
@@ -38,9 +38,7 @@ void GamePlayer::visualizeTurn (TurnSequence sequence)
     while (!sequence.empty()) {
         Action action {sequence.front()};
         if (action.move_id != -1) {
-            // - handle movements
-            // . move appropriate player marker to target location
-            // visualizer_->movePlayerMarker(manager_.playingNow(), getLocationVector(action.move_id));
+            // - handle movements, move appropriate player marker to target location
             interpolatePath(turn_start_location, action.move_id);
             turn_start_location = action.move_id;
         } else {
@@ -215,10 +213,6 @@ void GamePlayer::playMCTSGame (bool should_visualize)
 
 bool GamePlayer::customSearch (std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res)
 {
-    // std::vector<int> drone_schedule {1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6};
-    // std::vector<int> quadruped_schedule {0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6};
-    // std::vector<int> gantry_schedule {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6};
-
     std::vector<int> drone_schedule {1, 2, 3, 4, 5,
                                     0, 0, 0, 0, 0, 
                                     0, 0, 0, 0, 0, 
@@ -240,10 +234,6 @@ bool GamePlayer::customSearch (std_srvs::Trigger::Request &req, std_srvs::Trigge
                                     1, 2, 3, 4, 5, 
                                     1, 2, 3, 4, 5, 
                                     1, 2, 3, 4, 5};
-
-    // std::vector<int> drone_schedule {1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5};
-    // std::vector<int> quadruped_schedule {0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5};
-    // std::vector<int> gantry_schedule {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0};
 
     assert((drone_schedule.size() == quadruped_schedule.size()) && (quadruped_schedule.size() == gantry_schedule.size()));
 
@@ -319,7 +309,6 @@ bool GamePlayer::exhaustiveSearch (std_srvs::Trigger::Request &req, std_srvs::Tr
 
                 std_srvs::Trigger srv;
                 resetGame(srv.request, srv.response);
-                // std::cout << "Finished simulating game " << static_cast<int>(i) << "!\n\n\n" << std::endl;
             }
         }
     }
@@ -419,11 +408,6 @@ void GamePlayer::loadGame ()
     int starting_location {};
     if (!nh_.param<int>("/game_theoretic_painting/party/starting_location", starting_location, 0));
 
-    // if (!nh_.param<std::string>("/game_theoretic_painting/paths/meshes/environment", environment_mesh_, "package://coverage_contest/models/meshes/facility.stl"));
-    // if (!nh_.param<std::string>("/game_theoretic_painting/paths/meshes/players/drone", drone_mesh_, "package://coverage_contest/models/meshes/drone.dae"));
-    // if (!nh_.param<std::string>("/game_theoretic_painting/paths/meshes/players/quadruped", quadruped_mesh_, "package://coverage_contest/models/meshes/quadruped.dae"));
-    // if (!nh_.param<std::string>("/game_theoretic_painting/paths/meshes/players/gantry", gantry_mesh_, "package://coverage_contest/models/meshes/gantry.dae"));
-
     std::string rel_map_dir {};
     if (!nh_.param<std::string>("/game_theoretic_painting/paths/clouds/raw/map", rel_map_dir, "/coverage_contest/models/clouds/revised/map.pcd"));
     std::string map_dir {ws_dir + rel_map_dir};
@@ -432,8 +416,6 @@ void GamePlayer::loadGame ()
     if (!nh_.param<std::string>("/game_theoretic_painting/paths/clouds/raw/marked", rel_marked_dir, "/coverage_contest/models/clouds/revised/marked.pcd"));
     std::string marked_dir {ws_dir + rel_marked_dir};
 
-    // manager_.instantiateBoard(ws_dir + "coverage_contest/models/clouds/revised/map.pcd", movement_discretization, ws_dir + "coverage_contest/models/clouds/revised/marked.pcd", repair_discretization);
-    
     manager_->instantiateBoard(map_dir, movement_discretization, map_, marked_dir, repair_discretization, marked_);
     manager_->instantiatePlayers(n_drones, n_quadrupeds, n_gantries, starting_location);
 
@@ -472,7 +454,6 @@ void GamePlayer::instantiateVisualizer ()
             case 0:
             {
                 std::cout << "Trying to add marker for drone type" << std::endl;
-                // visualizer_->addPlayer(manager_.party_.playing_order[i], std::vector<int16_t>{255, 0, 0}, "package://coverage_contest/models/meshes/drone.dae");
                 visualizer_->addPlayer(manager_->party_.playing_order[i], "package://coverage_contest/models/meshes/drone.dae", user_input_color);
                 visualizer_->movePlayerMarker(manager_->party_.playing_order[i], getLocationVector(manager_->party_.playing_order[i]));
                 break;

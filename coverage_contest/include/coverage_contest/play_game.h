@@ -56,10 +56,6 @@ private:
     
     sensor_msgs::PointCloud2 map_;
     sensor_msgs::PointCloud2 marked_;
-    // std::string environment_mesh_;
-    // std::string drone_mesh_;
-    // std::string quadruped_mesh_;
-    // std::string gantry_mesh_;
 
     GameManager *manager_;
     GameVisualizer *visualizer_;
