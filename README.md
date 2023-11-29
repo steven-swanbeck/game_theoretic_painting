@@ -31,6 +31,7 @@ catkin build
 ```
 source devel/setup.bash
 ```
+5. Download meshes and clouds used for demonstraion by following the instructions in ```coverage_contest/models/info.txt```.
 
 ## Running the Game
 Parameters for numbers of players, game and repair board files and discretizations, and Monte Carlo tree search parameters can be changed in ```config/params.yaml```. Then run 
@@ -44,3 +45,20 @@ rosservice call /play_game
 ```
 in a separate terminal to simulate the full game.
 
+![](images/game_simulation.mp4)
+
+## Additional Info
+
+Currently supported robot types are drones, qunarupeds, and gantries.
+
+![](images/i4.png)
+
+The game board is built using input point clouds that represent the map of the environment and the material within it that must be repaired.
+
+![](images/i5.png)
+
+The robots play on this board until all material in the environment has been repaired.
+
+![](images/i1.png)
+
+![](images/i3.png)
