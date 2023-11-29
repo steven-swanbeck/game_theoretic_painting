@@ -1,5 +1,7 @@
 # We Paint! : Game-Theoretic Modeling for Robot Platform Selection in Industrial Fabric Maintenance Applications
 
+![](images/i3.png)
+
 ## About
 This project aims to compare the capabilities of different robotic platforms for performing fabric maintenance applications in industrial environments and optimize team composition for performance under time and cost constraints.
 
@@ -45,6 +47,9 @@ rosservice call /play_game
 ```
 in a separate terminal to simulate the full game.
 
+
+[](https://github.com/steven-swanbeck/game_theoretic_painting/assets/99771915/644db458-211a-4ba5-9886-ede0299eddec)
+
 ![](images/game_simulation.mp4)
 
 ## Additional Info
@@ -60,5 +65,3 @@ The game board is built using input point clouds that represent the map of the e
 The robots play on this board until all material in the environment has been repaired.
 
 ![](images/i1.png)
-
-![](images/i3.png)
