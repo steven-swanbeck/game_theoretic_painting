@@ -17,7 +17,7 @@ mkdir -p catkin_ws/src && cd catkin_ws
 ```
 2. Clone the contents of this repository:
 ```
-git clone https://github.com/steven-swanbeck/game_theoretic_painting.git src/
+git clone git@github.com:steven-swanbeck/game_theoretic_painting.git src/
 ```
 3. Install all package dependencies:
 ```
