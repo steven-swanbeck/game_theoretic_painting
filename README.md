@@ -9,7 +9,7 @@ This project aims to compare the capabilities of different robotic platforms for
 **coverage_contest** contains player and board definitions and solution procedures to play the game. 
 
 ## Requirements, Dependencies, and Building
-These packages are built and tested on a system running ROS1 noetic on Ubuntu 20.04. However, the project is written entirely in C++ and wrapped in a thin ROS wrapper for visualization purposes, so it can easily be compiled and run independently of ROS, just without visualiations. 
+These packages are built and tested on a system running ROS1 Noetic on Ubuntu 20.04. However, the project is written entirely in C++ and wrapped in a thin ROS wrapper for visualization purposes, so it can easily be compiled and run independently of ROS, just without the shown visualizations. 
 
 1. Create a Catkin workspace:
 ```
@@ -33,7 +33,7 @@ catkin build
 ```
 source devel/setup.bash
 ```
-5. Download meshes and clouds used for demonstraion by following the instructions in ```coverage_contest/models/info.txt```.
+5. Download meshes and clouds used for demonstration by following the instructions in ```coverage_contest/models/info.txt```.
 
 ## Running the Game
 Parameters for numbers of players, game and repair board files and discretizations, and Monte Carlo tree search parameters can be changed in ```config/params.yaml```. Then run 
@@ -54,7 +54,7 @@ in a separate terminal to simulate the full game.
 
 ## Additional Info
 
-Currently supported robot types are drones, qunarupeds, and gantries.
+Currently supported robot types are drones, quadrupeds, and gantries.
 
 ![](images/i4.png)
 
