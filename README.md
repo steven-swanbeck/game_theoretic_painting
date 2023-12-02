@@ -1,4 +1,4 @@
-# We Paint! : Game-Theoretic Modeling for Robot Platform Selection in Industrial Fabric Maintenance Applications
+# We Paint! Game-Theoretic Modeling for Robot Platform Selection in Industrial Fabric Maintenance Applications
 
 ![](images/i3.png)
 
