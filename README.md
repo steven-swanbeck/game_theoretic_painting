@@ -3,7 +3,7 @@
 ![](images/i3.png)
 
 ## About
-This project aims to compare the capabilities of different robotic platforms for performing fabric maintenance applications in industrial environments and optimize team composition for performance under time and cost constraints.
+This project aims to compare the capabilities of different robotic platforms for performing fabric maintenance applications in industrial environments and optimize team composition for performance under time and cost constraints using game-theoretic modeling.
 
 ## Contents
 **coverage_contest** contains player and board definitions and solution procedures to play the game. 
