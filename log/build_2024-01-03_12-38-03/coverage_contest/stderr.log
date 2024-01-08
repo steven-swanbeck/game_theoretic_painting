@@ -1,0 +1,7 @@
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:[m[K In member function ‘[01m[Kvoid GamePlayer::clearGameVisualizer(std::shared_ptr<std_srvs::srv::Trigger_Request_<std::allocator<void> > >, std::shared_ptr<std_srvs::srv::Trigger_Response_<std::allocator<void> > >)[m[K’:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:21:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kvisualizer_[m[K’ was not declared in this scope
+   21 |   [01;31m[Kvisualizer_[m[K->clearVisualizer();
+      |   [01;31m[K^~~~~~~~~~~[m[K
+gmake[2]: *** [CMakeFiles/play_game.dir/build.make:76: CMakeFiles/play_game.dir/src/play_game.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/play_game.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

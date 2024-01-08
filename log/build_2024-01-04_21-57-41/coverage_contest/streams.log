@@ -1,0 +1,15 @@
+[0.061s] Invoking command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20
+[0.086s] [35m[1mConsolidate compiler generated dependencies of target play_game[0m
+[0.095s] [ 50%] [32mBuilding CXX object CMakeFiles/play_game.dir/src/play_game.cpp.o[0m
+[1.362s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:[m[K In constructor ‘[01m[KGamePlayer::GamePlayer()[m[K’:
+[1.362s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:17:19:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kvisualizer_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[1.362s]    17 |   GameVisualizer *[01;35m[Kvisualizer_[m[K = new GameVisualizer();
+[1.362s]       |                   [01;35m[K^~~~~~~~~~~[m[K
+[2.369s] [100%] [32m[1mLinking CXX executable play_game[0m
+[2.501s] /usr/bin/ld: CMakeFiles/play_game.dir/src/play_game.cpp.o: in function `GamePlayer::GamePlayer()':
+[2.501s] /home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:17: undefined reference to `GameVisualizer::GameVisualizer()'
+[2.511s] collect2: error: ld returned 1 exit status
+[2.512s] gmake[2]: *** [CMakeFiles/play_game.dir/build.make:159: play_game] Error 1
+[2.512s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/play_game.dir/all] Error 2
+[2.512s] gmake: *** [Makefile:146: all] Error 2
+[2.515s] Invoked command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20

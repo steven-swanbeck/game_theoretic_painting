@@ -1,0 +1,100 @@
+[0.055s] Invoking command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake /home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest -DCMAKE_INSTALL_PREFIX=/home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest
+[0.113s] -- The C compiler identification is GNU 11.4.0
+[0.165s] -- The CXX compiler identification is GNU 11.4.0
+[0.171s] -- Detecting C compiler ABI info
+[0.218s] -- Detecting C compiler ABI info - done
+[0.222s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.222s] -- Detecting C compile features
+[0.223s] -- Detecting C compile features - done
+[0.225s] -- Detecting CXX compiler ABI info
+[0.271s] -- Detecting CXX compiler ABI info - done
+[0.275s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.275s] -- Detecting CXX compile features
+[0.276s] -- Detecting CXX compile features - done
+[0.282s] -- Found ament_cmake: 1.3.6 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.391s] -- Found Python3: /usr/bin/python3.10 (found version "3.10.12") found components: Interpreter 
+[0.463s] -- Found rclcpp: 16.0.7 (/opt/ros/humble/share/rclcpp/cmake)
+[0.504s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.509s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.516s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.528s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.544s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.598s] -- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.601s] -- Found rmw_fastrtps_cpp: 6.2.5 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.667s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.684s] -- Found FastRTPS: /opt/ros/humble/include  
+[0.712s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.721s] -- Looking for pthread.h
+[0.764s] -- Looking for pthread.h - found
+[0.764s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[0.807s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[0.808s] -- Found Threads: TRUE  
+[0.907s] -- Found geometry_msgs: 4.2.3 (/opt/ros/humble/share/geometry_msgs/cmake)
+[0.935s] -- Found sensor_msgs: 4.2.3 (/opt/ros/humble/share/sensor_msgs/cmake)
+[0.987s] -- Found pcl_ros: 2.4.0 (/opt/ros/humble/share/pcl_ros/cmake)
+[1.161s] -- Found eigen3_cmake_module: 0.1.1 (/opt/ros/humble/share/eigen3_cmake_module/cmake)
+[1.162s] -- Found Eigen3: TRUE (found version "3.4.0") 
+[1.162s] -- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+[1.400s] -- Checking for module 'eigen3'
+[1.407s] --   Found eigen3, version 3.4.0
+[1.425s] -- Found Eigen: /usr/include/eigen3 (Required is at least version "3.1") 
+[1.425s] -- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+[1.458s] -- Checking for module 'flann'
+[1.466s] --   Found flann, version 1.9.1
+[1.489s] -- Found FLANN: /usr/lib/x86_64-linux-gnu/libflann_cpp.so  
+[1.489s] -- FLANN found (include: /usr/include, lib: /usr/lib/x86_64-linux-gnu/libflann_cpp.so)
+[2.055s] -- Checking for module 'libusb-1.0'
+[2.063s] --   Found libusb-1.0, version 1.0.25
+[2.084s] -- Found libusb: /usr/lib/x86_64-linux-gnu/libusb-1.0.so  
+[2.085s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[2.120s] -- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb)
+[2.213s] -- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+[2.217s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[2.220s] -- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb)
+[2.320s] -- Found Qhull version 8.0.2
+[2.413s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[2.501s] -- Found PCL_COMMON: /usr/lib/x86_64-linux-gnu/libpcl_common.so  
+[2.502s] -- Found PCL_KDTREE: /usr/lib/x86_64-linux-gnu/libpcl_kdtree.so  
+[2.502s] -- Found PCL_OCTREE: /usr/lib/x86_64-linux-gnu/libpcl_octree.so  
+[2.503s] -- Found PCL_SEARCH: /usr/lib/x86_64-linux-gnu/libpcl_search.so  
+[2.504s] -- Found PCL_SAMPLE_CONSENSUS: /usr/lib/x86_64-linux-gnu/libpcl_sample_consensus.so  
+[2.504s] -- Found PCL_FILTERS: /usr/lib/x86_64-linux-gnu/libpcl_filters.so  
+[2.504s] -- Found PCL_2D: /usr/include/pcl-1.12  
+[2.504s] -- Found PCL_GEOMETRY: /usr/include/pcl-1.12  
+[2.505s] -- Found PCL_IO: /usr/lib/x86_64-linux-gnu/libpcl_io.so  
+[2.505s] -- Found PCL_FEATURES: /usr/lib/x86_64-linux-gnu/libpcl_features.so  
+[2.506s] -- Found PCL_ML: /usr/lib/x86_64-linux-gnu/libpcl_ml.so  
+[2.506s] -- Found PCL_SEGMENTATION: /usr/lib/x86_64-linux-gnu/libpcl_segmentation.so  
+[2.507s] -- Found PCL_VISUALIZATION: /usr/lib/x86_64-linux-gnu/libpcl_visualization.so  
+[2.508s] -- Found PCL_SURFACE: /usr/lib/x86_64-linux-gnu/libpcl_surface.so  
+[2.508s] -- Found PCL_REGISTRATION: /usr/lib/x86_64-linux-gnu/libpcl_registration.so  
+[2.509s] -- Found PCL_KEYPOINTS: /usr/lib/x86_64-linux-gnu/libpcl_keypoints.so  
+[2.509s] -- Found PCL_TRACKING: /usr/lib/x86_64-linux-gnu/libpcl_tracking.so  
+[2.510s] -- Found PCL_RECOGNITION: /usr/lib/x86_64-linux-gnu/libpcl_recognition.so  
+[2.510s] -- Found PCL_STEREO: /usr/lib/x86_64-linux-gnu/libpcl_stereo.so  
+[2.511s] -- Found PCL_APPS: /usr/lib/x86_64-linux-gnu/libpcl_apps.so  
+[2.511s] -- Found PCL_IN_HAND_SCANNER: /usr/include/pcl-1.12  
+[2.512s] -- Found PCL_MODELER: /usr/include/pcl-1.12  
+[2.512s] -- Found PCL_POINT_CLOUD_EDITOR: /usr/include/pcl-1.12  
+[2.512s] -- Found PCL_OUTOFCORE: /usr/lib/x86_64-linux-gnu/libpcl_outofcore.so  
+[2.513s] -- Found PCL_PEOPLE: /usr/lib/x86_64-linux-gnu/libpcl_people.so  
+[2.539s] [31mCMake Error at CMakeLists.txt:14 (find_package):
+[2.539s]   By not providing "Findmessage_generation.cmake" in CMAKE_MODULE_PATH this
+[2.539s]   project has asked CMake to find a package configuration file provided by
+[2.539s]   "message_generation", but CMake did not find one.
+[2.539s] 
+[2.539s]   Could not find a package configuration file provided by
+[2.539s]   "message_generation" with any of the following names:
+[2.540s] 
+[2.540s]     message_generationConfig.cmake
+[2.540s]     message_generation-config.cmake
+[2.540s] 
+[2.540s]   Add the installation prefix of "message_generation" to CMAKE_PREFIX_PATH or
+[2.540s]   set "message_generation_DIR" to a directory containing one of the above
+[2.540s]   files.  If "message_generation" provides a separate development package or
+[2.540s]   SDK, be sure it has been installed.
+[2.540s] 
+[2.540s] [0m
+[2.540s] -- Configuring incomplete, errors occurred!
+[2.540s] See also "/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest/CMakeFiles/CMakeOutput.log".
+[2.551s] Invoked command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake /home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest -DCMAKE_INSTALL_PREFIX=/home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest

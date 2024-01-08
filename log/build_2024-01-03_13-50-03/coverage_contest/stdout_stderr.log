@@ -1,0 +1,13 @@
+[35m[1mConsolidate compiler generated dependencies of target play_game[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/play_game.dir/src/play_game.cpp.o[0m
+In file included from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:1[m[K:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/play_game.h:29:5:[m[K [01;31m[Kerror: [m[Knon-static data member declared with placeholder ‘[01m[Kauto[m[K’
+   29 |     [01;31m[Kauto[m[K nh_;
+      |     [01;31m[K^~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:[m[K In function ‘[01m[Kint main(int, char**)[m[K’:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:34:3:[m[K [01;31m[Kerror: [m[K‘[01m[Knh_[m[K’ was not declared in this scope
+   34 |   [01;31m[Knh_[m[K = std::make_shared<GamePlayer>();
+      |   [01;31m[K^~~[m[K
+gmake[2]: *** [CMakeFiles/play_game.dir/build.make:76: CMakeFiles/play_game.dir/src/play_game.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/play_game.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

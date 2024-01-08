@@ -1,0 +1,12 @@
+[0.061s] Invoking command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20
+[0.084s] [35m[1mConsolidate compiler generated dependencies of target game_visualizer[0m
+[0.085s] [35m[1mConsolidate compiler generated dependencies of target play_game[0m
+[0.090s] [ 50%] Built target game_visualizer
+[0.095s] [ 75%] [32m[1mLinking CXX executable play_game[0m
+[0.258s] /usr/bin/ld: CMakeFiles/play_game.dir/src/play_game.cpp.o: in function `GamePlayer::GamePlayer()':
+[0.258s] /home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:16: undefined reference to `GameVisualizer::GameVisualizer()'
+[0.268s] collect2: error: ld returned 1 exit status
+[0.269s] gmake[2]: *** [CMakeFiles/play_game.dir/build.make:159: play_game] Error 1
+[0.269s] gmake[1]: *** [CMakeFiles/Makefile2:165: CMakeFiles/play_game.dir/all] Error 2
+[0.269s] gmake: *** [Makefile:146: all] Error 2
+[0.271s] Invoked command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20

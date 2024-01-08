@@ -1,0 +1,29 @@
+[0.057s] Invoking command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20
+[0.083s] [35m[1mConsolidate compiler generated dependencies of target play_game[0m
+[0.092s] [ 50%] [32mBuilding CXX object CMakeFiles/play_game.dir/src/play_game.cpp.o[0m
+[1.726s] In file included from [01m[K/usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:33[m[K,
+[1.726s]                  from [01m[K/usr/include/c++/11/bits/allocator.h:46[m[K,
+[1.726s]                  from [01m[K/usr/include/c++/11/unordered_map:40[m[K,
+[1.726s]                  from [01m[K/usr/include/c++/11/functional:61[m[K,
+[1.726s]                  from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/play_game.h:6[m[K,
+[1.726s]                  from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:1[m[K:
+[1.726s] /usr/include/c++/11/ext/new_allocator.h: In instantiation of ‘[01m[Kvoid __gnu_cxx::new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = GamePlayer; _Args = {}; _Tp = GamePlayer][m[K’:
+[1.726s] [01m[K/usr/include/c++/11/bits/alloc_traits.h:516:17:[m[K   required from ‘[01m[Kstatic void std::allocator_traits<std::allocator<_Tp1> >::construct(std::allocator_traits<std::allocator<_Tp1> >::allocator_type&, _Up*, _Args&& ...) [with _Up = GamePlayer; _Args = {}; _Tp = GamePlayer; std::allocator_traits<std::allocator<_Tp1> >::allocator_type = std::allocator<GamePlayer>][m[K’
+[1.726s] [01m[K/usr/include/c++/11/bits/shared_ptr_base.h:519:39:[m[K   required from ‘[01m[Kstd::_Sp_counted_ptr_inplace<_Tp, _Alloc, _Lp>::_Sp_counted_ptr_inplace(_Alloc, _Args&& ...) [with _Args = {}; _Tp = GamePlayer; _Alloc = std::allocator<GamePlayer>; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic][m[K’
+[1.726s] [01m[K/usr/include/c++/11/bits/shared_ptr_base.h:650:16:[m[K   required from ‘[01m[Kstd::__shared_count<_Lp>::__shared_count(_Tp*&, std::_Sp_alloc_shared_tag<_Alloc>, _Args&& ...) [with _Tp = GamePlayer; _Alloc = std::allocator<GamePlayer>; _Args = {}; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic][m[K’
+[1.727s] [01m[K/usr/include/c++/11/bits/shared_ptr_base.h:1342:14:[m[K   required from ‘[01m[Kstd::__shared_ptr<_Tp, _Lp>::__shared_ptr(std::_Sp_alloc_shared_tag<_Tp>, _Args&& ...) [with _Alloc = std::allocator<GamePlayer>; _Args = {}; _Tp = GamePlayer; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic][m[K’
+[1.727s] [01m[K/usr/include/c++/11/bits/shared_ptr.h:409:59:[m[K   required from ‘[01m[Kstd::shared_ptr<_Tp>::shared_ptr(std::_Sp_alloc_shared_tag<_Tp>, _Args&& ...) [with _Alloc = std::allocator<GamePlayer>; _Args = {}; _Tp = GamePlayer][m[K’
+[1.727s] [01m[K/usr/include/c++/11/bits/shared_ptr.h:862:14:[m[K   required from ‘[01m[Kstd::shared_ptr<_Tp> std::allocate_shared(const _Alloc&, _Args&& ...) [with _Tp = GamePlayer; _Alloc = std::allocator<GamePlayer>; _Args = {}][m[K’
+[1.727s] [01m[K/usr/include/c++/11/bits/shared_ptr.h:878:39:[m[K   required from ‘[01m[Kstd::shared_ptr<_Tp> std::make_shared(_Args&& ...) [with _Tp = GamePlayer; _Args = {}][m[K’
+[1.727s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:22:44:[m[K   required from here
+[1.727s] [01m[K/usr/include/c++/11/ext/new_allocator.h:162:11:[m[K [01;31m[Kerror: [m[Kno matching function for call to ‘[01m[KGamePlayer::GamePlayer()[m[K’
+[1.727s]   162 |         { [01;31m[K::new((void *)__p) _Up(std::forward<_Args>(__args)...)[m[K; }
+[1.727s]       |           [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[1.727s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:10:1:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[KGamePlayer::GamePlayer(const string&)[m[K’
+[1.727s]    10 | [01;36m[KGamePlayer[m[K::GamePlayer(const std::string& node_name) : rclcpp::Node(node_name) {
+[1.727s]       | [01;36m[K^~~~~~~~~~[m[K
+[1.727s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:10:1:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[1.764s] gmake[2]: *** [CMakeFiles/play_game.dir/build.make:76: CMakeFiles/play_game.dir/src/play_game.cpp.o] Error 1
+[1.764s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/play_game.dir/all] Error 2
+[1.764s] gmake: *** [Makefile:146: all] Error 2
+[1.766s] Invoked command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20

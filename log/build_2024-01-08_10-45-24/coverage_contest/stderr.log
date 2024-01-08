@@ -1,0 +1,6 @@
+[31mCMake Error at cmake_install.cmake:54 (file):
+  file INSTALL cannot find
+  "/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/game_visualizer":
+  No such file or directory.
+
+[0m

@@ -1,0 +1,10 @@
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:[m[K In member function ‘[01m[Kvoid GameVisualizer::addEnvironmentMarker(std::string, std::string, std::vector<float>, float)[m[K’:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:81:48:[m[K [01;31m[Kerror: [m[K‘[01m[Kvisualization_msgs::Marker[m[K’ has not been declared
+   81 |     env_vis->marker.type = visualization_msgs::[01;31m[KMarker[m[K::MESH_RESOURCE;
+      |                                                [01;31m[K^~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:82:50:[m[K [01;31m[Kerror: [m[K‘[01m[Kvisualization_msgs::Marker[m[K’ has not been declared
+   82 |     env_vis->marker.action = visualization_msgs::[01;31m[KMarker[m[K::ADD;
+      |                                                  [01;31m[K^~~~~~[m[K
+gmake[2]: *** [CMakeFiles/game_visualizer.dir/build.make:76: CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:139: CMakeFiles/game_visualizer.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

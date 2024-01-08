@@ -1,0 +1,24 @@
+[35m[1mConsolidate compiler generated dependencies of target game_visualizer[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o[0m
+[ 50%] [32m[1mLinking CXX static library libgame_visualizer.a[0m
+[ 50%] Built target game_visualizer
+[ 75%] [32mBuilding CXX object CMakeFiles/play_game.dir/src/play_game.cpp.o[0m
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:[m[K In constructor ‘[01m[KGamePlayer::GamePlayer()[m[K’:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:16:36:[m[K [01;31m[Kerror: [m[Kno matching function for call to ‘[01m[KGameVisualizer::GameVisualizer()[m[K’
+   16 |   visualizer_ = new GameVisualizer([01;31m[K)[m[K;
+      |                                    [01;31m[K^[m[K
+In file included from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/play_game.h:20[m[K,
+                 from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:1[m[K:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:35:5:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[KGameVisualizer::GameVisualizer(rclcpp::Node::SharedPtr)[m[K’
+   35 |     [01;36m[KGameVisualizer[m[K(rclcpp::Node::SharedPtr node);
+      |     [01;36m[K^~~~~~~~~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:35:5:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:33:7:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[KGameVisualizer::GameVisualizer(const GameVisualizer&)[m[K’
+   33 | class [01;36m[KGameVisualizer[m[K {
+      |       [01;36m[K^~~~~~~~~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:33:7:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:33:7:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[KGameVisualizer::GameVisualizer(GameVisualizer&&)[m[K’
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:33:7:[m[K [01;36m[Knote: [m[K  candidate expects 1 argument, 0 provided
+gmake[2]: *** [CMakeFiles/play_game.dir/build.make:76: CMakeFiles/play_game.dir/src/play_game.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:165: CMakeFiles/play_game.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

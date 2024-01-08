@@ -1,0 +1,70 @@
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:[m[K In member function ‘[01m[Kvoid GameVisualizer::clearVisualizer()[m[K’:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:11:5:[m[K [01;31m[Kerror: [m[K‘[01m[KPointCloud[m[K’ has not been declared
+   11 |     [01;31m[KPointCloud[m[K::Ptr pcl_points (new PointCloud);
+      |     [01;31m[K^~~~~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:12:20:[m[K [01;31m[Kerror: [m[K‘[01m[Kpcl_points[m[K’ was not declared in this scope; did you mean ‘[01m[Kpcl_lrintf[m[K’?
+   12 |     pcl::toROSMsg(*[01;31m[Kpcl_points[m[K, points);
+      |                    [01;31m[K^~~~~~~~~~[m[K
+      |                    [32m[Kpcl_lrintf[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:16:25:[m[K [01;31m[Kerror: [m[K‘[01m[KMarker[m[K’ is not a member of ‘[01m[Kvisualization_msgs[m[K’; did you mean ‘[01m[Kvisualization_msgs::msg::Marker[m[K’?
+   16 |     visualization_msgs::[01;31m[KMarker[m[K marker;
+      |                         [01;31m[K^~~~~~[m[K
+In file included from [01m[K/opt/ros/humble/include/visualization_msgs/visualization_msgs/msg/marker.hpp:7[m[K,
+                 from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:6[m[K,
+                 from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:1[m[K:
+[01m[K/opt/ros/humble/include/visualization_msgs/visualization_msgs/msg/detail/marker__struct.hpp:435:7:[m[K [01;36m[Knote: [m[K‘[01m[Kvisualization_msgs::msg::Marker[m[K’ declared here
+  435 | using [01;36m[KMarker[m[K =
+      |       [01;36m[K^~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:17:5:[m[K [01;31m[Kerror: [m[K‘[01m[Kmarker[m[K’ was not declared in this scope
+   17 |     [01;31m[Kmarker[m[K.header.frame_id = frame_id_;
+      |     [01;31m[K^~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:19:41:[m[K [01;31m[Kerror: [m[K‘[01m[Kvisualization_msgs::mmsg[m[K’ has not been declared
+   19 |     marker.action = visualization_msgs::[01;31m[Kmmsg[m[K::Marker::DELETEALL;
+      |                                         [01;31m[K^~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:23:5:[m[K [01;31m[Kerror: [m[K‘[01m[KEnvironmentVisualizer_t[m[K’ was not declared in this scope
+   23 |     [01;31m[KEnvironmentVisualizer_t[m[K *env_vis;
+      |     [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:23:30:[m[K [01;31m[Kerror: [m[K‘[01m[Kenv_vis[m[K’ was not declared in this scope
+   23 |     EnvironmentVisualizer_t *[01;31m[Kenv_vis[m[K;
+      |                              [01;31m[K^~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:31:5:[m[K [01;31m[Kerror: [m[K‘[01m[KPlayerVisualizer_t[m[K’ was not declared in this scope; did you mean ‘[01m[KclearVisualizer[m[K’?
+   31 |     [01;31m[KPlayerVisualizer_t[m[K *player_vis;
+      |     [01;31m[K^~~~~~~~~~~~~~~~~~[m[K
+      |     [32m[KclearVisualizer[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:31:25:[m[K [01;31m[Kerror: [m[K‘[01m[Kplayer_vis[m[K’ was not declared in this scope; did you mean ‘[01m[Kplayers_[m[K’?
+   31 |     PlayerVisualizer_t *[01;31m[Kplayer_vis[m[K;
+      |                         [01;31m[K^~~~~~~~~~[m[K
+      |                         [32m[Kplayers_[m[K
+In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+                 from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:5[m[K,
+                 from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:1[m[K:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:38:17:[m[K [01;31m[Kerror: [m[K‘[01m[Knh_[m[K’ was not declared in this scope
+   38 |     RCLCPP_INFO([01;31m[Knh_[m[K->get_logger(), "[Game Visualizer] Cleared game visualizer.");
+      |                 [01;31m[K^~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:38:5:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+   38 |     [01;31m[KRCLCPP_INFO[m[K(nh_->get_logger(), "[Game Visualizer] Cleared game visualizer.");
+      |     [01;31m[K^~~~~~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:38:5:[m[K [01;31m[Kerror: [m[K‘[01m[K<declaration error>[m[K’ is not a template [[01;31m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-fpermissive-fpermissive]8;;[m[K]
+   38 |     [01;31m[KRCLCPP_INFO[m[K(nh_->get_logger(), "[Game Visualizer] Cleared game visualizer.");
+      |     [01;31m[K^~~~~~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:38:5:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+   38 |     [01;31m[KRCLCPP_INFO[m[K(nh_->get_logger(), "[Game Visualizer] Cleared game visualizer.");
+      |     [01;31m[K^~~~~~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:38:5:[m[K [01;31m[Kerror: [m[K‘[01m[K<declaration error>[m[K’ is not a template [[01;31m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-fpermissive-fpermissive]8;;[m[K]
+   38 |     [01;31m[KRCLCPP_INFO[m[K(nh_->get_logger(), "[Game Visualizer] Cleared game visualizer.");
+      |     [01;31m[K^~~~~~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:38:5:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+   38 |     [01;31m[KRCLCPP_INFO[m[K(nh_->get_logger(), "[Game Visualizer] Cleared game visualizer.");
+      |     [01;31m[K^~~~~~~~~~~[m[K
+gmake[2]: *** [CMakeFiles/game_visualizer.dir/build.make:76: CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:139: CMakeFiles/game_visualizer.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

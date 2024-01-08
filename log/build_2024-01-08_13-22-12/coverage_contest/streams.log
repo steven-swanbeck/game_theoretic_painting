@@ -1,0 +1,11 @@
+[0.062s] Invoking command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20
+[0.093s] [ 25%] [32mBuilding CXX object CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o[0m
+[0.189s] In file included from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:1[m[K:
+[0.189s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:6:10:[m[K [01;31m[Kfatal error: [m[Kvisualization_msgs/msg/Marker.hpp: No such file or directory
+[0.189s]     6 | #include [01;31m[K<visualization_msgs/msg/Marker.hpp>[m[K
+[0.189s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.189s] compilation terminated.
+[0.198s] gmake[2]: *** [CMakeFiles/game_visualizer.dir/build.make:76: CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o] Error 1
+[0.198s] gmake[1]: *** [CMakeFiles/Makefile2:139: CMakeFiles/game_visualizer.dir/all] Error 2
+[0.198s] gmake: *** [Makefile:146: all] Error 2
+[0.200s] Invoked command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20

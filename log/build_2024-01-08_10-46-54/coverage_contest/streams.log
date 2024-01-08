@@ -1,0 +1,27 @@
+[0.060s] Invoking command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20
+[0.094s] [ 50%] Built target game_visualizer
+[0.115s] [100%] Built target play_game
+[0.125s] Invoked command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20
+[0.164s] Invoking command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --install /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest
+[0.169s] -- Install configuration: ""
+[0.169s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/lib/coverage_contest/play_game
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/config
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/config/params.yaml
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/launch
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/launch/load_game.launch
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/ament_index/resource_index/package_run_dependencies/coverage_contest
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/ament_index/resource_index/parent_prefix_path/coverage_contest
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/environment/ament_prefix_path.sh
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/environment/ament_prefix_path.dsv
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/environment/path.sh
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/environment/path.dsv
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/local_setup.bash
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/local_setup.sh
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/local_setup.zsh
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/local_setup.dsv
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/package.dsv
+[0.170s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/ament_index/resource_index/packages/coverage_contest
+[0.171s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/cmake/coverage_contestConfig.cmake
+[0.171s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/cmake/coverage_contestConfig-version.cmake
+[0.171s] -- Up-to-date: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/package.xml
+[0.171s] Invoked command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --install /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest

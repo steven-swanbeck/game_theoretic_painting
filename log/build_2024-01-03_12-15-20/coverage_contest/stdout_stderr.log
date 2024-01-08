@@ -1,0 +1,26 @@
+[35m[1mConsolidate compiler generated dependencies of target play_game[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/play_game.dir/src/play_game.cpp.o[0m
+[100%] [32m[1mLinking CXX executable play_game[0m
+[100%] Built target play_game
+-- Install configuration: ""
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/lib/coverage_contest/play_game
+-- Set runtime path of "/home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/lib/coverage_contest/play_game" to ""
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/config
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/config/params.yaml
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/launch
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/launch/load_game.launch
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/ament_index/resource_index/package_run_dependencies/coverage_contest
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/ament_index/resource_index/parent_prefix_path/coverage_contest
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/environment/ament_prefix_path.sh
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/environment/ament_prefix_path.dsv
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/environment/path.sh
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/environment/path.dsv
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/local_setup.bash
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/local_setup.sh
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/local_setup.zsh
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/local_setup.dsv
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/package.dsv
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/ament_index/resource_index/packages/coverage_contest
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/cmake/coverage_contestConfig.cmake
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/cmake/coverage_contestConfig-version.cmake
+-- Installing: /home/daniel/Research/Workspaces/game_theoretic_painting/install/coverage_contest/share/coverage_contest/package.xml

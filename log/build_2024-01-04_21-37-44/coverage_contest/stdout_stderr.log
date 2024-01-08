@@ -1,0 +1,9 @@
+[35m[1mConsolidate compiler generated dependencies of target play_game[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/play_game.dir/src/play_game.cpp.o[0m
+[100%] [32m[1mLinking CXX executable play_game[0m
+/usr/bin/ld: CMakeFiles/play_game.dir/src/play_game.cpp.o: in function `GamePlayer::GamePlayer()':
+/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:11: undefined reference to `GameVisualizer::GameVisualizer()'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/play_game.dir/build.make:159: play_game] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/play_game.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

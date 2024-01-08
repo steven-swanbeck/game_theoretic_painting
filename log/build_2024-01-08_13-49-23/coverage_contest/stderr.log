@@ -1,0 +1,17 @@
+In file included from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:11[m[K,
+                 from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:1[m[K:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/point.h:59:16:[m[K [01;31m[Kerror: [m[Kexpected constructor, destructor, or type conversion before ‘[01m[K([m[K’ token
+   59 | PCL_INSTANTIATE[01;31m[K([m[KNormalEstimationOMP, Haphephobia::Point);
+      |                [01;31m[K^[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/point.h:60:16:[m[K [01;31m[Kerror: [m[Kexpected constructor, destructor, or type conversion before ‘[01m[K([m[K’ token
+   60 | PCL_INSTANTIATE[01;31m[K([m[KKdTree, Haphephobia::Point);
+      |                [01;31m[K^[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/point.h:61:16:[m[K [01;31m[Kerror: [m[Kexpected constructor, destructor, or type conversion before ‘[01m[K([m[K’ token
+   61 | PCL_INSTANTIATE[01;31m[K([m[KtransformPointCloud, Haphephobia::Point);
+      |                [01;31m[K^[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/point.h:62:16:[m[K [01;31m[Kerror: [m[Kexpected constructor, destructor, or type conversion before ‘[01m[K([m[K’ token
+   62 | PCL_INSTANTIATE[01;31m[K([m[KIterativeClosestPointNonLinear, Haphephobia::Point);
+      |                [01;31m[K^[m[K
+gmake[2]: *** [CMakeFiles/game_visualizer.dir/build.make:76: CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:139: CMakeFiles/game_visualizer.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

@@ -1,0 +1,18 @@
+[0.061s] Invoking command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20
+[0.090s] [ 25%] [32mBuilding CXX object CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o[0m
+[0.092s] [ 50%] [32mBuilding CXX object CMakeFiles/play_game.dir/src/play_game.cpp.o[0m
+[0.094s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:3:10:[m[K [01;31m[Kfatal error: [m[Krclcpp/rclcpp.hpp: No such file or directory
+[0.094s]     3 | #include [01;31m[K<rclcpp/rclcpp.hpp>[m[K
+[0.094s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~[m[K
+[0.094s] compilation terminated.
+[0.094s] gmake[2]: *** [CMakeFiles/game_visualizer.dir/build.make:76: CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o] Error 1
+[0.094s] gmake[1]: *** [CMakeFiles/Makefile2:165: CMakeFiles/game_visualizer.dir/all] Error 2
+[0.094s] gmake[1]: *** Waiting for unfinished jobs....
+[2.363s] [ 75%] [32m[1mLinking CXX executable play_game[0m
+[2.524s] /usr/bin/ld: CMakeFiles/play_game.dir/src/play_game.cpp.o: in function `GamePlayer::GamePlayer()':
+[2.524s] /home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:16: undefined reference to `GameVisualizer::GameVisualizer()'
+[2.533s] collect2: error: ld returned 1 exit status
+[2.534s] gmake[2]: *** [CMakeFiles/play_game.dir/build.make:159: play_game] Error 1
+[2.535s] gmake[1]: *** [CMakeFiles/Makefile2:139: CMakeFiles/play_game.dir/all] Error 2
+[2.535s] gmake: *** [Makefile:146: all] Error 2
+[2.537s] Invoked command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20

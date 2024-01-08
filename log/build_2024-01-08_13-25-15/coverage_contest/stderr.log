@@ -1,0 +1,13 @@
+In file included from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:1[m[K:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:36:21:[m[K [01;31m[Kerror: [m[K‘[01m[KPointCloud2[m[K’ in namespace ‘[01m[Ksensor_msgs::msg[m[K’ does not name a type
+   36 |   sensor_msgs::msg::[01;31m[KPointCloud2[m[K points;
+      |                     [01;31m[K^~~~~~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:38:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kros[m[K’ does not name a type
+   38 |   [01;31m[Kros[m[K::Publisher points_pub;
+      |   [01;31m[K^~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:39:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kros[m[K’ does not name a type
+   39 |   [01;31m[Kros[m[K::Publisher marker_pub;
+      |   [01;31m[K^~~[m[K
+gmake[2]: *** [CMakeFiles/game_visualizer.dir/build.make:76: CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:139: CMakeFiles/game_visualizer.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

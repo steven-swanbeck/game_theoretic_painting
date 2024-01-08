@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpoint.a 
+/usr/bin/ranlib libpoint.a

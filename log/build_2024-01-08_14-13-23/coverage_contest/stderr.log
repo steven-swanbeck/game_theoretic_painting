@@ -1,0 +1,10 @@
+In file included from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:1[m[K:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:40:51:[m[K [01;31m[Kerror: [m[K‘[01m[KPointCloud[m[K’ has not been declared
+   40 |     void addEnvironmentPoints(std::string env_id, [01;31m[KPointCloud[m[K::Ptr &pcl_points);
+      |                                                   [01;31m[K^~~~~~~~~~[m[K
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:40:67:[m[K [01;31m[Kerror: [m[Kexpected ‘[01m[K,[m[K’ or ‘[01m[K...[m[K’ before ‘[01m[K&[m[K’ token
+   40 |     void addEnvironmentPoints(std::string env_id, PointCloud::Ptr [01;31m[K&[m[Kpcl_points);
+      |                                                                   [01;31m[K^[m[K
+gmake[2]: *** [CMakeFiles/game_visualizer.dir/build.make:76: CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:139: CMakeFiles/game_visualizer.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

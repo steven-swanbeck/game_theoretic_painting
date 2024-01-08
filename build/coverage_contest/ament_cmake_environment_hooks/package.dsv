@@ -1,0 +1,4 @@
+source;share/coverage_contest/local_setup.bash
+source;share/coverage_contest/local_setup.dsv
+source;share/coverage_contest/local_setup.sh
+source;share/coverage_contest/local_setup.zsh

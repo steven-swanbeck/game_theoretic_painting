@@ -1,0 +1,9 @@
+[35m[1mConsolidate compiler generated dependencies of target play_game[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/play_game.dir/src/play_game.cpp.o[0m
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:[m[K In constructor ‘[01m[KGamePlayer::GamePlayer()[m[K’:
+[01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/play_game.cpp:11:15:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass GamePlayer[m[K’ has no member named ‘[01m[KNodeHandle[m[K’
+   11 |   nh_ = this->[01;31m[KNodeHandle[m[K;
+      |               [01;31m[K^~~~~~~~~~[m[K
+gmake[2]: *** [CMakeFiles/play_game.dir/build.make:76: CMakeFiles/play_game.dir/src/play_game.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/play_game.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

@@ -1,0 +1,58 @@
+[0.061s] Invoking command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20
+[0.087s] [35m[1mConsolidate compiler generated dependencies of target game_visualizer[0m
+[0.097s] [ 25%] [32mBuilding CXX object CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o[0m
+[1.248s] In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+[1.249s]                  from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:5[m[K,
+[1.249s]                  from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:1[m[K:
+[1.249s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:[m[K In constructor ‘[01m[KGameVisualizer::GameVisualizer(rclcpp::Node::SharedPtr)[m[K’:
+[1.249s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:5:23:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass GameVisualizer[m[K’ has no member named ‘[01m[Kget_logger[m[K’
+[1.249s]     5 |     RCLCPP_INFO(this->[01;31m[Kget_logger[m[K(), "[Game Visualizer] Created game visualizer.");
+[1.249s]       |                       [01;31m[K^~~~~~~~~~[m[K
+[1.249s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:5:23:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass GameVisualizer[m[K’ has no member named ‘[01m[Kget_logger[m[K’
+[1.249s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:5:5:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[1.249s]     5 |     [01;31m[KRCLCPP_INFO[m[K(this->get_logger(), "[Game Visualizer] Created game visualizer.");
+[1.249s]       |     [01;31m[K^~~~~~~~~~~[m[K
+[1.249s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:5:5:[m[K [01;31m[Kerror: [m[K‘[01m[K<declaration error>[m[K’ is not a template [[01;31m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-fpermissive-fpermissive]8;;[m[K]
+[1.249s]     5 |     [01;31m[KRCLCPP_INFO[m[K(this->get_logger(), "[Game Visualizer] Created game visualizer.");
+[1.249s]       |     [01;31m[K^~~~~~~~~~~[m[K
+[1.249s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:5:5:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[1.249s]     5 |     [01;31m[KRCLCPP_INFO[m[K(this->get_logger(), "[Game Visualizer] Created game visualizer.");
+[1.249s]       |     [01;31m[K^~~~~~~~~~~[m[K
+[1.249s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:5:5:[m[K [01;31m[Kerror: [m[K‘[01m[K<declaration error>[m[K’ is not a template [[01;31m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-fpermissive-fpermissive]8;;[m[K]
+[1.249s]     5 |     [01;31m[KRCLCPP_INFO[m[K(this->get_logger(), "[Game Visualizer] Created game visualizer.");
+[1.249s]       |     [01;31m[K^~~~~~~~~~~[m[K
+[1.249s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:5:5:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[1.249s]     5 |     [01;31m[KRCLCPP_INFO[m[K(this->get_logger(), "[Game Visualizer] Created game visualizer.");
+[1.249s]       |     [01;31m[K^~~~~~~~~~~[m[K
+[1.249s] In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+[1.249s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+[1.250s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+[1.250s]                  from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/include/coverage_contest/game_visualizer.h:5[m[K,
+[1.250s]                  from [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:1[m[K:
+[1.250s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:5:23:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass GameVisualizer[m[K’ has no member named ‘[01m[Kget_logger[m[K’
+[1.250s]     5 |     RCLCPP_INFO(this->[01;31m[Kget_logger[m[K(), "[Game Visualizer] Created game visualizer.");
+[1.250s]       |                       [01;31m[K^~~~~~~~~~[m[K
+[1.250s] [01m[K/home/daniel/Research/Workspaces/game_theoretic_painting/src/coverage_contest/src/game_visualizer.cpp:5:23:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass GameVisualizer[m[K’ has no member named ‘[01m[Kget_logger[m[K’
+[1.250s]     5 |     RCLCPP_INFO(this->[01;31m[Kget_logger[m[K(), "[Game Visualizer] Created game visualizer.");
+[1.250s]       |                       [01;31m[K^~~~~~~~~~[m[K
+[1.468s] gmake[2]: *** [CMakeFiles/game_visualizer.dir/build.make:76: CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o] Error 1
+[1.469s] gmake[1]: *** [CMakeFiles/Makefile2:139: CMakeFiles/game_visualizer.dir/all] Error 2
+[1.469s] gmake: *** [Makefile:146: all] Error 2
+[1.471s] Invoked command in '/home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_teleop:/home/daniel/Research/Workspaces/turtlebot3/install/turtlebot3_example:/opt/ros/humble /usr/bin/cmake --build /home/daniel/Research/Workspaces/game_theoretic_painting/build/coverage_contest -- -j20 -l20

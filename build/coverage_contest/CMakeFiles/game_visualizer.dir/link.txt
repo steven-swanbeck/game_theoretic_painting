@@ -1,0 +1,2 @@
+/usr/bin/ar qc libgame_visualizer.a CMakeFiles/game_visualizer.dir/src/game_visualizer.cpp.o
+/usr/bin/ranlib libgame_visualizer.a
